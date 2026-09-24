@@ -1,0 +1,25 @@
+#ifndef _IO_IOEXCEPTION_H
+#define _IO_IOEXCEPTION_H
+
+#include <lang/Exception.h>
+
+BEGIN_NAMESPACE(io)
+
+/**
+ * Thrown if input/output operation fails.
+ * @ingroup io
+ */
+class IOException : //12
+	public NS(lang,Exception)
+{
+public:
+	IOException( const NS(lang,Format)& msg )											: Exception(msg) {} //16
+};
+
+
+} // io
+
+
+#endif // _IO_IOEXCEPTION_H
+
+// Copyright (C) 2004-2006 Pixelgene Ltd. All rights reserved. Consult your license regarding permissions and restrictions.
