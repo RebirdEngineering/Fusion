@@ -20,12 +20,12 @@ Simply open the repo in CMake and you will be able to build the most of the libr
 
 ### The executables used for comparison/reference (BLAKE3)
 
-	Angry Birds Seasons v4.1.0 for iPhone
 - `ea7f3ad2e21b743d1d87eb1c18e7f4f6302b7be76159b935b8a98cd9da1b21d3 (executable) + 1bc6a6c63908a8ea71f72e7bf53a535828b3791917d7a74a2994970f9af63cbd (.dSYM) AngryBirdsSeasonsFull`
-	Angry Birds Free with Magic v1.1.3 for Meego + leftover debug information.
+	Angry Birds Seasons v4.1.0 for iPhone
 - ` 950beefdcdcb45101543cf707de8919740af3d98fe7d5f9edc68c7d68e7e6d24 angrybirdsfreemagic`
-	Angry Birds Free with Magic v1.1.5 for Meego + leftover debug information.
+	Angry Birds Free with Magic v1.1.3 for Meego + leftover debug information.
 - ` 16da89de8ce40a7e2a84b7a2d894cbd60a80267ed920e44a3dfc43fb4e6127d9 angrybirdsfreemagic`
+	Angry Birds Free with Magic v1.1.5 for Meego + leftover debug information.
 
 ### Miscellaneous notes
 
@@ -35,6 +35,7 @@ Legal notes:
 - The main focus of the project is to allow modern-day development and is done in a good faith - we don't condone 
   piracy, we just essentially want to give it a "second life".
 - The decompilation project does not include any assets - you need to get them from your own copy of a game using it.
+- For development on Apple platforms, a local copy of their SDKs must be manually included.
 
 Project initially started by LolHacksRule. No AI is used for the decompiled code. Any PRs entirely using AI will be denied.
 

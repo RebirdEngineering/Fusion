@@ -1,0 +1,3 @@
+[submodule "external/AES"]
+	path = external/AES
+	url = http://github.com/RebirdEngineering/AES
