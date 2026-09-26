@@ -51,3 +51,5 @@ void AudioInput::removeListener(AudioInputListener* listener)
 }
 
 }
+
+#endif
