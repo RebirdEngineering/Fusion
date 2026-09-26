@@ -1,6 +1,6 @@
 ﻿project(lua)
 
-file(GLOB LUA_SRC "*.cpp" "detail/*.cpp") #"detail/lua51/*.cpp" "${CMAKE_SOURCE_DIR}/external/lua51/src/*.c")
+file(GLOB LUA_SRC "*.cpp" "detail/*.cpp" "${CMAKE_SOURCE_DIR}/external/lua/src/*.c")
 
 add_compile_definitions(USE_FLOAT)
 

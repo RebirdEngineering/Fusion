@@ -2,7 +2,7 @@ project(apprater)
 
 file(GLOB PF_SRC "*.cpp")
 
-if(IOS)
+if(IOS) #Only exists on iOS
     file(GLOB APPRATER_SRC "ios/*.mm")
 endif()
 

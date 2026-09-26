@@ -1,7 +1,7 @@
 #ifndef _LUA_DETAIL_REPLACEMENTS_H
 #define _LUA_DETAIL_REPLACEMENTS_H
 
-#include <external/lua51/src/lauxlib.h>
+#include <external/lua/src/lauxlib.h>
 
 namespace lua
 {
