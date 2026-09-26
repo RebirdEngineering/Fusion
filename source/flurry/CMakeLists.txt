@@ -1,6 +1,6 @@
 project(flurry)
 
-file(GLOB FLURRY_SRC "*.cpp" "${FLURRY_IMPL}/*.cpp")
+file(GLOB FLURRY_SRC "*.cpp" "${FLURRY_IMPL}/*.cpp") #Dummy on OSX
 
 #if(IOS) #Not yet decompiled.
 #    file(GLOB FLURRY_IOS_SRC "ios/*.mm")

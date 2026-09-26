@@ -17,7 +17,7 @@ endif()
 #endif()
 
 #if(OSX) #Not yet decompiled.
-#    file(GLOB FRAMEWORK_OSX_SRC "osx/*.cpp" "osx/*.m" "iOS/*.mm")
+#    file(GLOB FRAMEWORK_OSX_SRC "osx/*.cpp" "osx/*.m" "iOS/*.mm" ${FUSION_DIR}/external/asn1c/*.c)
 #    list(APPEND FRAMEWORK_SRC ${FRAMEWORK_OSX_SRC})
 #endif()
 

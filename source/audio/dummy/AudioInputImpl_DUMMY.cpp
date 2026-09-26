@@ -23,7 +23,7 @@ public:
 	std::vector<char> m_data;
 };
 
-class AudioInputImpl : //ABS410
+class AudioInputImpl : //ABS410, OSX
 	public Object
 {
 public:

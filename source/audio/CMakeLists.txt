@@ -20,6 +20,11 @@ endif()
 #    list(APPEND AUDIO_SRC ${AUDIO_IOS_SRC})
 #endif()
 
+#if(OSX) #Not yet decompiled.
+#    file(GLOB AUDIO_OSX_SRC ${FUSION_DIR}/external/mpg123/src/libmpg123/*.c)
+#    list(APPEND AUDIO_SRC ${AUDIO_OSX_SRC})
+#endif()
+
 #if(WINDOWS_PHONE) #Not yet decompiled.
 #    file(GLOB AUDIO_XAUDIO2_SRC "XAudio2/*.cpp")
 #    list(APPEND AUDIO_SRC ${AUDIO_XAUDIO2_SRC})
