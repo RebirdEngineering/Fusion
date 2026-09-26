@@ -2,6 +2,7 @@
 #define FLURRY_FLURRY_H
 
 #include <lang/LogListener.h>
+#include <lang/Object.h>
 
 namespace flurry
 {
@@ -23,9 +24,9 @@ public:
 
 	void logEvent(const std::string& eventName, const std::map<std::string, std::string>& params);
 
-	virtual void onAnalyticsEvent(const lang::analytics::Event& event);
+	void onAnalyticsEvent(const lang::analytics::Event& event);
 
-	virtual void onAnalyticsCommonParameters(const lang::analytics::Event& event);
+	void onAnalyticsCommonParameters(const lang::analytics::Event& event);
 private:
 	class Impl;
 	P(Impl) m_impl;
