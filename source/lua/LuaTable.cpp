@@ -5,8 +5,8 @@
 #include <lua/LuaState.h>
 #include <lua/LuaStackRestore.h>
 #include <lua/LuaException.h>
-#include <external/lua51/src/lua.h>
-#include <external/lua51/src/lauxlib.h>
+#include <external/lua/src/lua.h>
+#include <external/lua/src/lauxlib.h>
 
 
 using namespace io;

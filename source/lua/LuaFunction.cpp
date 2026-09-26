@@ -1,7 +1,7 @@
 #include <lua/LuaFunction.h>
 #include <lua/LuaState.h>
-#include <external/lua51/src/lua.h>
-#include <external/lua51/src/lauxlib.h>
+#include <external/lua/src/lua.h>
+#include <external/lua/src/lauxlib.h>
 
 namespace lua
 {

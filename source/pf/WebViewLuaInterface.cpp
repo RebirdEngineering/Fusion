@@ -1,6 +1,6 @@
 #include <pf/WebViewLuaInterface.h>
 #include <pf/WebView.h>
-#include <external/lua51/src/lauxlib.h>
+#include <external/lua/src/lauxlib.h>
 #include <lang/Log.h>
 #include <lang/String.h>
 

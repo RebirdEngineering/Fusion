@@ -1,6 +1,6 @@
 #include <lua/LuaStackRestore.h>
 #include <lua/LuaState.h>
-#include <external/lua51/src/lua.h>
+#include <external/lua/src/lua.h>
 
 BEGIN_NAMESPACE(lua) 
 

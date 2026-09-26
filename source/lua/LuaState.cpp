@@ -4,9 +4,9 @@
 #include <lua/LuaException.h>
 #include <lua/LuaStackRestore.h>
 #include <io/InputStream.h>
-#include <external/lua51/src/lua.h>
-#include <external/lua51/src/lauxlib.h>
-#include <external/lua51/src/lualib.h>
+#include <external/lua/src/lua.h>
+#include <external/lua/src/lauxlib.h>
+#include <external/lua/src/lualib.h>
 
 
 using namespace io;

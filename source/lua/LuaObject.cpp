@@ -1,7 +1,7 @@
 #include <lua/LuaObject.h>
 #include <lua/LuaState.h>
 #include <lua/LuaStackRestore.h>
-#include <external/lua51/src/lua.h>
+#include <external/lua/src/lua.h>
 
 
 USING_NAMESPACE(lang)
