@@ -10,7 +10,7 @@ The main branch (this one) is heavily based off the revision found in Angry Bird
 Please do not confuse this for private KA3D. Fusion is exclusively for modern day platforms.
 
 ### Differencies / accuracy notes
-- To reduce legal risk, we do not aim to reverse engineer anything handling DRM or IAPs, the resulting code is DRM-free.
+- To reduce legal risk, we do not aim to reverse engineer anything handling DRM or IAPs, the resulting code is DRM-free, at worst dummy implementations of them will be allowed, just so games would be able to reference them.
 - Certain variable/parameter names, asserts and missing methods have been reconstructed by referencing the originally semi-open-source release of the KA3D engine, reverse engineering KA3D-era and Silverlight ports of games. For more information, check the Hidden Birds Fusion documentation spreadsheet.
 - Any functions vastly similar to public KA3D in the grand scale will use the original namespace macros.
 
