@@ -4,7 +4,6 @@ project(Fusion)
 set (CMAKE_CXX_STANDARD 11)
 
 link_directories($ENV{DXSDK_DIR}/Lib/x86) #DirectX 11/+ SDK libs must be installed, won't be distributed, otherwise modify this
-include_directories($ENV{DXSDK_DIR}/Include ${CMAKE_SOURCE_DIR}) #DirectX 11/+ SDK must be installed, won't be distributed, otherwise modify this, yeah we include the root too for includes, that way we can use #include <external/*.h>, which is probably what they did.
 
 #link_directories(${CMAKE_SOURCE_DIR}/lib/msvc17)
 
@@ -22,6 +21,7 @@ option(AudioWriting "Build audio writing implementations" OFF)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib) #Realistically we'd use msvc17 or xcode4 [apple], given this is CMake
 
 set(FUSION_DIR ${CMAKE_CURRENT_SOURCE_DIR}) #So io won't get mad
+include_directories($ENV{DXSDK_DIR}/Include ${FUSION_DIR}) #DirectX 11/+ SDK must be installed, won't be distributed, otherwise modify this, yeah we include the root too for includes, that way we can use #include <external/*.h>, which is probably what they did.
 
 add_compile_definitions(_CRT_SECURE_NO_DEPRECATE HGR_NOPARTICLES WEBP_USE_THREAD UNICODE GLEW_STATIC ) #USE_THREAD is off?
 
@@ -51,8 +51,8 @@ if(NOT PLATFORM)
     endif()
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${CMAKE_SOURCE_DIR}/external)
+include_directories(${FUSION_DIR}/include)
+include_directories(${FUSION_DIR}/external)
 
 add_subdirectory(source)
 

@@ -5,10 +5,6 @@ file(GLOB GR_SRC "*.cpp")
 if(WIN32)
 	#add_subdirectory(dx11) #NOT YET DECOMPILED
 	add_subdirectory(gl)
-
-	#part of legacy fusion
-	#add_subdirectory(gl1)
-	#add_subdirectory(gles2)
 endif()
 
 if(IOS)
@@ -21,4 +17,3 @@ endif()
 
 add_compile_definitions(_LIB)
 add_library(gr STATIC ${GR_SRC}) #grgl2 does not have build type appended and named grgl
-#target_include_directories(gr PRIVATE ${CMAKE_SOURCE_DIR}/external/Fusion/include)

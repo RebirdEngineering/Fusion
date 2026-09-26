@@ -1,31 +1,6 @@
 project(io)
 
-#set(IO_SRC #All releases
-#    BasicFileSystem.cpp
-#    BundleFileSystem.cpp
-#    ByteArrayInputStream.cpp
-#    ByteArrayOutputStream.cpp
-#    CacheFileSystem.cpp
-#    DataInputStream.cpp
-#    DataOutputStream.cpp
-#    FileFormat.cpp
-#    InfoZip.cpp
-#    InputStream.cpp
-#    MemoryAliasInputStream.cpp
-#    OutputStream.cpp
-#    PathName.cpp
-#    SevenZip.cpp
-#    Utils.cpp
-#    URI.cpp
-#    VFS.cpp
-#    ZipEntryInputStream.cpp
-#    ZipFileInputStream.cpp
-#)
-
-file(GLOB IO_SRC "*.cpp")
-
-file(GLOB IO_OTHER_SRC "std/*.cpp" "detail/*.cpp") #Std is used on Android OSX and iOS
-#file(GLOB IO_SRC "*.cpp" "std/*.cpp" "detail/*.cpp" ${CMAKE_SOURCE_DIR}/external/zlib/*.c) #Std is used on Android OSX and iOS
+file(GLOB IO_SRC "*.cpp" "std/*.cpp" "detail/*.cpp" ${FUSION_DIR}/external/zlib/*.c) #Std is used on Android OSX and iOS, according to OSX zlib is embedded in the lib
 
 if(WIN32 OR WINDOWS_PHONE OR WINDOWS_STORE)
     file(GLOB IO_WIN32_SRC "win32/*.cpp")
@@ -48,5 +23,5 @@ if (LINUX) #or apple
 endif()
 
 add_compile_definitions(_LIB)
-add_library(io STATIC ${IO_SRC} ${IO_OTHER_SRC})
-target_include_directories(io PRIVATE ${FUSION_DIR}/external/zlib)
+add_library(io STATIC ${IO_SRC})
+target_include_directories(io PRIVATE ${FUSION_DIR}/external/zlib) #According to OSX zlib is embedded in the lib
