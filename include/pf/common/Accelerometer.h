@@ -3,7 +3,7 @@
 
 //Includes and namespaces are redundant since we're including this file in the namespace
 
-Accelerometer::Accelerometer()
+Accelerometer::Accelerometer() //Includes and namespaces are redundant since we're including this file in the namespace
 {
 	m_impl = new Impl();
 }

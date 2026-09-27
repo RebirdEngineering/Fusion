@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class AlertBox::AlertBoxImpl : public Object
+	class AlertBox::AlertBoxImpl : public lang::Object
 	{
 	public:
 		AlertBoxImpl()
@@ -24,7 +24,7 @@ namespace pf
 		{
 		}
 
-		void show(const std::string& title, const std::string&message, int type, AlertBoxListener* listener)
+		void show(const std::string& title, const std::string& message, int type, AlertBoxListener* listener)
 		{
 		}
 	};

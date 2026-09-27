@@ -1,13 +1,11 @@
 #ifndef _PF_COMMON_TEXTINPUT_H
 #define _PF_COMMON_TEXTINPUT_H
 
-#include <pf/TextInput.h> //For now
-
-BEGIN_NAMESPACE(pf)
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 TextInput::TextInput()
 {
-	m_impl = new TextInputImpl();
+	m_impl = new TextInputImpl(); //8
 }
 
 TextInput::~TextInput()
@@ -24,19 +22,19 @@ bool TextInput::isActive() const //Not defined on iOS
 	return m_impl->isActive();
 }
 
-void TextInput::activate(const std::string& string, TextInputObserver* observer)
+void TextInput::activate(const std::string& string, TextInputObserver* observer) //25
 {
-	m_impl->activate(string, observer);
+	m_impl->activate(string, observer); //27
 }
 
 void TextInput::deactivate()
 {
-	m_impl->deactivate();
+	m_impl->deactivate(); //32
 }
 
 std::string TextInput::input() const
 {
-	return m_impl->input();
+	return m_impl->input(); //37
 }
 
 bool TextInput::isVirtualKeyboardVisible() //Not defined on iOS
@@ -47,8 +45,6 @@ bool TextInput::isVirtualKeyboardVisible() //Not defined on iOS
 void TextInput::hideVirtualKeyboard() //Not defined on iOS
 {
 	return m_impl->hideVirtualKeyboard();
-}
-
 }
 
 #endif // !_PF_COMMON_TEXTINPUT_H

@@ -2,20 +2,23 @@
 #define _PF_STORE_H
 
 #include <lang/Object.h> //For now
-#include <pf/StoreListener.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
 
-class Store :
-	public Object
+class StoreListener;
+
+class Store : //14
+	public lang::Object
 {
 public:
-	void showProductInStore(const string&, StoreListener*);
+	static void showProductInStore(const std::string& iTunesItemIdentifier, StoreListener* listener); //36
 
-	bool isSupported();
+	static bool isSupported(); //41
 private:
-	Store(const Store&);
-	Store& operator=(const Store&);
+	class Impl; //Ok so there's no Impl and m_impl? We at least need this defined
+	Store(const Store&); //46
+	Store& operator=(const Store&); //47
 };
 
 }

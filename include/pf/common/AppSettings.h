@@ -2,8 +2,8 @@
 #define _PF_COMMON_APPSETTINGS_H
 
 //Includes and namespaces are redundant since we're including this file in the namespace
-
-AppSettings::AppSettings()
+ 
+AppSettings::AppSettings() //Includes and namespaces are redundant since we're including this file in the namespace
 {
 	m_impl = new AppSettingsImpl(); //8
 }

@@ -1,94 +1,93 @@
 #ifndef _PF_LOCATION_H
 #define _PF_LOCATION_H
 
-#include <lang/Exception.h> //For now
+#include <lang/Object.h>
 
-namespace pf
+namespace pf //9
 {
 
-struct GeoCoordinate
+struct GeoCoordinate //14
 {
-	double latitude;
-	double longitude;
+	double latitude; //16
+	double longitude; //17
 };
 
-struct Region
+struct Region //20
 {
-	long int regionId;
-	GeoCoordinate coord;
-	int informRadius;
+	long int regionId; //22
+	GeoCoordinate coord; //23
+	int informRadius; //24
 };
 
-class LocationListener
+class LocationListener //36
 {
 public:
-	~LocationListener();
-	virtual void locationPermissionDenied();
-	virtual void locationChanged();
-	virtual void regionEntered(const Region&);
-	virtual void regionExited(const Region&);
+	~LocationListener(); //39
+	virtual void locationPermissionDenied(); //40
+	virtual void locationChanged(); //41
+	virtual void regionEntered(const Region&); //42
+	virtual void regionExited(const Region&); //43
 };
 
-class Location :
-	public Object
+class Location : //52
+	public lang::Object
 {
 public:
-	enum DeviceStatus
+	enum DeviceStatus //59
 	{
 		OFFLINE,
 		READY,
 	};
 
-	enum AccuracyLevel
+	enum AccuracyLevel //68
 	{
 		LOW,
 		NORMAL,
 		BEST,
 	};
 
-	Location();
+	Location(); //78
 
-	Location(float, AccuracyLevel);
+	Location(float, AccuracyLevel); //85
 
-	~Location();
+	~Location(); //90
 
-	const GeoCoordinate& emptyGeoCoordinate(const GeoCoordinate&);
+	const GeoCoordinate& emptyGeoCoordinate(); //95
 
-	bool isValidGeoCoordinate(const GeoCoordinate&);
+	bool isValidGeoCoordinate(const GeoCoordinate&); //105
 
-	bool isSupported();
+	bool isSupported(); //115
 
-	bool isGpsAvailable();
+	bool isGpsAvailable(); //121
 
-	void startUpdating() const;
+	void startUpdating() const; //126
 
-	void stopUpdating() const;
+	void stopUpdating() const; //132
 
-	void setDistanceFilter(float);
+	void setDistanceFilter(float) const; //137
 
-	void setAccuracy(AccuracyLevel) const;
+	void setAccuracy(AccuracyLevel) const; //143
 
-	DeviceStatus getStatus() const;
+	DeviceStatus getStatus() const; //148
 
-	const GeoCoordinate& currentLocation() const;
+	const GeoCoordinate& currentLocation() const; //153
 
-	void startMonitoringForRegions(const std::vector<Region>&);
+	void startMonitoringForRegions(const std::vector<Region>&); //160
 
-	void stopMonitoringAllRegions();
+	void stopMonitoringAllRegions(); //165
 
-	int numOfMonitoredRegions() const;
+	int numOfMonitoredRegions() const; //170
 
-	int maxNumOfMonitoredRegions();
+	int maxNumOfMonitoredRegions(); //175
 
-	void addListener(LocationListener*);
+	void addListener(LocationListener*); //181
 	
-	void removeListener(LocationListener*);
+	void removeListener(LocationListener*); //187
 private:
 	class LocationImpl;
-	P(LocationImpl) m_impl;
-
-	Location(const Location&);
-	Location& operator=(const Location&);
+	P(LocationImpl) m_impl; //190
+	Location(const Location&); //191
+	Location& operator=(const Location&); //192
 };
 
 }

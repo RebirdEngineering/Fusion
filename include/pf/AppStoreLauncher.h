@@ -9,7 +9,7 @@ namespace pf
 
 class AppStoreLauncherImpl;
 
-class AppStoreLauncher :
+class AppStoreLauncher : //19
 	public lang::Object
 {
 public:
@@ -25,11 +25,11 @@ public:
 
 	~AppStoreLauncher();
 
-	bool launchAppStore(const std::string& applicationID, AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener);
+	static bool launchAppStore(const std::string& applicationID, AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener); //49
 
-	bool isSupported();
+	static bool isSupported();
 
-	bool isVariantSupported(AppStoreVariant storeVariant);
+	static bool isVariantSupported(AppStoreVariant storeVariant);
 
 	AppStoreVariant defaultVariant();
 };

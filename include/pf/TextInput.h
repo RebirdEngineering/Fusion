@@ -5,41 +5,40 @@
 
 namespace pf
 {
-	class TextInputObserver
+	class TextInputObserver //11
 	{
 	public:
-		virtual bool acceptInput(const std::string&, unsigned short) = 0;
+		virtual bool acceptInput(const std::string&, unsigned short) = 0; //18
 
-		virtual void inputChanged(const std::string& newString) = 0; //Recover from common/DebugConsole.h and common/TextInput.h
+		virtual void inputChanged(const std::string& newString) = 0; //24 | Recover from AB common/DebugConsole.h and AB common/TextInput.h
 	};
 
-	class TextInput :
-		public Object
+	class TextInput : //31 | TextInputImpl_OSX, TextInputImpl_Dummy (OSX [legacy], Blackberry), TextInput_* (iOS, IPHONE)
+		public lang::Object
 	{
 	public:
-		TextInput();
+		TextInput(); //37
 
-		~TextInput();
+		~TextInput(); //42
 
-		bool isSupported();
+		bool isSupported(); //47
 
-		bool isActive() const;
+		bool isActive() const; //52
 
-		void activate(const std::string& string, TextInputObserver* observer);
+		void activate(const std::string& string, TextInputObserver* observer); //59
 
-		void deactivate();
+		void deactivate(); //64
 
-		std::string input() const;
+		std::string input() const; //69
 
-		bool isVirtualKeyboardVisible();
+		bool isVirtualKeyboardVisible(); //74
 
-		void  hideVirtualKeyboard();
+		void  hideVirtualKeyboard(); //79
 	private:
 		class TextInputImpl;
-		P(TextInputImpl) m_impl;
-
-		TextInput(const TextInput&);
-		TextInput& operator=(const TextInput&);
+		P(TextInputImpl) m_impl; //85
+		TextInput(const TextInput&); //86
+		TextInput& operator=(const TextInput&); //87
 	};
 }
 

@@ -3,46 +3,46 @@
 
 #include <lang/Object.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
 
-class LauncherDelegate
+class LauncherDelegate //12
 {
 public:
-	enum ResultValue { FAILED, SUCCEEDED, CANCELLED, UNKNOWN };
-	virtual void LauncherCompleted(ResultValue) = 0;
+	enum ResultValue { FAILED, SUCCEEDED, CANCELLED, UNKNOWN }; //15
+	virtual void LauncherCompleted(ResultValue) = 0; //16
 };
 
-class Launcher :
+class Launcher : //24
 	public lang::Object
 {
 public:
-	Launcher();
+	Launcher(); //28
 
-	~Launcher();
+	~Launcher(); //30
 
-	bool isSupported();
+	bool isSupported(); //35
 
-	bool open();
+	bool open(); //40
 
-	bool openURL(const std::string& target);
+	bool openURL(const std::string& target); //47
 
-	bool openProgram(const std::string& target);
+	bool openProgram(const std::string& target); //53
 
-	bool canOpenProgram(const std::string& target, const std::string& minVersion);
+	bool canOpenProgram(const std::string& target, const std::string& minVersion); //62
 
-	bool openSMS(const std::string&, const std::string&, const std::string&, const std::string&);
+	bool openSMS(const std::string&, const std::string&, const std::string&, const std::string&); //67, unknown params.
 
-	bool openEmail(const std::string&, const std::string&, const std::string&);
+	bool openEmail(const std::string&, const std::string&, const std::string&); //72, unknown params.
 
-	bool canOpenEmail();
+	bool canOpenEmail(); //77
 
-	void setDelegate(LauncherDelegate*);
+	void setDelegate(LauncherDelegate*); //83, unknown param.
 private:
 	class LauncherImpl;
-	P(LauncherImpl) m_impl;
-
-	Launcher(const Launcher&);
-	Launcher& operator=(const Launcher&);
+	P(LauncherImpl) m_impl; //88
+	Launcher(const Launcher&); //89
+	Launcher& operator=(const Launcher&); //90
 };
 
 }

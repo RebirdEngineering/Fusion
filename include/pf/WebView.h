@@ -1,13 +1,13 @@
 #ifndef _PF_WEBVIEW_H
 #define _PF_WEBVIEW_H
 
-#include <lang/Object.h> //For now
+#include <lang/Object.h>
 
 namespace pf
 {
 
 class WebViewImpl; //Should be outside webview
-class WebViewListener; //Needed?
+class WebViewListener;
 
 class WebView :
 	public lang::Object
@@ -30,16 +30,17 @@ public:
 	void setListener(WebViewListener* listener); //57
 	WebViewListener* getListener(); //58
 
-	std::string* executeJavaScript(const std::string& javaScript); //61
-	void asyncExecuteJavaScript(const std::string& javaScript); //62
+	std::string* executeJavaScript(std::string javaScript); //61
+	void asyncExecuteJavaScript(std::string javaScript); //62
 
-	static bool isSupported(); //64
+	bool isSupported(); //64
 	bool isWebViewSupported(); //65
 
 	int m_func_ref; //68
 	int m_callback; //69
 
 private:
+	friend class WebViewListener;
 	P(WebViewImpl) m_impl; //73
 
 	WebView(const WebView&); //75

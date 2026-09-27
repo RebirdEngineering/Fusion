@@ -1,9 +1,7 @@
 #ifndef _PF_COMMON_REMOTENOTIFICATIONS_H
 #define _PF_COMMON_REMOTENOTIFICATIONS_H
 
-#include <pf/RemoteNotifications.h> //For now
-
-BEGIN_NAMESPACE(pf)
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 RemoteNotifications::RemoteNotifications()
 {
@@ -37,8 +35,6 @@ void RemoteNotifications::setEnabled(bool enabled)
 bool RemoteNotifications::areSettingsProvidedByThePlatform() //Not defined on iOS
 {
 	return m_impl->areSettingsProvidedByThePlatform();
-}
-
 }
 
 #endif //! _PF_COMMON_REMOTENOTIFICATIONS_H

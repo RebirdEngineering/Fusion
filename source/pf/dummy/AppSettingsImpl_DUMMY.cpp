@@ -6,7 +6,7 @@ using namespace lang;
 namespace pf
 {
 
-class AppSettings::AppSettingsImpl : //OSX, Android, PC
+class AppSettings::AppSettingsImpl : //OSX, Android, Win
     public Object
 {
 public:

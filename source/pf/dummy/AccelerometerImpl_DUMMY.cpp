@@ -5,7 +5,7 @@ USING_NAMESPACE(math)
 
 BEGIN_NAMESPACE(pf)
 
-class Accelerometer::Impl : public Object //OSX
+class Accelerometer::Impl : public Object //OSX and likely Win
 {
 public:
 	Impl()

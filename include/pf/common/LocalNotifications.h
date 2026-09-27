@@ -1,9 +1,7 @@
 #ifndef _PF_COMMON_LOCALNOTIFICATIONS_H
 #define _PF_COMMON_LOCALNOTIFICATIONS_H
 
-#include <pf/LocalNotifications.h>
-
-BEGIN_NAMESPACE(pf)
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 LocalNotifications::LocalNotifications()
 {
@@ -47,8 +45,6 @@ void LocalNotifications::addListener(LocalNotificationsListener* l)
 void LocalNotifications::removeListener(LocalNotificationsListener* l)
 {
 	m_impl->removeListener(l);
-}
-
 }
 
 #endif // ! _PF_COMMON_LOCALNOTIFICATIONS_H

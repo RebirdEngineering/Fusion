@@ -1,10 +1,6 @@
 #ifndef _PF_COMMON_APPSTORELAUNCHER_H
 #define _PF_COMMON_APPSTORELAUNCHER_H
 
-#include <pf/AppStoreLauncher.h>
-
-BEGIN_NAMESPACE(pf)
-
 AppStoreLauncher::AppStoreLauncher()
 {
 }
@@ -26,8 +22,6 @@ bool AppStoreLauncher::launchAppStore(const std::string& applicationID, AppStore
 AppStoreLauncher::AppStoreVariant AppStoreLauncher::defaultVariant() //Not on iOS
 {
 	return AppStoreLauncherImpl::defaultVariant();
-}
-
 }
 
 #endif // !_PF_COMMON_APPSTORELAUNCHER_H

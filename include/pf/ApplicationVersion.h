@@ -3,14 +3,15 @@
 
 #include <lang/pp.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf //6
+{
 
-class ApplicationVersion
+class ApplicationVersion //15
 {
 public:
-	bool isSupported();
+	static bool isSupported(); //24
 
-	std::string getVersionString();
+	static std::string getVersionString(); //31
 
 	class Impl; //No m_impl?
 };

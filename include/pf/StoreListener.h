@@ -1,9 +1,8 @@
 #ifndef _PF_STORELISTENER_H
 #define _PF_STORELISTENER_H
 
-#include <lang/pp.h>
-
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
 
 class StoreListener
 {

@@ -1,18 +1,11 @@
 #ifndef _PF_COMMON_UUID_H
 #define _PF_COMMON_UUID_H
 
-#include <pf/UUID.h>
+//Includes and namespaces are redundant since we're including this file in the namespace
 
-namespace pf
-{
-
-UUID::UUID()
+UUID::UUID() //UUIDImpl_DUMMY, UUID_ios+osx
 {
 	m_impl = new Impl();
-}
-
-UUID::~UUID()
-{
 }
 
 UUID::~UUID()
@@ -27,8 +20,6 @@ bool UUID::isSupported() //Not defined on iOS
 std::string UUID::generateUUID() //Not defined on iOS
 {
 	return m_impl->generateUUID();
-}
-
 }
 
 #endif //! _PF_COMMON_UUID_H

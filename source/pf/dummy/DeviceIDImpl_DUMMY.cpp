@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class DeviceID::Impl : public Object
+	class DeviceID::Impl : public Object //PC?
 	{
 	public:
 		Impl()

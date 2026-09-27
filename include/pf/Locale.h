@@ -6,22 +6,21 @@
 namespace pf
 {
 
-class Locale : public lang::Object //This reeks of identical code
+class Locale : public lang::Object //15 | This reeks of identical code
 {
 public:
-	Locale();
+	Locale(); //22
 
-	~Locale();
+	~Locale(); //27
 
-	bool isSupported();
+	bool isSupported(); //32
 
-	std::vector<std::string> getPreferedLanguages();
+	std::vector<std::string> getPreferedLanguages(); //37
 private:
 	class LocaleImpl;
-	P(LocaleImpl) m_impl;
-
-	Locale(const Locale&);
-	Locale& operator=(const Locale&);
+	P(LocaleImpl) m_impl; //42
+	Locale(const Locale&); //43
+	Locale& operator=(const Locale&); //44
 };
 
 }

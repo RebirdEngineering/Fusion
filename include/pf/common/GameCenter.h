@@ -1,11 +1,7 @@
 #ifndef _PF_COMMON_GAMECENTER_H
 #define _PF_COMMON_GAMECENTER_H
 
-#include <pf/GameCenter.h>
-
-BEGIN_NAMESPACE(pf)
-
-GameCenter::GameCenter(GameCenterListener listener)
+GameCenter::GameCenter(GameCenterListener* listener)
 {
 	m_impl = new Impl(listener);
 }
@@ -67,8 +63,6 @@ void GameCenter::retrievePlayers(const std::vector<std::string>&, void*)
 bool GameCenter::isSupported()
 {
 	return m_impl->isSupported();
-}
-
 }
 
 #endif // !_PF_COMMON_GAMECENTER_H
