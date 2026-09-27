@@ -3,65 +3,67 @@
 
 #include <lang/Object.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
 
-class DeviceInfo :
-	public Object
+class DeviceInfo : //13
+	public lang::Object
 {
 public:
-	DeviceInfo();
+	DeviceInfo(); //20
 
-	~DeviceInfo();
+	~DeviceInfo(); //25
 
-	bool isSupported();
+	bool isSupported(); //32
 
-	std::string getOSName();
+	std::string getOSName() const; //41
 
-	std::string getOSVersion();
+	std::string getOSVersion() const; //50
 
-	std::string getModel();
+	std::string getModel() const; //59
 
-	std::string getManufacturer() const;
+	std::string getManufacturer() const; //68
 
-	std::string getProduct() const;
+	std::string getProduct() const; //77
 
-	std::string getPlatform() const;
+	std::string getPlatform() const; //86
 
-	std::string getHardware() const;
+	std::string getHardware() const; //96
 
-	std::string getABI() const;
+	std::string getABI() const; //104
 
-	int getDisplayWidth() const;
+	int getDisplayWidth() const; //111
 
-	int getDisplayHeight() const;
+	int getDisplayHeight() const; //118
 
-	int getDisplayDensityGroup() const;
+	int getDisplayDensityGroup() const; //125
 
-	int getDisplayConfigurationGroup() const;
+	int getDisplayConfigurationGroup() const; //132
 
-	int getTotalMemory() const;
+	int getTotalMemory() const; //139
 
-	int getCPUCoreCount() const;
+	int getCPUCoreCount() const; //146
 
-	int getCPUSpeed() const;
+	int getCPUSpeed() const; //153
 
-	std::vector<std::string> getCPUFeatures() const;
+	std::vector<std::string> getCPUFeatures() const; //160
 
-	std::string getCPUImplementer() const;
+	std::string getCPUImplementer() const; //167
 
-	std::string getCPUPart() const;
+	std::string getCPUPart() const; //174
 
-	std::string getCPUHardware() const;
+	std::string getCPUHardware() const; //181
 
-	std::vector<std::string> getHardwareComponents() const;
+	std::vector<std::string> getHardwareComponents() const; //188
 
-	int getPPI() const;
+	int getPPI() const; //201
+
 private:
 	class Impl;
-	P(Impl) m_impl;
+	P(Impl) m_impl; //205
 
-	DeviceInfo(const DeviceInfo&);
-	DeviceInfo& operator=(const DeviceInfo&);
+	DeviceInfo(const DeviceInfo&); //207
+	DeviceInfo& operator=(const DeviceInfo&); //208
 };
 
 }

@@ -1,0 +1,33 @@
+#ifndef _PF_DRMV2_H
+#define _PF_DRMV2_H
+
+#include <lang/Object.h>
+
+namespace pf
+{
+
+class DrmV2Impl;
+
+class DrmV2 : //16, class only known in ABS410 iPhone
+	public lang::Object
+{
+public:
+	DrmV2(); //25
+
+	~DrmV2(); //30
+
+	bool consumeKey(std::string key, std::string udid, bool*, bool*);
+
+	std::string getDeviceID(); //47
+
+	bool areDeviceIDsEqual(const std::string&, const std::string&); //52
+private:
+	P(DrmV2Impl) m_impl; //55
+
+	DrmV2(const DrmV2&);
+	DrmV2& operator=(const DrmV2&);
+};
+
+}
+
+#endif // !_PF_DRMV2_H

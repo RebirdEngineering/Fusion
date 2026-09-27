@@ -9,13 +9,13 @@ namespace util
 class SHA1
 {
 public:
-	std::string hash(const void* src, int length);
+	static std::string hash(const void* src, int length);
 
-	std::string hash(const std::string& str);
+	static std::string hash(const std::string& str);
 
-	std::string hash(const std::vector<char>& buffer);
+	static std::string hash(const std::vector<char>& buffer);
 
-	std::string hash(const std::vector<unsigned char>& buffer); // new
+	static std::string hash(const std::vector<unsigned char>& buffer); // new
 private:
 	SHA1(const SHA1&);
 	SHA1& operator=(const SHA1&);

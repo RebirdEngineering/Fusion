@@ -6,31 +6,31 @@
 namespace pf
 {
 
-class DeviceID :
+class DeviceID : //15
 	public lang::Object
 {
 public:
-	DeviceID();
+	DeviceID(); //22
 
-	~DeviceID();
+	~DeviceID(); //27
 
-	bool isSupported();
+	bool isSupported(); //32
 
-	std::vector<char> getDeviceID();
+	std::vector<char> getDeviceID(); //45
 
-	std::map<std::string, std::string> getPlatformIDs() const;
+	std::map<std::string, std::string> getPlatformIDs() const; //65
 
-	std::string getDeviceIDHash();
+	std::string getDeviceIDHash(); //70
 
-	std::string emptyID();
+	std::string emptyID(); //76
 private:
 	class Impl;
-	P(Impl) m_impl;
+	P(Impl) m_impl; //80
 
-	DeviceID(const DeviceID&);
-	DeviceID& operator=(const DeviceID&);
+	DeviceID(const DeviceID&); //82
+	DeviceID& operator=(const DeviceID&); //83
 };
 
 }
 
-#endif // !_PF_TEXTINPUT_H
+#endif // !_PF_DEVICEID_H

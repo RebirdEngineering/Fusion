@@ -1,9 +1,7 @@
 #ifndef _PF_COMMON_DEVICEINFO_H
 #define _PF_COMMON_DEVICEINFO_H
 
-#include <pf/DeviceInfo.h>
-
-BEGIN_NAMESPACE(pf)
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 DeviceInfo::DeviceInfo()
 {
@@ -14,17 +12,17 @@ DeviceInfo::~DeviceInfo()
 {
 }
 
-std::string DeviceInfo::getOSName()
+std::string DeviceInfo::getOSName() const
 {
 	return m_impl->getOSName();
 }
 
-std::string DeviceInfo::getOSVersion()
+std::string DeviceInfo::getOSVersion() const
 {
 	return m_impl->getOSVersion();
 }
 
-std::string DeviceInfo::getModel()
+std::string DeviceInfo::getModel() const
 {
 	return m_impl->getModel();
 }
@@ -119,8 +117,6 @@ std::vector<std::string> DeviceInfo::getHardwareComponents() const
 int DeviceInfo::getPPI() const //Except this one
 {
 	return m_impl->getPPI();
-}
-
 }
 
 #endif // !_PF_COMMON_DEVICEINFO_H
