@@ -1,3 +1,8 @@
+#ifndef _PF_COMMON_APPSETTINGS_H
+#define _PF_COMMON_APPSETTINGS_H
+
+//Includes and namespaces are redundant since we're including this file in the namespace
+
 AppSettings::AppSettings()
 {
 	m_impl = new AppSettingsImpl(); //8
@@ -41,3 +46,5 @@ std::string AppSettings::getString(const std::string& key) const //40
 {
 	return m_impl->getString(key.c_str()); //42
 }
+
+#endif

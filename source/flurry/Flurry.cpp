@@ -1,3 +1,4 @@
+#include <flurry/Flurry.h>
 #include <flurry/FlurryImpl.h>
 #include <lang/Log.h>
 

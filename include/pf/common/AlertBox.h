@@ -1,9 +1,7 @@
 #ifndef _PF_COMMON_ALERTBOX_H
 #define _PF_COMMON_ALERTBOX_H
 
-#include <pf/AlertBox.h>
-
-BEGIN_NAMESPACE(pf)
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 AlertBox::AlertBox()
 {
@@ -26,9 +24,7 @@ void AlertBox::setCustomButtons(const std::vector<std::string>& customButtons)
 
 void AlertBox::show(const std::string& title, const std::string& message, int type, AlertBoxListener* listener)
 {
-	m_impl->show(title, message, listener);
-}
-
+	m_impl->show(title, message, type, listener);
 }
 
 #endif // !_PF_TEXTINPUT_H

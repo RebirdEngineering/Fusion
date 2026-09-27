@@ -257,6 +257,7 @@ namespace audio
             LANG_LOG("Audio", LANG_LOG_PRIORITY_ERROR, "Failed to retrieve the IDirectSoundNotify interface (hr=%d)", hr); //345
         }
 	};
-}
 
 #include <audio/common/AudioOutput.h>
+
+}

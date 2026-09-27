@@ -1,12 +1,9 @@
 #ifndef _GAME_COMMON_SYSTEMFONT_H
 #define _GAME_COMMON_SYSTEMFONT_H
 
-#include <game/SystemFont.h>
+//Includes and namespaces are redundant since we're including this file in the namespace
 
-namespace game
-{
-
-SystemFont::SystemFont(gr::Context* context, const std::string& fontName, int fontSize, const gr::Color& fontColor, int style) //15
+SystemFont::SystemFont(Context* context, const std::string& fontName, int fontSize, const gr::Color& fontColor, int style) //15
 {
 	m_impl = new Impl(context, fontName, fontSize, fontColor, style);
 }
@@ -15,12 +12,12 @@ SystemFont::~SystemFont()
 {
 }
 
-void SystemFont::drawString(gr::Context* context, const std::string& str, float y, float x, Anchor anchor) const //Idk why x and y are swapped
+void SystemFont::drawString(Context* context, const std::string& str, float y, float x, Anchor anchor) const //Idk why x and y are swapped
 {
 	m_impl->drawString(context, str, 0, -1, y, x, anchor);
 }
 
-void SystemFont::drawString(gr::Context* context, const std::string& str, int offset, int length, float x, float y, Anchor anchor) const
+void SystemFont::drawString(Context* context, const std::string& str, int offset, int length, float x, float y, Anchor anchor) const
 {
 	m_impl->drawString(context, str, offset, length, y, x, anchor);
 }
@@ -70,11 +67,9 @@ int SystemFont::getTracking() const
 	return m_impl->getTracking(); //Always?
 }
 
-gr::Rect SystemFont::getBounds(const std::string& str, Anchor anchor, int offset, int length) const
+Rect SystemFont::getBounds(const std::string& str, Anchor anchor, int offset, int length) const
 {
 	return m_impl->getBounds(str, anchor, offset, length);
-}
-
 }
 
 #endif

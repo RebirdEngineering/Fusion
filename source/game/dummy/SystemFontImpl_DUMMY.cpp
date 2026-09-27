@@ -79,6 +79,7 @@ namespace game
 			return "";
 		}
 	};
-}
 
 #include <game/common/SystemFont.h>
+
+}

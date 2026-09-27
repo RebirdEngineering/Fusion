@@ -145,6 +145,6 @@ private:
 	}
 };
 
-END_NAMESPACE()
-
 #include <audio/common/AudioInput.h> //Yeah
+
+END_NAMESPACE()

@@ -1,9 +1,7 @@
 #ifndef _PF_COMMON_ACCELEROMETER_H
 #define _PF_COMMON_ACCELEROMETER_H
 
-#include <pf/Accelerometer.h>
-
-BEGIN_NAMESPACE(pf)
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 Accelerometer::Accelerometer()
 {
@@ -16,12 +14,12 @@ Accelerometer::~Accelerometer()
 
 bool Accelerometer::isSupported()
 {
-	return false; //False on Apple? Why?
+	return m_impl->isSupported();
 }
 
-void Accelerometer::start()
+bool Accelerometer::start()
 {
-	m_impl->start();
+	return m_impl->start();
 }
 
 void Accelerometer::stop()
@@ -31,15 +29,12 @@ void Accelerometer::stop()
 
 float3 Accelerometer::getData() //NOT IN IOS HEADER
 {
-	m_impl->getData();
+	return m_impl->getData();
 }
 
 float3 Accelerometer::getDataFiltered()
 {
-	m_impl->getDataFiltered();
+	return m_impl->getDataFiltered();
 }
 
-
-}
-
-#endif // !_PF_TEXTINPUT_H
+#endif // !_PF_COMMON_ACCELEROMETER_H

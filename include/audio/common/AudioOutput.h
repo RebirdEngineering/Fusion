@@ -1,10 +1,7 @@
 #ifndef _AUDIO_COMMMON_AUDIOOUTPUT_H
 #define _AUDIO_COMMMON_AUDIOOUTPUT_H
 
-//#include <audio/AudioOutput.h>
-
-namespace audio
-{
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 AudioOutput::AudioOutput(const AudioConfiguration& configuration) //6
 {
@@ -123,8 +120,6 @@ int AudioOutput::getPlayingClipCount(int track)
 bool AudioOutput::isStarted() const //122
 {
 	return m_impl->isStarted();
-}
-
 }
 
 #endif

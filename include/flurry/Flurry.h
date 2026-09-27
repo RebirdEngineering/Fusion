@@ -7,33 +7,33 @@
 namespace flurry
 {
 
-class Flurry :
+class Flurry : //26
 	public lang::Object, public lang::analytics::Listener
 {
 public:
-	Flurry();
-	~Flurry();
+	Flurry(); //30
+	~Flurry(); //31
 
-	void startSession(const std::string& apiKey);
+	void startSession(const std::string& apiKey); //37
 
-	void endSession();
+	void endSession(); //42
 
-	void logEvent(const std::string&);
+	void logEvent(const std::string& eventName); //48
 
-	void logEvent(const std::string& eventName, const std::string& paramName, const std::string& paramValue);
+	void logEvent(const std::string& eventName, const std::string& paramName, const std::string& paramValue); //56
 
-	void logEvent(const std::string& eventName, const std::map<std::string, std::string>& params);
+	void logEvent(const std::string& eventName, const std::map<std::string, std::string>& params); //63
 
-	void onAnalyticsEvent(const lang::analytics::Event& event);
+	void onAnalyticsEvent(const lang::analytics::Event& event); //69
 
-	void onAnalyticsCommonParameters(const lang::analytics::Event& event);
+	void onAnalyticsCommonParameters(const lang::analytics::Event& event); //75
 private:
 	class Impl;
-	P(Impl) m_impl;
-	std::map<std::string, std::string> m_commonParameters;
+	P(Impl) m_impl; //80
+	std::map<std::string, std::string> m_commonParameters; //81
 
-	Flurry(const Flurry&);
-	Flurry& operator=(const Flurry&);
+	Flurry(const Flurry&); //83
+	Flurry& operator=(const Flurry&); //84
 };
 
 }

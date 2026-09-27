@@ -67,7 +67,7 @@ file(GLOB IMG_PNG_SRC
 )
 
 #file(GLOB IMG_PNG_SRC ${FUSION_DIR}/external/libpng/*.c )
-file(GLOB_RECURSE IMG_WEBP_SRC ${FUSION_DIR}/external/webp/*.c )
+#file(GLOB_RECURSE IMG_WEBP_SRC ${FUSION_DIR}/external/webp/*.c ) #Include webp too? ABS410 uses it. OSX does not so we're not sure if this would go in LIB
 list(APPEND IMG_EXTERNAL_SRC ${IMG_JPEG_SRC} ${IMG_PNG_SRC})
 #list(APPEND IMG_EXTERNAL_SRC ${IMG_JPEG_SRC} ${IMG_PNG_SRC} ${IMG_WEBP_SRC})
 

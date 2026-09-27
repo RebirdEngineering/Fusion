@@ -57,6 +57,6 @@ public:
     }
 };
 
-#include <pf/common/AppSettings.h> //Yeah
+#include <pf/common/AppSettings.h>
 
 }

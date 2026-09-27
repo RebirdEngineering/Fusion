@@ -2,6 +2,7 @@
 #define _PF_ACCELEROMETER_H
 
 #include <math/float3.h>
+#include <lang/Object.h>
 
 namespace pf
 {
@@ -10,25 +11,25 @@ class Accelerometer :
 	public lang::Object
 {
 public:
-	Accelerometer();
+	Accelerometer(); //37
 
-	~Accelerometer();
+	~Accelerometer(); //42
 
-	bool isSupported();
+	bool isSupported(); //47
 
-	bool start();
+	bool start(); //53
 
-	void stop();
+	void stop(); //58
 
-	NS(math, float3) getData();
+	NS(math, float3) getData(); //65
 
-	NS(math, float3) getDataFiltered();
+	NS(math, float3) getDataFiltered(); //72
 private:
 	class Impl;
-	P(Impl) m_impl;
+	P(Impl) m_impl; //77
 
-	Accelerometer(const Accelerometer&);
-	Accelerometer& operator=(const Accelerometer&);
+	Accelerometer(const Accelerometer&); //79
+	Accelerometer& operator=(const Accelerometer&); //80
 };
 
 }

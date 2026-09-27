@@ -1,10 +1,7 @@
 #ifndef _AUDIO_COMMMON_AUDIOINPUT_H
 #define _AUDIO_COMMMON_AUDIOINPUT_H
 
-//#include <audio/AudioInput.h>
-
-namespace audio
-{
+//Includes and namespaces are redundant since we're including this file in the namespace
 
 AudioInput::AudioInput(const AudioConfiguration& configuration) //6
 {
@@ -48,8 +45,6 @@ void AudioInput::addListener(AudioInputListener* listener)
 void AudioInput::removeListener(AudioInputListener* listener)
 {
 	m_impl->removeListener(listener);
-}
-
 }
 
 #endif

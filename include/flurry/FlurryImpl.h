@@ -2,7 +2,6 @@
 #define FLURRY_FLURRYIMPL_H
 
 #include <lang/Object.h>
-#include <flurry/Flurry.h>
 
 namespace flurry
 {
@@ -10,22 +9,21 @@ namespace flurry
 		public lang::Object
 	{
 	public:
-		Impl();
-		~Impl();
+		Impl(); //22
+		~Impl(); //23
 
 		typedef std::map<std::string, std::string> KeyValuePairs; //25
 
-		void startSession(const std::string& apiKey);
-		void endSession();
-		void logEvent(const std::string& eventName, const KeyValuePairs& paramValue);
+		void startSession(const std::string& apiKey); //27
+		void endSession(); //28
+		void logEvent(const std::string& eventName, const KeyValuePairs& paramValue); //29
 	private:
-		void logToConsole(const std::string& eventName, const KeyValuePairs& params)
+		void logToConsole(const std::string& eventName, const KeyValuePairs& params) //34 | TODO
 		{
-			std::string paramStr;
-			for (KeyValuePairs::const_iterator it = params.begin(); it != params.end(); it++)
-			{
-				//paramStr.append(it->first);
-			}
+			//std::string paramStr; //36
+
+			//for (KeyValuePairs::const_iterator it = params.begin(); it != params.end(); it++) //38
+				//paramStr + "'" + '=' + "'"; //+ 45
 		}
 	};
 }

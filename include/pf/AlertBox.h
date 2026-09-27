@@ -3,10 +3,13 @@
 
 #include <lang/Object.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
+
+class AlertBoxListener;
 
 class AlertBox :
-	public Object
+	public lang::Object
 {
 public:
 	enum Button
@@ -41,7 +44,7 @@ public:
 
 	void setCustomButtons(const std::vector<std::string>& customButtons);
 
-	void show(const std::string&, const std::string&, int, AlertBoxListener*);
+	void show(const std::string& title, const std::string& message, int type, AlertBoxListener* listener);
 private:
 	class AlertBoxImpl;
 	P(AlertBoxImpl) m_impl;
