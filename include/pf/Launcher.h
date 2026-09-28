@@ -6,7 +6,7 @@
 namespace pf
 {
 
-class LauncherDelegate //12
+class LauncherDelegate //12 | Win32 (16 bytes)
 {
 public:
 	enum ResultValue { FAILED, SUCCEEDED, CANCELLED, UNKNOWN }; //15

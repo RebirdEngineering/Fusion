@@ -8,7 +8,7 @@ namespace pf
 
 class DrmV2Impl;
 
-class DrmV2 : //16, class only known in ABS410 iPhone, impl no, it's likely there due to GameLua.h included the base header, assuming from TrilogyU.
+class DrmV2 : //16, class only known in ABS410 iPhone, impl no, it's likely there due to GameLua.h included the base header, assuming from TrilogyU. Win: 40 bytes
 	public lang::Object
 {
 public:

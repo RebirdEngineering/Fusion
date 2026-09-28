@@ -6,7 +6,7 @@
 namespace pf
 {
 
-class DeviceID : //15
+class DeviceID : //15 | Win
 	public lang::Object
 {
 public:

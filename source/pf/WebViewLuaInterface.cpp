@@ -12,6 +12,9 @@ namespace pf
 class WebViewLuaListener : public WebViewListener //Originally in lua in ABC <3.1.2, Friends (Fusion) <1.1.0, ABR <1.6.1, ABS <3.3.0, ABSP <1.5.2, ABSW <1.2.2 and Croods <1.1.0
 {
 public:
+	const char* s_tableName = "WebView";
+	const char* s_metaTableName = "rovio.webview";
+
 	WebViewLuaListener()
 	{
 		mNameSpaceForJSCalls = "";
@@ -164,13 +167,13 @@ private:
 	}
 };
 
-WebViewLuaInterface::WebViewLuaInterface(LuaState* lua) :
-	mLuaState(lua),
-	LuaObject(lua)
+WebViewLuaInterface::WebViewLuaInterface(LuaState* lua) : //236
+	LuaObject(lua),
+	mLuaState(lua)
 {
-	bool initialized = false; //?
+	static bool initialized = false; //240 | It's local var soooo static?
 
-	const luaL_Reg webView_f[] = { //224
+	const luaL_Reg webView_f[] = { //244
 		{ "new", create },
 		{ 0, 0 }
 	};
@@ -191,23 +194,24 @@ WebViewLuaInterface::WebViewLuaInterface(LuaState* lua) :
 		{ 0, 0 }
 	};
 
-	if (WebView::isSupported() && !initialized)
+	if (WebView::isSupported() && !initialized) //TODO
+	//if (WebView::isSupported() && !initialized)
 	{
-		lua_State* l = lua->impl();
-		luaL_newmetatable(l, s_metaTableName);
-		lua_pushvalue(l, -1);
-		lua_setfield(l, -2, "__index");
-		luaL_register(l, 0, webView_m);
-		luaL_register(l, s_tableName, webView_f);
-		lua_settop(l, -3);
-		lua_getglobal(l, s_tableName);
-		lua_pushstring(l, "0");
-		lua_setfield(l, -2, "DONT_LOAD_PAGE");
-		lua_pushstring(l, "1");
-		lua_setfield(l, -2, "LOAD_PAGE_INTO_WEBVIEW");
-		lua_pushstring(l, "2");
-		lua_setfield(l, -2, "LOAD_PAGE_INTO_EXTERNAL_BROWSER");
-		lua_settop(l, -2);
+		lua_State* L = lua->impl(); //268
+		luaL_newmetatable(L, s_metaTableName);
+		lua_pushvalue(L, -1);
+		lua_setfield(L, -2, "__index");
+		luaL_register(L, 0, webView_m);
+		luaL_register(L, s_tableName, webView_f);
+		lua_settop(L, -3);
+		lua_getglobal(L, s_tableName);
+		lua_pushstring(L, "0");
+		lua_setfield(L, -2, "DONT_LOAD_PAGE");
+		lua_pushstring(L, "1");
+		lua_setfield(L, -2, "LOAD_PAGE_INTO_WEBVIEW");
+		lua_pushstring(L, "2");
+		lua_setfield(L, -2, "LOAD_PAGE_INTO_EXTERNAL_BROWSER");
+		lua_settop(L, -2);
 		s_instance = this;
 		initialized = true;
 	}

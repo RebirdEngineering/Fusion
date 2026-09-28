@@ -61,9 +61,7 @@ namespace pf
 		}
 
 	private:
-		//Guesses from iOS
-		LauncherDelegate* _delegate;
-		//EmailerSender
+		LauncherDelegate* m_impl; //Assumption
 	};
 
 #include <pf/common/Launcher.h>

@@ -6,7 +6,7 @@
 namespace pf
 {
 
-class DeviceInfo : //13
+class DeviceInfo : //13 | Win32
 	public lang::Object
 {
 public:

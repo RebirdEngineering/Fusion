@@ -6,7 +6,7 @@
 namespace pf
 {
 
-class Locale : public lang::Object //15 | This reeks of identical code
+class Locale : public lang::Object //15 | Win, This reeks of identical code
 {
 public:
 	Locale(); //22

@@ -14,7 +14,7 @@ public:
 	virtual void notificationReceived(const std::string&) = 0; //13
 };
 
-class LocalNotifications : public lang::Object //20
+class LocalNotifications : public lang::Object //20 | 44 byte Impl on Win32
 {
 public:
 	LocalNotifications(); //25

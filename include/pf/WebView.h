@@ -33,14 +33,13 @@ public:
 	std::string* executeJavaScript(std::string javaScript); //61
 	void asyncExecuteJavaScript(std::string javaScript); //62
 
-	bool isSupported(); //64
+	static bool isSupported(); //64 | Is this supposed to be static?
 	bool isWebViewSupported(); //65
 
 	int m_func_ref; //68
 	int m_callback; //69
 
 private:
-	friend class WebViewListener;
 	P(WebViewImpl) m_impl; //73
 
 	WebView(const WebView&); //75
