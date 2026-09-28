@@ -2,6 +2,7 @@ WebView::WebView(int x, int y, int height, int width, bool backgroundIsTranspare
 {
 	m_func_ref = -1;
 	m_callback = -1;
+
 	m_impl = new WebViewImpl(x, y, height, width, backgroundIsTransparent);
 }
 
@@ -62,7 +63,7 @@ std::string* WebView::executeJavaScript(std::string javaScript) //61
 
 void WebView::asyncExecuteJavaScript(std::string javaScript) //66
 {
-	return m_impl->asyncExecuteJavaScript(javaScript); //68
+	m_impl->asyncExecuteJavaScript(javaScript); //68
 }
 
 bool WebView::isSupported() //Not defined on iOS

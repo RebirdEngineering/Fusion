@@ -13,9 +13,9 @@ public:
 
 	~UUID(); //25
 
-	bool isSupported(); //30
+	static bool isSupported(); //30
 
-	std::string generateUUID(); //35
+	static std::string generateUUID(); //35
 private:
 	class Impl;
 	P(Impl) m_impl; //39
