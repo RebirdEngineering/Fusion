@@ -7,7 +7,7 @@
 namespace game
 {
 
-class SystemFont : //13 | 88 bytes on Win32 (GDI), 56 on iOS, 40 bytes on ABC OSX 3.0.1 and ABS OSX 3.1.1
+class SystemFont : //13 | 88 bytes on Win32 (GDI), 56 on iOS, 40 bytes on ABC OSX 3.0.1 (OSX) and ABS OSX 3.1.1
 	public IFont
 {
 public:
