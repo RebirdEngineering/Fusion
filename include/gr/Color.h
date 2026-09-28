@@ -1,13 +1,11 @@
 #ifndef _GR_COLOR_H
 #define _GR_COLOR_H
 
-#include <lang/Object.h>
 #include <math/float4.h>
 
 BEGIN_NAMESPACE(gr)
 
-class Color :
-	public lang::Object
+class Color
 {
 public:
 	explicit Color( unsigned int color );
