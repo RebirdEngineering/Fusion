@@ -7,14 +7,6 @@ namespace pf
 	class Store::Impl : public Object
 	{
 	public:
-		Impl()
-		{
-		}
-
-		~Impl()
-		{
-		}
-
 		static void showProductInStore(const std::string& iTunesItemIdentifier, StoreListener* listener)
 		{
 		}
