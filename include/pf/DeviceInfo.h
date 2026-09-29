@@ -59,8 +59,8 @@ public:
 	int getPPI() const; //201
 
 private:
-	class Impl;
-	P(Impl) m_impl; //205
+	class DeviceInfoImpl;
+	P(DeviceInfoImpl) m_impl; //205 | Impl sizes: [Win32: 12 bytes, Android: 36 bytes, OSX: 16 bytes {legacy is 8 bytes (DUMMY)}, iOS: 12 bytes]
 
 	DeviceInfo(const DeviceInfo&); //207
 	DeviceInfo& operator=(const DeviceInfo&); //208

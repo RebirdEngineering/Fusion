@@ -4,14 +4,14 @@ using namespace lang;
 
 namespace pf
 {
-	class DeviceInfo::Impl : public Object
+	class DeviceInfo::DeviceInfoImpl : public Object //Legacy OSX, only here as a failsafe.
 	{
 	public:
-		Impl()
+		DeviceInfoImpl()
 		{
 		}
 
-		~Impl()
+		~DeviceInfoImpl()
 		{
 		}
 
