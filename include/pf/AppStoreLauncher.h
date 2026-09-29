@@ -7,13 +7,13 @@
 namespace pf
 {
 
-class AppStoreLauncherImpl;
+//class AppStoreLauncherImpl; //iOS + OSX + Android: 12 bytes [iOS]
 
-class AppStoreLauncher : //19
+class AppStoreLauncher : //19 | No RTTI on Seasons 4.1.0 Win and WP8! Doesn't exist?
 	public lang::Object
 {
 public:
-	enum AppStoreVariant
+	enum AppStoreVariant //24
 	{
 		ANDROID_GOOGLE_PLAY,
 		ANDROID_AMAZON,
@@ -21,17 +21,14 @@ public:
 		IOS_STORE,
 		OSX_STORE
 	};
-	AppStoreLauncher();
-
-	~AppStoreLauncher();
 
 	static bool launchAppStore(const std::string& applicationID, AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener); //49
 
-	static bool isSupported();
+	static bool isSupported(); //56
 
-	static bool isVariantSupported(AppStoreVariant storeVariant);
+	static bool isVariantSupported(AppStoreVariant storeVariant); //63
 
-	AppStoreVariant defaultVariant();
+	AppStoreVariant defaultVariant(); //70
 };
 
 }

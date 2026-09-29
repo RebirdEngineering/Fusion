@@ -7,14 +7,6 @@ namespace pf
 	class AppStoreLauncherImpl : public Object //Potentially unofficial name.
 	{
 	public:
-		AppStoreLauncherImpl()
-		{
-		}
-
-		~AppStoreLauncherImpl()
-		{
-		}
-
 		static bool launchAppStore(const std::string& applicationID, AppStoreLauncher::AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener)
 		{
 			return false;
