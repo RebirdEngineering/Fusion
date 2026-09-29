@@ -5,7 +5,7 @@ USING_NAMESPACE(math)
 
 BEGIN_NAMESPACE(pf)
 
-class Accelerometer::Impl : public Object //OSX and likely Win
+class Accelerometer::Impl : public Object //Win32+OSX+WP8
 {
 public:
 	Impl()
@@ -32,17 +32,13 @@ public:
 
 	float3 getData()
 	{
-		return m_data;
+		return float3(0, 0, 0);
 	}
 
 	float3 getDataFiltered()
 	{
-		return m_dataSmoothed;
+		return float3(0, 0, 0);
 	}
-	
-	//Guesses from iOS impl
-	float3 m_data;
-	float3 m_dataSmoothed;
 };
 
 #include <pf/common/Accelerometer.h>
