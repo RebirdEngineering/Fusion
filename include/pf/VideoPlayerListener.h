@@ -2,13 +2,16 @@
 #define _PF_VIDEOPLAYERLISTENER_H
 
 #include <pf/VideoPlayerPlayListItem.h>
+//#include <pf/VideoPlayer.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
+	class VideoPlayer;
 
-class VideoPlayerListener
+class VideoPlayerListener //12
 {
 public:
-	enum PlaybackEndReason
+	enum PlaybackEndReason //19
 	{
 		PLAYBACK_COMPLETED,
 		CLOSED,
@@ -18,26 +21,27 @@ public:
 		UNSUPPORTED_MEDIA_TYPE,
 		UNKNOWN_ERROR
 	};
-	struct CuePoint
+
+	struct CuePoint //30
 	{
-	public:
-		std::string name;
-		std::string type;
-		float secondsFromBeginning;
+		std::string name; //32
+		std::string type; //33
+		float secondsFromBeginning; //34
 	};
-	virtual void onVideoPreparing(VideoPlayer&, VideoPlayerPlayListItem);
 
-	virtual void onVideoStarted(VideoPlayer&, VideoPlayerPlayListItem);
+	virtual void onVideoPreparing(VideoPlayer&, VideoPlayerPlayListItem); //40
 
-	virtual void onVideoCancelled(VideoPlayer&);
+	virtual void onVideoStarted(VideoPlayer&, VideoPlayerPlayListItem); //45
 
-	virtual void onVideoEnded(VideoPlayer&, VideoPlayerPlayListItem, PlaybackEndReason, float, float);
+	virtual void onVideoCancelled(VideoPlayer&); //50
 
-	virtual void onVideoPlaylistEnded(VideoPlayer&, std::vector<VideoPlayerPlayListItem>);
+	virtual void onVideoEnded(VideoPlayer&, VideoPlayerPlayListItem, PlaybackEndReason, float, float); //55
 
-	virtual void onExtraButtonClicked(VideoPlayer&, const std::string&);
+	virtual void onVideoPlaylistEnded(VideoPlayer&, std::vector<VideoPlayerPlayListItem>); //60
 
-	virtual void onCuePointReached(VideoPlayer&, std::vector <VideoPlayerListener>);
+	virtual void onExtraButtonClicked(VideoPlayer&, const std::string&); //62
+
+	virtual void onCuePointReached(VideoPlayer&, std::vector <VideoPlayerListener>); //67
 };
 
 }

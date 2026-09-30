@@ -3,7 +3,8 @@
 
 #include <util/BaseN.h>
 
-BEGIN_NAMESPACE(util)
+namespace util
+{
 
 class Base64
 {

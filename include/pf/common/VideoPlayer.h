@@ -1,32 +1,30 @@
 #ifndef _PF_COMMON_VIDEOPLAYER_H
 #define _PF_COMMON_VIDEOPLAYER_H
 
-#include <pf/VideoPlayer.h>
+//Includes and namespaces are redundant since we're including this file in the namespace
 
-BEGIN_NAMESPACE(pf)
-
-VideoPlayer::VideoPlayer(bool separateActivityOnAndroid)
+VideoPlayer::VideoPlayer(bool separateActivityOnAndroid) //7
 {
-	m_impl = VideoPlayerImpl(separateActivityOnAndroid);
+	m_impl = new VideoPlayerImpl(separateActivityOnAndroid); //10
 }
 
 VideoPlayer::~VideoPlayer()
 {
 }
 
-void VideoPlayer::addListener(VideoPlayerListener* listener)
+void VideoPlayer::addListener(VideoPlayerListener* listener) //22
 {
-	m_impl->addListener(listener);
+	m_impl->addListener(listener); //24
 }
 
-void VideoPlayer::removeListener(VideoPlayerListener* listener)
+void VideoPlayer::removeListener(VideoPlayerListener* listener) //27
 {
-	m_impl->removeListener(listener);
+	m_impl->removeListener(listener); //29
 }
 
-void VideoPlayer::setSource(const std::string& filename, float startPositionSeconds)
+void VideoPlayer::setSource(const std::string& filename, float startPositionSeconds) //32
 {
-	m_impl->setSource(filename, startPositionSeconds);
+	m_impl->setSource(filename, startPositionSeconds); //34
 }
 
 void VideoPlayer::setSource(const VideoPlayerPlayListItem& item) //Not defined on iOS
@@ -46,59 +44,67 @@ void VideoPlayer::setLooping(bool looping) //Not defined on iOS
 
 void VideoPlayer::show()
 {
-	m_impl->show();
+	m_impl->show(); //54
 }
 
 void VideoPlayer::hide()
 {
-	m_impl->hide();
+	m_impl->hide(); //59
 }
 
 void VideoPlayer::play()
 {
-	m_impl->play();
+	m_impl->play(); //64
 }
 
 void VideoPlayer::pause()
 {
-	m_impl->pause();
+	m_impl->pause(); //69
 }
 
 void VideoPlayer::resume()
 {
-	m_impl->resume();
+	m_impl->resume(); //74
+}
+
+void VideoPlayer::close()
+{
+	m_impl->close(); //79
 }
 
 bool VideoPlayer::isPaused() const
 {
-	return m_impl->isPaused();
+	return m_impl->isPaused(); //84
 }
 
-void VideoPlayer::setCloseButtonImagePaths(const std::string& imageNormal, const std::string& imagePressed)
+bool VideoPlayer::isSupported()
 {
-	m_impl->setCloseButtonImagePaths(imageNormal, imagePressed);
+	return m_impl->isSupported();
 }
 
-void VideoPlayer::addExtraButton(const std::string& buttonId, const std::string& image, ExtraButtonPosition position)
+void VideoPlayer::setCloseButtonImagePaths(const std::string& imageNormal, const std::string& imagePressed) //87
 {
-	m_impl->addExtraButton(buttonId, image, position);
+	m_impl->setCloseButtonImagePaths(imageNormal, imagePressed); //89
+}
+
+void VideoPlayer::addExtraButton(const std::string& buttonId, const std::string& image, ExtraButtonPosition position) //92
+{
+	m_impl->addExtraButton(buttonId, image, position); //94
 }
 
 void VideoPlayer::addExtraLayer(const std::string& image, float secondsVisible, ExtraButtonPosition position, const std::string& text, const std::string& font, float fontSize) //Not defined on iOS
 {
-	m_impl->addExtraLayer(image, seconds, secondsVisible, position, text, font);
+	m_impl->addExtraLayer(image, secondsVisible, position, font, text, fontSize);
 }
 
-void VideoPlayer::setCuePoints(const std::vector<VideoPlayerListener::CuePoint>& cuePoints)
+void VideoPlayer::setCuePoints(const std::vector<VideoPlayerListener::CuePoint>& cuePoints) //104
 {
-	m_impl->setCuePoints(cuePoints);
+	m_impl->setCuePoints(cuePoints); //106
 }
 
 void VideoPlayer::clearCuePoints()
 {
-	m_impl->clearCuePoints();
-}
-
+	m_impl->clearCuePoints(); //111
 }
 
 #endif //! _PF_COMMON_VIDEOPLAYER_H

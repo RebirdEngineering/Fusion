@@ -7,7 +7,8 @@
 
 //BEGIN_NAMESPACE(lang) BEGIN_NAMESPACE(log) struct Event; class Listener; } }
 	
-BEGIN_NAMESPACE(framework)
+namespace framework
+{
 
 class FileLogger :
 	public lang::log::Listener
@@ -19,6 +20,6 @@ public:
 	virtual void onLogEvent(const NS(lang::log, Event)& Event);
 };
 
-} // framework
+END_NAMESPACE() // framework
 
-#endif // _FRAMEWORK_STDOUTLOGGER_H
+#endif // _FRAMEWORK_FILELOGGER_H

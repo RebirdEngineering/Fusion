@@ -3,41 +3,41 @@
 
 #include <lang/pp.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
 
-class VideoPlayerPlayListItem
+class VideoPlayerPlayListItem //11
 {
 public:
-	enum InterfaceType
+	enum InterfaceType //19
 	{
 		INTERFACE_TYPE_UNKNOWN,
 		NO_USER_CONTROL,
 		USER_CONTROL_ENABLED
 	};
 
-	VideoPlayerPlayListItem(std::string, InterfaceType);
+	VideoPlayerPlayListItem(std::string, InterfaceType); //31
 
-	VideoPlayerPlayListItem();
+	VideoPlayerPlayListItem(); //36
 
-	virtual ~VideoPlayerPlayListItem();
+	virtual ~VideoPlayerPlayListItem(); //41
 
-	bool isUserControlEnabled();
+	bool isUserControlEnabled(); //46
 
-	void setUrl(std::string);
+	void setUrl(std::string); //51
 
-	const std::string& getUrl() const;
+	const std::string& getUrl() const; //56
 
-	void setInterfaceType(InterfaceType = USER_CONTROL_ENABLED);
+	void setInterfaceType(InterfaceType);
 
-	InterfaceType getInterfaceType() const;
+	InterfaceType getInterfaceType() const; //66
 
-	float getStartPositionSeconds();
-
-	setStartPositionSeconds(float);
+	float getStartPositionSeconds(); //68
+	void setStartPositionSeconds(float); //69
 private:
-	std::string m_url;
-	InterfaceType m_interfaceType;
-	float m_startPositionSeconds;
+	std::string m_url; //72
+	InterfaceType m_interfaceType; //73
+	float m_startPositionSeconds; //74
 };
 
 }

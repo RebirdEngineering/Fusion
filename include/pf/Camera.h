@@ -3,25 +3,30 @@
 
 #include <lang/Object.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf //8
+{
 
-class Camera :
-	public NS(lang,Object)
+class CameraListener;
+
+class Camera : //19 | Only mentioned via header?
+	public lang::Object
 {
 public:
-	class Size
+	class Size //23
 	{
 	public:
-		int width;
-		int height;
-		Size();
+		Size(); //26
+		int width; //27
+		int height; //28
+
+		Size(int w, int h); //30
 	};
-	enum Position
+	enum Position //36
 	{
 		CAMERA_BACK,
 		CAMERA_FRONT
 	};
-	enum Status
+	enum Status //46
 	{
 		STATUS,
 		READY,
@@ -29,39 +34,41 @@ public:
 		ERROR_INIT,
 		ERROR_SHOW
 	};
-	Camera(Position, CameraListener*);
-	~Camera();
+	Camera(Position, CameraListener*); //64
 
-	void showPreview();
+	~Camera(); //66
 
-	void hidePreview();
+	void showPreview(); //74
 
-	std::vector<Size> getSupportedImageResolutions();
+	void hidePreview(); //82
 
-	void setImageResolution(Size);
+	std::vector<Size> getSupportedImageResolutions(); //89
 
-	void setPreviewBounds(int, int, Size);
+	void setImageResolution(Size); //99
 
-	bool isSupported();
+	void setPreviewBounds(int, int, Size); //108
 
-	bool isAvailable();
+	bool isSupported(); //114
 
-	Camera(const Camera&);
-	Camera& operator=(const Camera&);
+	bool isAvailable(); //122
+
+	Camera(const Camera&); //125
+	Camera& operator=(const Camera&); //126
 private:
-	SP(Impl) m_impl;
+	class Impl;
+	std::shared_ptr<Impl> m_impl; //129
 };
 
-class CameraListener
+class CameraListener //137
 {
 public:
-	virtual void onFrameAvailable(unsigned char*, size_t, int, int);
+	virtual void onFrameAvailable(unsigned char*, size_t, int, int); //151
 
-	virtual unsigned char* getBuffer(size_t);
+	virtual unsigned char* getBuffer(size_t); //160
 
-	virtual void onCameraStatus(Status, const std::string&);
+	virtual void onCameraStatus(Camera::Status, const std::string&); //167
 protected:
-	std::vector<unsigned char> m_buffer;
+	std::vector<unsigned char> m_buffer; //170
 };
 
 }

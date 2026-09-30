@@ -10,7 +10,8 @@
 
 //alphabet //__cxx_global_var_init
 
-BEGIN_NAMESPACE(util)
+namespace util
+{
 
 template <int D, int E> class BaseN
 {

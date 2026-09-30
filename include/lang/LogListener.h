@@ -3,8 +3,8 @@
 
 #include <lang/pp.h>
 
-BEGIN_NAMESPACE(lang)
-BEGIN_NAMESPACE(log)
+namespace lang {
+namespace log {
 
 struct Event
 {
@@ -26,7 +26,8 @@ public:
 };
 
 }
-BEGIN_NAMESPACE(analytics)
+
+namespace analytics {
 
 class Event
 {
