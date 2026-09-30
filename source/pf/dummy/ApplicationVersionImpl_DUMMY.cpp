@@ -5,14 +5,6 @@ namespace pf
 	class ApplicationVersion::Impl //Potentially an unofficial name.
 	{
 	public:
-		Impl()
-		{
-		}
-
-		~Impl()
-		{
-		}
-
 		static bool isSupported()
 		{
 			return false;

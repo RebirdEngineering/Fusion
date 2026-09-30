@@ -1,20 +1,12 @@
 #ifndef _PF_COMMON_APPSTORELAUNCHER_H
 #define _PF_COMMON_APPSTORELAUNCHER_H
 
-AppStoreLauncher::AppStoreLauncher()
+bool AppStoreLauncher::isVariantSupported(AppStoreVariant storeVariant) //11
 {
+	return AppStoreLauncherImpl::isVariantSupported(storeVariant); //13
 }
 
-AppStoreLauncher::~AppStoreLauncher()
-{
-}
-
-bool AppStoreLauncher::isVariantSupported(AppStoreVariant storeVariant)
-{
-	return AppStoreLauncherImpl::isVariantSupported(storeVariant);
-}
-
-bool AppStoreLauncher::launchAppStore(const std::string& applicationID, AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener)
+bool AppStoreLauncher::launchAppStore(const std::string& applicationID, AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener) //16
 {
 	return AppStoreLauncherImpl::launchAppStore(applicationID, storeVariant, gotoReviews, listener);
 }
