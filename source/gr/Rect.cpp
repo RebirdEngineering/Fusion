@@ -1,7 +1,7 @@
 #include <gr/Rect.h>
 #include <lang/Math.h>
 
-using namespace lang;
+USING_NAMESPACE(lang)
 
 BEGIN_NAMESPACE(gr) 
 

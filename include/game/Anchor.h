@@ -5,24 +5,25 @@
 
 BEGIN_NAMESPACE(game)
 
-class Anchor //8
+class Anchor //12
 {
 public:
-	enum VAnchor { TOP, VCENTER, BOTTOM, BASELINE, VPIVOT, VUNDEFINED }; //15 / 14 (ABFM)
-	enum HAnchor { LEFT, HCENTER, RIGHT, HPIVOT, HUNDEFINED }; //16 / 15 (ABFM)
+	enum VAnchor { TOP, VCENTER, BOTTOM, BASELINE, VPIVOT, VUNDEFINED }; //15
+	enum HAnchor { LEFT, HCENTER, RIGHT, HPIVOT, HUNDEFINED }; //16
 
-	VAnchor v; //21
-	HAnchor h; //22
-	Anchor();
-	Anchor(VAnchor);
-	Anchor(HAnchor);
-	Anchor(VAnchor va, HAnchor ha);
-	Anchor(HAnchor, VAnchor);
-	bool operator==(const Anchor&) const;
+	VAnchor v; //37
+	HAnchor h; //38
+	Anchor() { v = TOP; h = LEFT; } //18 | Check?
+	Anchor(VAnchor va) { v = va; } //19 | Check?
+	Anchor(HAnchor ha) { h = ha; } //20 | Check?
+	Anchor(VAnchor va, HAnchor ha) { v = va; h = ha; } //21 | Check?
+	Anchor(HAnchor ha, VAnchor va) { h = ha; v = va; } //22 | Check?
 
-	void fromString(const char* str);
+	bool operator==(const Anchor&) const; //24
 
-	NS(gr, Rect) offsetRect(const NS(gr, Rect)&, int, int, int) const;
+	void fromString(const char* str); //29
+
+	NS(gr, Rect) offsetRect(const NS(gr, Rect)&, int refX, int refY) const; //34
 };
 
 END_NAMESPACE();
