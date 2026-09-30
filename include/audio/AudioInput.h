@@ -36,7 +36,7 @@ public:
 	void removeListener(AudioInputListener* listener); //68
 
 private:
-	P(AudioInputImpl) m_impl; //71
+	P(AudioInputImpl) m_impl; //71 | Impl sizes: [iOS+OSX+Android+WP8: 76 bytes] no Fusion builds has a real impl used.
 	AudioInput(const AudioInput&); //72
 	AudioInput& operator=(const AudioInput&); //73
 };

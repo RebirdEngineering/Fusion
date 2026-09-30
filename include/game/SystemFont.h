@@ -7,7 +7,7 @@
 namespace game
 {
 
-class SystemFont : //13 | 88 bytes on Win32 (GDI), 56 on iOS, 40 bytes on ABC OSX 3.0.1 (OSX) and ABS OSX 3.1.1
+class SystemFont : //13 | 88 bytes on Win32 (GDI), 56 on iOS, 40 bytes on ABC OSX 3.0.1 (OSX) and ABS OSX 3.1.1, 56 on ABS 4.1.0 OSX
 	public IFont
 {
 public:
@@ -53,7 +53,7 @@ public:
 	const char* toString(Style); //141
 private:
 	class Impl;
-	P(Impl) m_impl; //159
+	P(Impl) m_impl; //159 | Impl sizes: [Win32: 88 bytes, iOS: 56 bytes, WP8: 12 bytes {Dummy?}, Android: 100 bytes, OSX: 56 bytes]
 };
 
 }

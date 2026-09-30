@@ -63,7 +63,7 @@ public:
     bool isStarted() const; //157
 
 private:
-    P(AudioOutputImpl) m_impl; //160
+    P(AudioOutputImpl) m_impl; //160 | Impl sizes: [Android: 184 bytes, iOS+OSX: 240 bytes {OpenAL}, Win32: 216 bytes, WP8: 232 bytes]
     AudioOutput(const AudioOutput&); //161
     AudioOutput& operator=(const AudioOutput&); //162
 };

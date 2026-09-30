@@ -29,7 +29,7 @@ public:
 	void onAnalyticsCommonParameters(const lang::analytics::Event& event); //75
 private:
 	class Impl;
-	P(Impl) m_impl; //80
+	P(Impl) m_impl; //80 | Impl sizes: [iOS: 12 bytes, Android: 56 bytes, OSX: 12 bytes, WP8: 12 bytes, Win32: 12 bytes]
 	std::map<std::string, std::string> m_commonParameters; //81
 
 	Flurry(const Flurry&); //83
