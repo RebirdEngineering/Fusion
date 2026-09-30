@@ -3,52 +3,67 @@
 
 #include <math/float4.h>
 
-BEGIN_NAMESPACE(gr)
+namespace gr
+{
 
-class Color
+class Color //11
 {
 public:
-	explicit Color( unsigned int color );
+	explicit Color( unsigned int color ); //27
 	
-	Color( float alpha, float red, float green, float blue);
+	/*
+	* 
+	* @param alpha 
+	* @param red
+	* @param green
+	* @param blue
+	*/
+	Color( float alpha, float red, float green, float blue); //36
 	
-	Color( const NS(math, float4) & color );
+	/*
+	*
+	* @param color
+	*/
+	Color( const NS(math, float4) & color ); //42
 	
-	~Color( );
+	~Color( ); //44
 	
-	float red( ) const;
+	float red( ) const; //49
 	
-	float green( ) const;
+	float green( ) const; //53
 	
-	float blue( ) const;
+	float blue( ) const; //57
 	
-	float alpha( ) const;
+	float alpha( ) const; //61
 	
-	NS(math, float4) getColorAsFloat4( ) const;
+	NS(math, float4) getColorAsFloat4( ) const; //66
 	
-	unsigned int getColorAsInt( ) const;
+	unsigned int getColorAsInt( ) const; //72
 	
-	void setRed( float );
+	void setRed( float ); //78
 	
-	void setGreen( float );
+	void setGreen( float ); //83
 	
-	void setBlue( float );
+	void setBlue( float ); //88
 	
-	void setAlpha( float );
+	void setAlpha( float ); //93
 	
-	void setColor( const NS(math, float4)& );
+	void setColor( const NS(math, float4)& ); //99
 	
-	void setColor( unsigned int color );
+	void setColor( unsigned int color ); //105
+
+	void setColor( float, float, float, float ); //114
 	
-	Color& operator+=( const Color& );
+	Color& operator+=( const Color& rhs ); //119 | Assumption
 	
-	Color& operator*=( const Color& );
+	Color& operator*=( const Color& rhs ); //124
 	
-	Color& operator+( const Color& );
+	Color operator+( const Color& rhs ); //129 | Assumption
 	
-	Color& operator*( const Color& rhs);
+	Color operator*( const Color& rhs ); //134
+
 private:
-	NS(math, float4) m_color;
+	NS(math, float4) m_color; //137
 };
 
 }
