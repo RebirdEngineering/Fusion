@@ -10,7 +10,7 @@ namespace flurry
 {
 	Flurry::Flurry()
 	{
-		m_impl = new Impl();
+		m_impl = new Impl(); //8
 	}
 
 	Flurry::~Flurry()
@@ -19,43 +19,48 @@ namespace flurry
 
 	void Flurry::startSession(const std::string& apiKey)
 	{
-		m_impl->startSession(apiKey);
+		m_impl->startSession(apiKey); //17
 		addListener(this);
 	}
 
 	void Flurry::endSession()
 	{
 		removeListener(this);
-		m_impl->endSession();
+		m_impl->endSession(); //24
 	}
 
-	void Flurry::logEvent(const std::string& eventName, const std::string& paramName, const std::string& paramValue)
+	void Flurry::logEvent(const std::string& eventName)
 	{
-		std::map<std::string, std::string> params;
+		m_impl->logEvent(eventName, m_commonParameters);
+	}
+
+	void Flurry::logEvent(const std::string& eventName, const std::string& paramName, const std::string& paramValue) //32
+	{
+		std::map<std::string, std::string> params; //34
 		params[paramName] = paramValue;
-		m_impl->logEvent(eventName, params);
+		m_impl->logEvent(eventName, params); //36
 	}
 
-	void Flurry::onAnalyticsEvent(const lang::analytics::Event& event)
+	void Flurry::logEvent(const std::string& eventName, const std::map<std::string, std::string>& params) //39
 	{
-		std::map<std::string, std::string> combinedParams = m_commonParameters;
+		m_impl->logEvent(eventName, params); //41
+	}
 
-		for (std::map<std::string, std::string>::const_iterator i = combinedParams.begin(); i != combinedParams.end(); i++)
+	void Flurry::onAnalyticsEvent(const analytics::Event& event) //44
+	{
+		std::map<std::string, std::string> combinedParams = m_commonParameters; //46
+
+		for (std::map<std::string, std::string>::const_iterator i = combinedParams.begin(); i != combinedParams.end(); i++) //48
 		{
 			combinedParams[i->first] = i->second; //?
 		}
 
-		m_impl->logEvent(event.event, combinedParams);
+		m_impl->logEvent(event.event, combinedParams); //53
 	}
 
-	void Flurry::logEvent(const std::string& eventName, const std::map<std::string, std::string>& params)
+	void Flurry::onAnalyticsCommonParameters(const analytics::Event& event) //56
 	{
-		m_impl->logEvent(eventName, params);
-	}
-
-	void Flurry::onAnalyticsCommonParameters(const lang::analytics::Event& event)
-	{
-		for (std::map<std::string, std::string>::const_iterator i = event.params.begin(); i != event.params.end(); i++)
+		for (std::map<std::string, std::string>::const_iterator i = event.params.begin(); i != event.params.end(); i++) //58
 		{
 			if (i->first == i->second)
 				m_commonParameters[i->first] = i->second; //?
