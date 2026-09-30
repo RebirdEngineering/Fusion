@@ -6,6 +6,7 @@
 #include <audio/AudioConfiguration.h>
 #include <io/PathName.h>
 #include <gr/Color.h>
+#include <lang/Object.h>
 
 namespace audio
 {
