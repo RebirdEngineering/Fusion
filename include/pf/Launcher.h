@@ -6,7 +6,7 @@
 namespace pf
 {
 
-class LauncherDelegate //12 | Win32 (16 bytes)
+class LauncherDelegate //12
 {
 public:
 	enum ResultValue { FAILED, SUCCEEDED, CANCELLED, UNKNOWN }; //15
@@ -40,7 +40,7 @@ public:
 	void setDelegate(LauncherDelegate*); //83, unknown param.
 private:
 	class LauncherImpl;
-	P(LauncherImpl) m_impl; //88
+	P(LauncherImpl) m_impl; //88 | Impl sizes: [Win32+WP8: 16 bytes, iOS: 32 bytes, Android: 16 bytes]
 	Launcher(const Launcher&); //89
 	Launcher& operator=(const Launcher&); //90
 };

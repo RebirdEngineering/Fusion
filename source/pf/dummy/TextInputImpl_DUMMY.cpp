@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class TextInput::TextInputImpl : public Object //Ok so this kind of file is officially named TextInputImpl_* yet some platforms call it TextInput_*, where's the consistency? We've only seen this variant in Trilogii? Not on Win.
+	class TextInput::TextInputImpl : public Object //Ok so this kind of file is officially named TextInputImpl_* yet some platforms call it TextInput_*, where's the consistency?
 	{
 	public:
 		TextInputImpl()

@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class Locale::LocaleImpl : public Object
+	class Locale::LocaleImpl : public Object //WP8+OSX
 	{
 	public:
 		LocaleImpl()

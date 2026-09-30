@@ -18,7 +18,7 @@ public:
 	static std::string generateUUID(); //35
 private:
 	class Impl;
-	P(Impl) m_impl; //39
+	P(Impl) m_impl; //39 | All platforms are 12 bytes.
 
 	UUID(const UUID&); //41
 	UUID& operator=(const UUID&); //42

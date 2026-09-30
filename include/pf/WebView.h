@@ -40,7 +40,7 @@ public:
 	int m_callback; //69
 
 private:
-	P(WebViewImpl) m_impl; //73
+	P(WebViewImpl) m_impl; //73 | Impl sizes: [Android: 68 bytes, iOS: 16 bytes, Win32+OSX: 16 bytes {DUMMY}]
 
 	WebView(const WebView&); //75
 	WebView& operator=(const WebView&); //76

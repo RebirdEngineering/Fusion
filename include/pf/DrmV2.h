@@ -16,16 +16,15 @@ public:
 
 	~DrmV2(); //30
 
-	bool consumeKey(std::string key, std::string udid, bool*, bool*);
+	bool consumeKey(std::string key, std::string udid, bool*, bool*); //39
 
 	std::string getDeviceID(); //47
 
 	bool areDeviceIDsEqual(const std::string&, const std::string&); //52
 private:
 	P(DrmV2Impl) m_impl; //55
-
-	DrmV2(const DrmV2&);
-	DrmV2& operator=(const DrmV2&);
+	DrmV2(const DrmV2&); //56
+	DrmV2& operator=(const DrmV2&); //57
 };
 
 }

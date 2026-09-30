@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class WebViewImpl : public Object //OSX and Win, 16 bytes.
+	class WebViewImpl : public Object //Win32
 	{
 	public:
 		WebViewImpl(int x, int y, int height, int width, bool backgroundIsTransparent)

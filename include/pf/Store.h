@@ -16,7 +16,7 @@ public:
 
 	static bool isSupported(); //41
 private:
-	class Impl; //Ok so there's no Impl and m_impl? We at least need this defined
+	class Impl; //Ok so there's no Impl and m_impl? We at least need this defined. Only exists in ABS 4.1.0?
 	Store(const Store&); //46
 	Store& operator=(const Store&); //47
 };

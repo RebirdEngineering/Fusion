@@ -6,7 +6,7 @@
 namespace pf
 {
 
-class DeviceID : //15 | Win
+class DeviceID : //15
 	public lang::Object
 {
 public:
@@ -25,7 +25,7 @@ public:
 	std::string emptyID(); //76
 private:
 	class Impl;
-	P(Impl) m_impl; //80
+	P(Impl) m_impl; //80 | All are 12 bytes.
 
 	DeviceID(const DeviceID&); //82
 	DeviceID& operator=(const DeviceID&); //83

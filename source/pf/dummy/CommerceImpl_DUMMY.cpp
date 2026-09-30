@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class Commerce::CommerceImpl : public Object
+	class Commerce::CommerceImpl : public Object //Potentially unofficial.
 	{
 	public:
 		CommerceImpl(unsigned int, const char**, CommerceListener*);
@@ -46,12 +46,14 @@ namespace pf
 
 		const std::vector<P(CommerceItem)> getItems(CommerceListener*)
 		{
-			return m_items;
+			std::vector<P(CommerceItem)> result;
+			return result;
 		}
 
 		std::vector<P(CommerceItem)> getItemsRef()
 		{
-			return m_items;
+			std::vector<P(CommerceItem)> result;
+			return result;
 		}
 
 		bool isPurchaseHistoryImplemented()
@@ -63,10 +65,8 @@ namespace pf
 		{
 			return false;
 		}
-
-		std::vector<P(CommerceItem)> m_items;
 	};
 
-//#include <pf/common/Commerce.h>
+//#include <pf/common/Commerce.h> //Doesn't exist? Well then how does this work?
 
 }

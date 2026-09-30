@@ -48,6 +48,6 @@ namespace pf
 		void removeListener(LocationListener*);
 	};
 
-//#include <pf/common/Location.h>
+//#include <pf/common/Location.h> //Doesn't exist?
 
 }

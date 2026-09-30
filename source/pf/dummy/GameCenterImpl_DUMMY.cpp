@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class GameCenter::Impl : public Object
+	class GameCenter::Impl : public Object //No RTTI on Win32 and WP8?
 	{
 	public:
 		Impl(GameCenterListener* listener)

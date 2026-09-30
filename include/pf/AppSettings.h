@@ -29,7 +29,7 @@ public:
 	std::string getString(const std::string& key) const; //61
 private:
 	class AppSettingsImpl;
-	P(AppSettingsImpl) m_impl; //66
+	P(AppSettingsImpl) m_impl; //66 | Impl sizes: [Win32+OSX+WP8+Android [Prob anything]: 0 bytes [DUMMY], iOS: 44 bytes {iOS}]
 	AppSettings(const AppSettings&); //67
 	AppSettings& operator=(const AppSettings&); //68
 };

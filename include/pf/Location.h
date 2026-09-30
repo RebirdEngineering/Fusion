@@ -29,7 +29,7 @@ public:
 	virtual void regionExited(const Region&); //43
 };
 
-class Location : //52
+class Location : //52 | Not mentioned in any other build?
 	public lang::Object
 {
 public:
@@ -85,7 +85,7 @@ public:
 	void removeListener(LocationListener*); //187
 private:
 	class LocationImpl;
-	P(LocationImpl) m_impl; //190
+	P(LocationImpl) m_impl; //190 | Impl sizes: [iOS: 28 bytes]
 	Location(const Location&); //191
 	Location& operator=(const Location&); //192
 };

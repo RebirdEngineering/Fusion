@@ -18,7 +18,7 @@ public:
 	std::vector<std::string> getPreferedLanguages(); //37
 private:
 	class LocaleImpl;
-	P(LocaleImpl) m_impl; //42
+	P(LocaleImpl) m_impl; //42 | Impl sizes: [Win32: 12 bytes {Win32}, Android: 12 bytes {Android}, WP8+OSX: 12 bytes {DUMMY}]
 	Locale(const Locale&); //43
 	Locale& operator=(const Locale&); //44
 };

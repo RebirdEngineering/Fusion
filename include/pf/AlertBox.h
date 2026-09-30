@@ -3,16 +3,16 @@
 
 #include <lang/Object.h>
 
-namespace pf
+namespace pf //8
 {
 
 class AlertBoxListener;
 
-class AlertBox :
+class AlertBox : //22 | No RTTI on Seasons 4.1.0 Win and WP8! Doesn't exist?
 	public lang::Object
 {
 public:
-	enum Button
+	enum Button //26
 	{
 		BUTTON_OK,
 		BUTTON_OKCANCEL,
@@ -21,7 +21,7 @@ public:
 		BUTTON_RETRYCANCEL,
 		BUTTON_CUSTOM
 	};
-	enum Result
+	enum Result //34
 	{
 		RESULT_NOTSUPPORTED = -1,
 		RESULT_UNKNOWN,
@@ -36,27 +36,26 @@ public:
 		RESULT_CUSTOM_1,
 		RESULT_CUSTOM_2
 	};
-	AlertBox();
+	AlertBox(); //52
 
-	bool isSupported();
+	bool isSupported(); //57
 
-	~AlertBox();
+	~AlertBox(); //62
 
-	void setCustomButtons(const std::vector<std::string>& customButtons);
+	void setCustomButtons(const std::vector<std::string>& customButtons); //67
 
-	void show(const std::string& title, const std::string& message, int type, AlertBoxListener* listener);
+	void show(const std::string& title, const std::string& message, int type, AlertBoxListener* listener); //73
 private:
 	class AlertBoxImpl;
-	P(AlertBoxImpl) m_impl;
-
-	AlertBox(const AlertBox&);
-	AlertBox& operator=(const AlertBox&);
+	P(AlertBoxImpl) m_impl; //77 | Impl sizes: [iOS+OSX: 28 bytes {iOS, OSX}, Android: 24 bytes {Android}]
+	AlertBox(const AlertBox&); //78
+	AlertBox& operator=(const AlertBox&); //79
 };
 
-class AlertBoxListener
+class AlertBoxListener //82
 {
 public:
-	virtual void dialogDismissed(AlertBox*, AlertBox::Result) = 0;
+	virtual void dialogDismissed(AlertBox* dialog, AlertBox::Result result) = 0; //86 | Recovered param names from apprater::AppraterAlertBoxListener::dialogDismissed
 };
 
 }

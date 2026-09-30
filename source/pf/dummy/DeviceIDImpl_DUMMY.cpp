@@ -1,10 +1,11 @@
 #include <pf/DeviceID.h>
+//#include <unistd.h>
 
 using namespace lang;
 
 namespace pf
 {
-	class DeviceID::Impl : public Object //OSX
+	class DeviceID::Impl : public Object //Potentially unofficial.
 	{
 	public:
 		Impl()
@@ -21,6 +22,9 @@ namespace pf
 		}
 
 		std::vector<char> getDeviceID(); //TODO
+		//{
+			//if gethostuuid()
+		//}
 
 		std::map<std::string, std::string> getPlatformIDs() const; //TODO
 
@@ -31,7 +35,7 @@ namespace pf
 
 		std::string emptyID()
 		{
-			return "";
+			return "unavailable";
 		}
 
 	};

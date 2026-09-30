@@ -5,7 +5,7 @@
 
 class CommerceListener;
 
-namespace pf
+namespace pf //7
 {
 
 class CommerceItem : //12
@@ -58,7 +58,7 @@ protected:
 	std::vector<char> m_receipt; //112
 };
 
-class Commerce :
+class Commerce : //124 | Only seen on iOS?
 	public lang::Object
 {
 public:
@@ -89,7 +89,7 @@ public:
 	bool getPurchaseHistory(CommerceListener*); //198
 private:
 	class CommerceImpl;
-	P(CommerceImpl) m_impl; //203
+	P(CommerceImpl) m_impl; //203 | Impl sizes [iOS: 24 bytes]
 	Commerce(const Commerce&); //204
 	Commerce& operator=(const Commerce&); //205
 };

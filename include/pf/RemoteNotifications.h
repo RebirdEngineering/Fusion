@@ -31,7 +31,7 @@ public:
 	bool areSettingsProvidedByThePlatform(); //73
 private:
 	class Impl;
-	P(Impl) m_impl; //77
+	P(Impl) m_impl; //77 | Impl sizes: [iOS: 12 bytes, Android: 12 bytes, Win32: 12 bytes, WP8: 12 bytes]
 
 	RemoteNotifications(const RemoteNotifications&); //79
 	RemoteNotifications& operator=(const RemoteNotifications&); //80

@@ -37,7 +37,7 @@ public:
 	void removeListener(LocalNotificationsListener* l); //73
 protected:
 	class LocalNotificationsImpl;
-	LocalNotificationsImpl* m_impl; //79
+	LocalNotificationsImpl* m_impl; //79 | Impl sizes: [OSX: 12 bytes {DUMMY}, Android: 12 bytes, Win32: 44 bytes, WP8: 12 bytes]
 };
 
 }

@@ -90,7 +90,7 @@ public:
 	bool isSupported(); //204
 private:
 	class Impl;
-	P(Impl) m_impl; //208
+	P(Impl) m_impl; //208 | Impl sizes: [iOS+OSX: 20 bytes]
 
 	GameCenter(const GameCenter&); //210
 	GameCenter& operator=(const GameCenter&); //211
