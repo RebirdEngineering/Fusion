@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class Launcher::LauncherImpl : public Object
+	class Launcher::LauncherImpl : public Object //Unofficial?
 	{
 	public:
 		LauncherImpl()
@@ -59,9 +59,6 @@ namespace pf
 		{
 			//_delegate = delgate;
 		}
-
-	private:
-		LauncherDelegate* m_impl; //Assumption
 	};
 
 #include <pf/common/Launcher.h>
