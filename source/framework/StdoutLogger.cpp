@@ -27,14 +27,14 @@ void StdoutLogger::onLogEvent(const log::Event& e) //40
 	};
 	if ((supports_color() & 1) != 0)
 	{
-		color = "\x1B[0m";
+		reset = "\x1B[0m"; //Black?
 		if (e.priority == LANG_LOG_PRIORITY_WARN)
 		{
-			reset = "\x1B[1m\x1B[33m";
+			color = "\x1B[1m\x1B[33m"; //Yellow?
 		}
 		else if (e.priority == LANG_LOG_PRIORITY_ERROR)
 		{
-			reset = "\x1B[1m\x1B[31m";
+			color = "\x1B[1m\x1B[31m"; //Red?
 		}
 	}
 #endif
