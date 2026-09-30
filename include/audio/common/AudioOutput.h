@@ -3,7 +3,7 @@
 
 //Includes and namespaces are redundant since we're including this file in the namespace
 
-AudioOutput::AudioOutput(const AudioConfiguration& configuration) //6
+AudioOutput::AudioOutput(const AudioConfiguration& configuration) //6 | //Includes and namespaces are redundant since we're including this file in the namespace
 {
     m_impl = new AudioOutputImpl(configuration);
 }

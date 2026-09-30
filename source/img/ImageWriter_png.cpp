@@ -3,7 +3,7 @@
 #include <img/ImageWriter.h>
 #include <io/IOException.h>
 #include <lang/Log.h>
-#include <external/libpng/png.h> //Todo replace
+#include <external/libpng/png.h>
 
 
 using namespace io;

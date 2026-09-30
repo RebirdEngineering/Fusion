@@ -45,7 +45,8 @@ public:
 	}
 
 	~AudioInputImpl() //53
-	{}
+	{
+	}
 
 	bool startInput() //57
 	{
@@ -53,7 +54,8 @@ public:
 	}
 
 	void stopInput() //62
-	{}
+	{
+	}
 
 	bool isStarted() const //66
 	{
