@@ -5,7 +5,7 @@
 
 DeviceInfo::DeviceInfo()
 {
-	m_impl = new Impl();
+	m_impl = new DeviceInfoImpl();
 }
 
 DeviceInfo::~DeviceInfo()
