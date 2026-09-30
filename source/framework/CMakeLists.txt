@@ -1,13 +1,21 @@
 project(framework)
 
-file(GLOB FRAMEWORK_SRC "*.cpp") #TODO make this so win32 uses VisualStudioLogger
+set(FRAMEWORK_SRC 
+    "App.cpp"
+    "OSInterface.cpp"
+)
+
+#if(APPLE) #Not yet decompiled.
+#    file(GLOB FRAMEWORK_APPLE_SRC "StdoutLogger.cpp")
+#    list(APPEND FRAMEWORK_SRC ${FRAMEWORK_APPLE_SRC})
+#endif()
 
 if(WIN32)
-    list(APPEND FRAMEWORK_SRC "win32/WinMain.cpp") #WIP
+    list(APPEND FRAMEWORK_SRC "VisualStudioLogger.cpp" "win32/WinMain.cpp") #WIP
 endif()
 
 #if(ANDROID) #Not yet decompiled.
-#    file(GLOB FRAMEWORK_ANDROID_SRC "android/*.cpp")
+#    file(GLOB FRAMEWORK_ANDROID_SRC "AndroidLogger.cpp" "StderrLogger.cpp" "StdoutLogger.cpp" "android/*.cpp")
 #    list(APPEND FRAMEWORK_SRC ${FRAMEWORK_ANDROID_SRC})
 #endif()
 
@@ -17,7 +25,7 @@ endif()
 #endif()
 
 #if(OSX) #Not yet decompiled.
-#    file(GLOB FRAMEWORK_OSX_SRC "osx/*.cpp" "osx/*.m" "iOS/*.mm" ${FUSION_DIR}/external/asn1c/*.c)
+#    file(GLOB FRAMEWORK_OSX_SRC "osx/*.cpp" "osx/*.m" ${FUSION_DIR}/external/asn1c/*.c)
 #    list(APPEND FRAMEWORK_SRC ${FRAMEWORK_OSX_SRC})
 #endif()
 
