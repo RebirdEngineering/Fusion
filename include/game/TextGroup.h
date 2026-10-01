@@ -11,9 +11,9 @@ class TextGroup :
 public:
 	const std::string& get(const std::string& id) const;
 
-	std::string getFormatted(const std::string& id, const TextFormatter& formatter) const; //UNOFFICIAL NAMES
+	std::string getFormatted(const std::string& id, const TextFormatter& formatter) const; //Recover names from ABFM
 
-	void getIDs(std::vector<std::string>& entries) const; //UNOFFICIAL NAMES
+	void getIDs(std::vector<std::string>& idlist) const; //Recover name from ABFM
 private:
 	std::map<std::string, std::string> m_entries;
 
