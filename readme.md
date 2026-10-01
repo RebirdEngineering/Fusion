@@ -10,18 +10,18 @@ The main branch (this one) is heavily based off the revision found in Angry Bird
 Please do not confuse this for private KA3D. Fusion is exclusively for modern day platforms.
 
 ### Differencies / accuracy notes
-- To reduce legal risk, we do not aim to reverse engineer anything handling DRM or IAPs, the resulting code is DRM-free, at worst dummy implementations of them will be allowed, just so games would be able to reference them.
-- Certain variable/parameter names, asserts and missing methods have been reconstructed by referencing the originally semi-open-source release of the KA3D engine, reverse engineering KA3D-era and Silverlight ports of games. For more information, check the Hidden Birds Fusion documentation spreadsheet.
+- To reduce legal risk, we do not aim to reverse engineer anything handling DRM or IAPs, the resulting code is DRM-free, at worst dummy implementations of them will be allowed, just so applications would be able to reference them.
+- Certain variable/parameter names, asserts and missing methods have been reconstructed by referencing the originally semi-open-source release of the KA3D engine, as well as reverse engineering KA3D-era and Silverlight ports of games. For more information, check the Hidden Birds Fusion documentation spreadsheet.
 - Any functions vastly similar to public KA3D in the grand scale will use the original namespace macros.
 
 ### Compiling
 
-Simply open the repo in CMake and you will be able to build the most of the libraries for targeting to a project. At the moment, the repo is not quite completed and other build types than Windows or dummy implementations are unimplemented.
+Clone the repo using your Git client, please do not download the master release as an archive as it won't include external submodules, which are needed. After you did that, simply open the repo in CMake and you will be able to build the most of the libraries for targeting to a project. At the moment, the repo is not quite completed and other build types than Windows or dummy implementations are unimplemented.
 
 ### The executables used for comparison/reference (BLAKE3)
 
 - `ea7f3ad2e21b743d1d87eb1c18e7f4f6302b7be76159b935b8a98cd9da1b21d3 (executable) + 1bc6a6c63908a8ea71f72e7bf53a535828b3791917d7a74a2994970f9af63cbd (.dSYM) AngryBirdsSeasonsFull`
-	Angry Birds Seasons v4.1.0 for iPhone
+	Angry Birds Seasons v4.1.0 for iPhone.
 - ` 950beefdcdcb45101543cf707de8919740af3d98fe7d5f9edc68c7d68e7e6d24 angrybirdsfreemagic`
 	Angry Birds Free with Magic v1.1.3 for Meego + leftover debug information.
 - ` 16da89de8ce40a7e2a84b7a2d894cbd60a80267ed920e44a3dfc43fb4e6127d9 angrybirdsfreemagic`
@@ -30,7 +30,7 @@ Simply open the repo in CMake and you will be able to build the most of the libr
 ### Miscellaneous notes
 
 Legal notes:
-- The source code of engine itself (everything in `source` and `include`) are provided as-is.
+- The source code of the engine itself (everything in `source` and `include`) are provided as-is.
 - Any modifications are licensed under MIT.
 - The main focus of the project is to allow modern-day development and is done in a good faith - we don't condone 
   piracy, we just essentially want to give it a "second life".
