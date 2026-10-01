@@ -1,7 +1,6 @@
 #include <game/Sprite.h>
 #include <game/SpriteSheet.h>
 #include <gr/Context.h>
-#include <gr/Image.h>
 
 using namespace gr;
 using namespace math;
@@ -51,15 +50,16 @@ Sprite::Sprite(SpriteSheet* sheet, const std::string& name, int x, int y, int wi
     assert("game::Sprite::Sprite(game::SpriteSheet* sheet, const std::string& name, int x, int y, int width, int height, short pivotX, short pivotY, game::Sprite::SourceRotation rotation) was not yet decompiled.");
 }
 
-void Sprite::draw(Context* context, float x, float y, Anchor anchor) const //73
+void Sprite::draw(Context* context, float x, float y, Anchor anchor) const //73 | TODO
 {
     //m_sheet->getImage()->draw(context, x, y, m_width, m_height, m_UVs);
-};
+    assert("void game::Sprite::draw(gr::Context* context, float x, float y, game::Anchor anchor) const was not yet decompiled.");
+}
 
 void Sprite::draw(Context* context, const Transform& tm, const float2* corners, Shader* shader) const //151
 {
     draw(context, tm, corners, shader, 0);
-};
+}
 
 void Sprite::draw(Context* context, const Transform& tm, const float2* corners, Shader* shader, float4* vertexColors) const //156
 {
@@ -71,12 +71,12 @@ void Sprite::draw(Context* context, const Transform& tm, const float2* corners, 
     tm.transform(verts[2]); //163
     tm.transform(verts[3]); //164
     m_sheet->getImage()->draw(context, (float3*)corners, m_UVs, shader); //165 | Correct?
-};
+}
 
 SpriteSheet* Sprite::getSheet() const //170
 {
     return m_sheet;
-};
+}
 
 const std::string& Sprite::getName() const //180
 {
@@ -96,21 +96,21 @@ int Sprite::getHeight() const
 int Sprite::getPivotX() const //180
 {
     return m_pivotX;
-};
+}
 
 int Sprite::getPivotY() const //190
 {
     return m_pivotY;
-};
+}
 
 int Sprite::getPositionInSheetX() const //200
 {
     return m_x;
-};
+}
 
 int Sprite::getPositionInSheetY() const //205
 {
     return m_y;
-};
+}
 
 }
