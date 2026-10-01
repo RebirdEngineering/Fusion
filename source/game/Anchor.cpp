@@ -1,6 +1,7 @@
 #include <game/Anchor.h>
 #include <lang/Exception.h>
 
+USING_NAMESPACE(gr)
 USING_NAMESPACE(lang)
 
 BEGIN_NAMESPACE(game)
@@ -34,12 +35,26 @@ void Anchor::fromString(const char* str)
     }
 }
 
-/*void Anchor::offset(int, int, int, int, int)
+Rect Anchor::offsetRect(const Rect& rect, int refX, int refY) const //Recovered from ABFM, not used in ABS 4.1.0
 {
-}
+    Rect newRect;
 
-Rect Anchor::offsetRect(const Rect& rect, int, int, int) const
-{
-}*/
+    switch (v)
+    {
+    case VCENTER: newRect.setTop(rect.top() - ((rect.height()) >> 1)); newRect.setBottom(rect.bottom() - (rect.height() >> 1)); break;
+    case BOTTOM: newRect.setTop(rect.top() - rect.height()); newRect.setBottom(rect.bottom() - rect.height()); break;
+    case BASELINE:
+    case VPIVOT: newRect.setTop(rect.top() - refY); newRect.setBottom(rect.bottom() - refY); break;
+    }
+
+    switch (h)
+    {
+    case HCENTER: newRect.setLeft(rect.left() - (rect.width() >> 1)); newRect.setRight(rect.right() - (rect.width() >> 1)); break;
+    case RIGHT: newRect.setLeft(rect.left() - rect.width()); newRect.setRight(rect.right() - rect.width()); break;
+    case HPIVOT: newRect.setLeft(rect.left() - refX); newRect.setRight(rect.right() - refX); break;
+    }
+
+    return newRect;
+}
 
 END_NAMESPACE()
