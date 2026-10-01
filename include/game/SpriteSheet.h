@@ -30,7 +30,7 @@ public:
 	
 	Sprite* createSprite(const std::string& id, int x, int y, int width, int height, int pivotX, int pivotY, Sprite::SourceRotation rotation);
 	
-	void removeSprite(const std::string&);
+	void removeSprite(const std::string& id); //Recover name from ABFM
 
 	Sprite* getSprite(const std::string& id) const;
 
