@@ -14,4 +14,3 @@ endif()
 
 add_compile_definitions(_LIB)
 add_library(net STATIC ${NET_SRC})
-#target_include_directories(net PRIVATE ${FUSION_DIR}/external/Fusion/include)
