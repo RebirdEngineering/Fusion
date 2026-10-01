@@ -1,9 +1,7 @@
 project(apprater)
 
-file(GLOB PF_SRC "*.cpp")
-
-if(IOS) #Only exists on iOS
-    file(GLOB APPRATER_SRC "ios/*.mm")
+if(IOS) #Only exists on Apple
+    list(APPEND APPRATER_SRC "ios/*.mm")
 endif()
 
 add_compile_definitions(_LIB)

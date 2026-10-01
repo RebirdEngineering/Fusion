@@ -1,6 +1,8 @@
-#add_subdirectory(ads)
+#add_subdirectory(ads) #New not in ABS410, just here for reference
 add_subdirectory(audio)
-#add_subdirectory(apprater)
+if (APPLE) #Apple devices only
+	add_subdirectory(apprater)
+endif()
 add_subdirectory(flurry)
 add_subdirectory(framework)
 add_subdirectory(game)
@@ -12,6 +14,6 @@ add_subdirectory(lang)
 add_subdirectory(lua)
 add_subdirectory(math)
 add_subdirectory(net)
-#add_subdirectory(payment)
+#add_subdirectory(payment) #Doesn't exist on OSX
 add_subdirectory(pf)
 add_subdirectory(util)
