@@ -3,18 +3,21 @@
 
 #include <apprater/common/AppraterImplBase.h>
 
-bool Apprater::check(const Config& config)
+bool Apprater::check(const Config& config) //11
 {
-	AppraterImplBase::sm_usedConfig.iTunesAppId = config.iTunesAppId;
-	AppraterImplBase::sm_usedConfig.daysUntilPromptFirst = config.daysUntilPromptFirst;
-	AppraterImplBase::sm_usedConfig.daysUntilPromptLater = config.daysUntilPromptLater;
-	AppraterImplBase::sm_usedConfig.triesUntilPromptFirst = config.triesUntilPromptFirst;
+	AppraterImplBase::sm_usedConfig = config; //13
 	AppraterImplBase::addTry();
 	return AppraterImplBase::needToPrompt();
 }
 
-void Apprater::prompt(const std::string& message, const std::string& yes, const std::string& no, const std::string& later, std::tr1::is_function<void(Result)>& callback, const std::string& promptReason)
+void Apprater::prompt(const std::string& message, //18
+	const std::string& yes, //19
+	const std::string& no, //20
+	const std::string& later, //21
+	std::tr1::is_function<void(Result)>& callback, //22
+	const std::string& promptReason) //23
 {
-	AppraterImplBase::sm_launchRating = Apprater::Impl::launchRating;
+	AppraterImplBase::sm_callback = callback;
+	AppraterImplBase::sm_launchRating = Apprater::Impl::launchRating; //26
 	AppraterImplBase::prompt(message, yes, no, later, callback, promptReason);
 }
