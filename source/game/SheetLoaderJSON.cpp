@@ -28,13 +28,13 @@ Sprite* getSprite(const std::string& name, const std::map<std::string, P(SpriteS
 	return 0;
 }
 
-void loadJSONSheet(Context* context, const JSON& sheet, SpriteSheet& dstSheet, const std::string& filename) //32-131 | TODO | called by loadSheet, loadSheets and loadSheetClips, sub_35FB20 on Android GP
+void loadJSONSheet(Context* context, const JSON& sheet, SpriteSheet& dstSheet, const std::string& filename) //32-131 | Correct | called by loadSheet, loadSheets and loadSheetClips, sub_35FB20 on Android GP
 {
-	/*if (filename.empty()) //37
+	if (filename.empty()) //37
 	{
 		const std::string& image = sheet.get("meta").getString("image"); //40
 		const PathName& parentPath = PathName(image).parent(); //41
-		const std::string& imagePath = PathName(parentPath).toString(); //42
+		const std::string& imagePath = parentPath.toString(); //42
 		dstSheet.loadImage(context, imagePath); //43
 	}
 
@@ -58,16 +58,15 @@ void loadJSONSheet(Context* context, const JSON& sheet, SpriteSheet& dstSheet, c
 				int width = frame.getInt("w"); //70
 				int height = frame.getInt("h"); //71
 
-				Sprite::SourceRotation rotationUsed; //74
+				Sprite::SourceRotation rotationUsed = (Sprite::SourceRotation)f.getBool("rotationUsed"); //74 | Correct?
 
-				dstSheet.createSprite(filename, x, y, width, height, width / 2, height / 2, rotationUsed);
+				dstSheet.createSprite(filename, x, y, width, height, width / 2, height / 2, rotationUsed); //86
 			}
 		}
 
 		else
 			throwError(Exception(Format("Unsupported TexturePacker JSON sheet format (use JSON Array format instead)"))); //91
 	}
-
 	else
 	{
 		if (sheet.get("meta").getString("app").find("Adobe") && sheet.get("meta").getString("app").find("ArtPacker")) //94
@@ -77,24 +76,32 @@ void loadJSONSheet(Context* context, const JSON& sheet, SpriteSheet& dstSheet, c
 			for (size_t i = 0; i < frames.size(); i++) //99
 			{
 				const JSON& f = frames[i]; //101
+
 				const std::string& id = f.getString("filename"); //104
+
 				const JSON& frame = f.get("frame"); //106
 				int x = frame.getInt("x"); //107
 				int y = frame.getInt("y"); //108
 				int width = frame.getInt("w"); //109
 				int height = frame.getInt("h"); //110
 
-				int pivotX = frame[0].getInt("x"); //113
-				int pivotY = frame[1].getInt("y"); //114
+				int pivotX = width / 2; //113
+				int pivotY = height / 2; //114
 
-				const JSON& pivot = frame.get("pivot"); //118
+				if (f.has("pivot"))
+				{
+					const JSON& pivot = frame.get("pivot"); //118
+					pivotY = floorf(pivot.getInt("x") + 0.5f);
+					pivotY = floorf(pivot.getInt("y") + 0.5f);
+				}
+
+				dstSheet.createSprite(id, x, y, width, height, pivotX, pivotY, Sprite::ROTATION_NONE); //124
 			}
 		}
 
 		else
-			//throwError(Exception(Format("Unsupported JSON sheet format"))); //129
-	}*/
-	assert("void game::loadJSONSheet(gr::Context* context, const util::JSON& sheet, game::SpriteSheet& dstSheet, const std::string& filename) was not yet decompiled.");
+			throwError(Exception(Format("Unsupported JSON sheet format"))); //129
+	}
 }
 
 SpriteSheet* loadJSONSheet(Context* context, const JSON& sheet, const std::string& filename) //133-138 | TODO
