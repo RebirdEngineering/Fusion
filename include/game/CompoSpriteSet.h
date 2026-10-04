@@ -7,21 +7,22 @@ namespace game
 {
 	class CompoSprite;
 
-class CompoSpriteSet :
+class CompoSpriteSet : //14
 	public lang::Object
 {
 public:
-	CompoSpriteSet();
+	CompoSpriteSet(); //21
 
-	void add(const std::string& id, CompoSprite* compo);
+	void add(const std::string& id, CompoSprite* compo); //26
 
-	CompoSprite* getCompoSprite(const std::string& id) const;
+	CompoSprite* getCompoSprite(const std::string& id) const; //32
 
-	void removeSprite(const std::string& id); //Undefined on iOS, guessed var.
+	void removeSprite(const std::string& id); //38 | Undefined on iOS, guessed var.
 
-	const std::map<std::string, P(CompoSprite)> getCompoSprites() const; //Unknown where this is.
+	const std::map<std::string, P(CompoSprite)>& getCompoSprites() const; //43 | Unknown where this is.
+
 private:
-	std::map<std::string, P(CompoSprite)> m_composites;
+	std::map<std::string, P(CompoSprite)> m_composites; //46
 };
 
 }

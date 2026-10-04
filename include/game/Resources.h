@@ -46,7 +46,7 @@ public:
 
 	void setPath(const std::string& path); //56
 
-	void addCompoSpriteSet(const std::string& name, CompoSpriteSet* composet); //62 | assumption
+	void addCompoSpriteSet(const std::string& name, CompoSpriteSet* set); //62 | Recover param names from ABFM
 
 	void addSpriteSheet(const std::string& name, SpriteSheet* sheet); //68
 
@@ -214,7 +214,7 @@ public:
 	{
 		enum SpriteType { UNDEFINED, SPRITE, COMPOSPRITE }; //500
 
-		SpriteEntry(); //502
+		SpriteEntry() { m_type = UNDEFINED; m_sheetName = ""; m_sprite = 0; m_compoSprite = 0; } //502
 
 		SpriteType m_type; //504
 		std::string m_sheetName; //505

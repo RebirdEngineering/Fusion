@@ -5,10 +5,9 @@
 
 namespace lang
 {
-	template <unsigned int Align, unsigned int Size> struct aligned_storage
+	template <unsigned int Align, unsigned int Size> struct aligned_storage //47
 	{
-	public:
-		char _storage[Align * Size / Align];
+		alignas(Align) char _storage[Size]; //49
 	};
 }
 
