@@ -17,8 +17,8 @@ class LabelPool :
 	
 public:
 	struct Text { //13
-		Text(const std::string& fontname, int size, int color, const std::string& str, int style); //14 /*//assert(it != m_labels.end()); //ABC_CHN ABTTCH
-		{
+		Text(const std::string& fontname, int size, int color, const std::string& str, int style); //14 //assert(it != m_labels.end()); //ABC_CHN ABTTCH
+		/*{
 			//unsigned char* strp; //17
 			//int c; //18
 			//.c_str(); //17

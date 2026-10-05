@@ -284,7 +284,7 @@ static const char* const s_keysz[] = //44
 };
 
 
-App::Configuration::Configuration() //293
+App::Configuration::Configuration()
 {
 	name = "";
 	width = 0;
@@ -306,8 +306,8 @@ App::Configuration::Configuration() //293
     dllPath = "";
 }
 
-App::App( OSInterface* os, //294 
-    const std::string& pathname) : //295 | [Changed]?
+App::App( OSInterface* os, //294-307
+    const std::string& dataPath) : //295
 	m_os( os ),
 	m_quit( false )
 {
@@ -317,10 +317,10 @@ App::App( OSInterface* os, //294
 	for ( int i = 0 ; i < KEY_COUNT ; ++i ) //303
 		m_keyDown[i] = false;
 
-	setDataPath(pathname);
+	setDataPath(dataPath);
 }
 
-App::~App() //310
+App::~App() //309-313
 {
 	delete sm_app;
     m_touches.clear(); //312
@@ -337,13 +337,13 @@ App* App::get()
 
 void App::deleteApp()
 {
-    delete sm_app;
-    sm_app = 0;
+    delete sm_app; //326
+    sm_app = 0; //327
 }
 
 bool App::initialized()
 {
-	return sm_app != 0;
+	return sm_app != 0; //332
 }
 
 void App::activate( bool /*active*/ ) //335
@@ -351,7 +351,7 @@ void App::activate( bool /*active*/ ) //335
 	for ( int i = 0 ; i < KEY_COUNT ; ++i ) //337
 		setKeyDown( (KeyType)i, false ); //338
 
-    m_touches.resize(0);
+    touchCancel();
 }
 
 void App::loadFromUrl(const std::string& url) //345
@@ -391,10 +391,10 @@ void App::mouseWheel( int ticks ) //378
 {
 }
 
-void App::quit(int returnCode) //382 | [CHANGED] added return code
+void App::quit(int returnCode) //382-186
 {
-	m_quit = true;
-    m_returnCode = returnCode;
+	m_quit = true; //384
+    m_returnCode = returnCode; //385
 }
 
 bool App::quitRequested() const	
@@ -448,7 +448,7 @@ void App::touchCancel()
 
 const std::vector<TouchEvent>& App::touches() const
 {
-    return m_touches;
+    return m_touches; //439
 }
 
 const char* App::toString( KeyType key ) //442 | According to line numbers the assert was removed.

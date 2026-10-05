@@ -6,7 +6,7 @@ USING_NAMESPACE(lang)
 
 BEGIN_NAMESPACE(game)
 
-void Anchor::fromString(const char* str)
+void Anchor::fromString(const char* str) //9
 {
     if (!str)
         return;
@@ -31,7 +31,7 @@ void Anchor::fromString(const char* str)
         if (!strcmp(str, "HPIVOT"))
             h = HPIVOT;
         else
-            throwError(Exception(Format("Invalid anchor: {0}", str)));
+            throwError(Exception(Format("Invalid anchor: {0}", str))); //34
     }
 }
 

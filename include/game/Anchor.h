@@ -19,7 +19,7 @@ public:
 	Anchor(VAnchor va, HAnchor ha) { v = va; h = ha; } //21 | Check?
 	Anchor(HAnchor ha, VAnchor va) { h = ha; v = va; } //22 | Check?
 
-	bool operator==(const Anchor&) const; //24
+	bool operator==(const Anchor& anchor) const; //24 | Unused?
 
 	void fromString(const char* str); //29
 

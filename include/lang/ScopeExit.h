@@ -8,23 +8,23 @@ BEGIN_NAMESPACE(lang)
 template <class F> class ScopeExit //Lambda at line 290?
 {
 public:
-	F f;
-	bool active;
+	F f; //13
+	bool active; //14
 
-	ScopeExit(const F&);
+	ScopeExit(const F&); //16
 
-	//ScopeExit(void); //?
+	//ScopeExit(F); //22
 	
-	//ScopeExit(void); //?
+	//ScopeExit(F); //28
 
-	operator=(F); //?
+	operator=(F); //35?
 
-	~ScopeExit();
+	~ScopeExit(); //42
 
 	
 private:
-	ScopeExit(const F&);
-	ScopeExit& operator=(void);
+	ScopeExit(const F&); //51
+	ScopeExit& operator=(const F&); //52
 };
 
 }
