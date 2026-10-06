@@ -6,43 +6,69 @@ namespace lang
 namespace event
 {
 
-static Event<void(std::function<void()>)> RUN; //Line 10
+static Event<void(std::function<void()>)> RUN; //10
 
-static Mutex s_mutex;
-static size_t nextEvent;
-static std::vector<std::pair<float, std::function<void()>>> s_staging;
-static std::vector<std::pair<float, std::function<void()>>> s_queue;
-
-BEGIN_NAMESPACE(detail)
-
-//inline P(Link) listen(Event<void(function<void()>, )
-//{
-//}
-
-void addQueue(float delay, std::function<void()> const& event)
+Link::Link(const std::function<Status(Link*, Status)>& func) //12
 {
-	Mutex::Lock lock(s_mutex);
-	//s_staging.push_back(std::make_pair<float, std::tr1::function<void>(delay, event));
+	//m_changeStatus.assign(func, 2);
+	m_status = DISCONNECTED;
 }
 
-void destructLink(Link* link)
+Link::~Link()
 {
-	//link->m_status = Link::DESTRUCTED;
+	disconnect();
+	//if (m_changeStatus)
+		//m_changeStatus.assign(m_status, DISCONNECTED + DESTRUCTED);
 }
 
-void process(float dt)
+void Link::connect()
 {
-	P(Link) link;
+	//if (!m_changeStatus) //?
+		//throw();
+
+	//m_changeStatus.assign(m_status, CONNECTED);
+}
+
+void Link::disconnect()
+{
+	//if (!m_changeStatus) //?
+		//throw();
+
+	//m_changeStatus.assign(m_status, DISCONNECTED);
+}
+
+static Mutex s_mutex; //40
+static size_t nextEvent; //41
+static std::vector<std::pair<float, std::function<void()>>> s_staging; //42
+static std::vector<std::pair<float, std::function<void()>>> s_queue; //43
+
+namespace detail
+{
+	event_id_t getNextID() //48
+	{
+		static event_id_t id; //50
+		return id++;
+	}
+
+	void addQueue(float delay, std::function<void()> const& event) //54
+	{
+		Mutex::Lock lock(s_mutex); //56
+		s_staging.push_back(std::make_pair(delay, event));
+	}
+
+	void destructLink(Link* link) //60
+	{
+		delete link;
+	}
+}
+
+void process(float dt) //66
+{
+	//P(Link)(RUN); //68 operator()
 	//Mutex::Lock(s_mutex);
-	//operator();
-}
-
-event_id_t getNextID()
-{
-	event_id_t id;
-	return id;
+	//operator(); //90
 }
 
 }
 }
-}
+//}
