@@ -3,10 +3,10 @@
 namespace framework
 {
 
-OSInterface::~OSInterface() //7
+OSInterface::~OSInterface()
 {
-	m_arguments.clear();
-	m_argv.clear();
+	m_arguments.clear(); //7
+	m_argv.clear(); //8
 }
 
 }

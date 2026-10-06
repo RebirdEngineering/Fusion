@@ -17,6 +17,7 @@ Link::Link(const std::function<Status(Link*, Status)>& func) //12
 Link::~Link()
 {
 	disconnect();
+	//m_status = DESTRUCTED;
 	//if (m_changeStatus)
 		//m_changeStatus.assign(m_status, DISCONNECTED + DESTRUCTED);
 }
@@ -65,6 +66,7 @@ namespace detail
 void process(float dt) //66
 {
 	//P(Link)(RUN); //68 operator()
+	// 
 	//Mutex::Lock(s_mutex);
 	//operator(); //90
 }

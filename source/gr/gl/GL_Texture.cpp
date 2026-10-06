@@ -55,7 +55,7 @@ GL_Texture::~GL_Texture() //138
     deallocate();
 }
 
-void GL_Texture::allocate(GL_Context* context, int width, int height, int mipcount, SurfaceFormat format, int usageflags) //144
+void GL_Texture::allocate(GL_Context* context, int width, int height, int mipcount, SurfaceFormat format, int usageflags) //144 | TODO
 {
     /*deallocate();
 
@@ -204,7 +204,7 @@ void GL_Texture::allocate(GL_Context* context, int width, int height, int mipcou
     assert("void GL_Texture::allocate(GL_Context* context, int width, int height, int mipcount, SurfaceFormat format, int usageflags) was not yet decompiled.");
 }
 
-void GL_Texture::deallocate()
+void GL_Texture::deallocate() //TODO
 {
     /*int texUnits; //378
     if (m_tex)
@@ -253,7 +253,7 @@ void GL_Texture::deallocate()
     assert("void GL_Texture::deallocate() is not yet decompiled.");
 }
 
-void GL_Texture::blt(int x, int y, const void* data, int pitch, int miplevel, int w, int h, const SurfaceFormat& fmt) //443 TODO
+void GL_Texture::blt(int x, int y, const void* data, int pitch, int miplevel, int w, int h, const SurfaceFormat& fmt) //443 | TODO
 {
     assert(pitch * 8 >= w * fmt.bitsPerPixel()); //233 (ABC OSX 1.0.0)
     assert(x >= 0); //234 (ABC OSX 1.0.0)
@@ -354,6 +354,7 @@ void GL_Texture::setName(const std::string& name) //559
     m_name = name; //561
 }
 
+//TODO?
 /*
 void gl2::GL_Texture::getData( void** bits, int* pitch ) const
 {

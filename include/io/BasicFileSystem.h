@@ -10,7 +10,7 @@ namespace io
 	class FileOutputStream;
 	class MemoryMappedFile;
 
-class BasicFileSystem
+class BasicFileSystem //Used in mobile, RCS client and Seasons 4.0.1 for PC
 {
 public:
 	static P(FileInputStream) createInputStream(const std::string& path); //33
