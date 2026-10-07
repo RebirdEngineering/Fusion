@@ -1,3 +1,6 @@
+#ifndef _IO_ENUMRECURSIVE_H
+#define _IO_ENUMRECURSIVE_H
+
 #include <io/DirEntry.h>
 
 namespace io
@@ -15,3 +18,5 @@ void enumerate(enumerate_t* enumImpl, const std::string& basedir, const std::str
 
 }
 }
+
+#endif //_IO_ENUMRECURSIVE_H
