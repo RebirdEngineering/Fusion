@@ -6,24 +6,24 @@
 namespace io
 {
 
-class DirEntry
+struct DirEntry
 {
 public:
-    DirEntry();
+    DirEntry(); //15
 
-    DirEntry(const std::string&, uint32_t);
+    DirEntry(const std::string&, uint32_t); //20
 
-    enum Type
+    bool operator==(const DirEntry&) const; //25
+    bool operator<(const DirEntry&) const; //30
+
+    std::string relativepath; //43
+    uint32_t    flags; //44
+
+    enum Type //46
     {
         TYPE_FILE = 1,
         TYPE_DIR
     };
-
-    std::string& relativepath;
-    uint32_t    flags;
-private:
-    bool operator==(const DirEntry&) const;
-    bool operator<(const DirEntry&) const;
 };
 
 }
