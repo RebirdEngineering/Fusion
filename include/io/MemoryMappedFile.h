@@ -6,20 +6,22 @@
 namespace io
 {
 
-class MemoryMappedFile : public lang::Object
+class MemoryMappedFile : public lang::Object //9
 {
 public:
-	MemoryMappedFile(const std::string& name); //Guess from MAIS
+	MemoryMappedFile(const std::string& name); //19 | Guess from MAIS
 
-	~MemoryMappedFile();
+	~MemoryMappedFile(); //26
 
-	size_t size() const;
-	const char* data(size_t offset) const; //Recover from assert
+	size_t size() const; //31
+
+	const char* data(size_t offset) const; //38 | Recover from assert
 private:
 	class Impl;
-	P(Impl) m_impl;
-	MemoryMappedFile(const MemoryMappedFile&);
-	MemoryMappedFile& operator=(const MemoryMappedFile&);
+	P(Impl) m_impl; //42
+
+	MemoryMappedFile(const MemoryMappedFile&); //44
+	MemoryMappedFile& operator=(const MemoryMappedFile&); //45
 };
 
 }
