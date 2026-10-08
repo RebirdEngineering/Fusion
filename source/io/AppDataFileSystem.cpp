@@ -27,40 +27,44 @@ P(AppDataOutputStream) AppDataFileSystem::createOutputStream(const std::string& 
 	return new AppDataOutputStream(path);
 }
 
-P(MemoryMappedFile) AppDataFileSystem::openMemoryMappedFile(const std::string& path) //Not defined in Seasons 4.1.0 iOS.
+#ifndef PLATFORM_IOS
+P(MemoryMappedFile) AppDataFileSystem::openMemoryMappedFile(const std::string& path)
 {
 	return BasicFileSystem::openMemoryMappedFile(PathName(appdataPath(), path).toString());
 }
 
-bool AppDataFileSystem::exists(const std::string& path) //Not defined in Seasons 4.1.0 iOS
+bool AppDataFileSystem::exists(const std::string& path)
 {
 	return BasicFileSystem::exists(PathName(appdataPath(), path).toString());
 }
 
-void AppDataFileSystem::copy(const std::string& path, const std::string&, bool) //Not defined in Seasons 4.1.0 iOS
+void AppDataFileSystem::copy(const std::string& path, const std::string&, bool)
 {
 	BasicFileSystem::copy(PathName(appdataPath(), path).toString(), "", false); //TEMP
 }
 
-void AppDataFileSystem::move(const std::string& path, const std::string&, bool) //Not defined in Seasons 4.1.0 iOS
+void AppDataFileSystem::move(const std::string& path, const std::string&, bool)
 {
 	BasicFileSystem::move(PathName(appdataPath(), path).toString(), "", false); //TEMP
 }
 
-void AppDataFileSystem::rename(const std::string& path, const std::string& newName) //Not defined in Seasons 4.1.0 iOS Name recovered from CFS
+void AppDataFileSystem::rename(const std::string& path, const std::string& newName)
 {
 	BasicFileSystem::rename(PathName(appdataPath(), path).toString(), PathName(appdataPath(), newName).toString());
 }
+#endif
 
 void AppDataFileSystem::remove(const std::string& path)
 {
 	BasicFileSystem::remove(PathName(appdataPath(), path).toString());
 }
 
+#ifndef PLATFORM_IOS
 bool AppDataFileSystem::isFile(const std::string& path)
 {
 	return BasicFileSystem::isFile(PathName(appdataPath(), path).toString());
 }
+#endif
 
 bool AppDataFileSystem::isDirectory(const std::string& path)
 {

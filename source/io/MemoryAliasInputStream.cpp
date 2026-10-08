@@ -1,6 +1,7 @@
 #include <io/MemoryAliasInputStream.h>
 
-BEGIN_NAMESPACE(io)
+namespace io
+{
 
 MemoryAliasInputStream::MemoryAliasInputStream(const void* data, int size, const std::string& name):
     InputStream(this)

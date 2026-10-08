@@ -12,7 +12,7 @@ using namespace detail;
 #ifdef PLATFORM_ANDROID //This class only exists on Android as it reads the APK using Java classes.
 #include <java/jni.h>
 
-USING_NAMESPACE(java)
+using namespace java;
 
 P(BundleInputStream) BundleFileSystem::createInputStream(const std::string& path)
 {

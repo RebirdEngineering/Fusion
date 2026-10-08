@@ -1,7 +1,7 @@
 #include <io/MemoryMappedFile.h>
 #include <io/IOException.h>
 
-#include <sys/mman.h>
+//#include <sys/mman.h> //Dummied for now
 
 using namespace lang;
 
@@ -13,7 +13,7 @@ class MemoryMappedFile::Impl : public Object //20 bytes. Used by Android[+RCS/Sk
 public:
 	Impl(const std::string& name)
 	{
-		FILE* f = fopen(name.c_str(), "rb");
+		/*FILE* f = fopen(name.c_str(), "rb");
 		if (!f)
 			throwError(IOException(Format("Failed to open {0} with errno {1} ({2})", name, errno, strerror(errno)));
 		
@@ -25,13 +25,13 @@ public:
 		if (m_size)
 			m_memmap = mmap(0, m_size, 1, PROT_READ, MAP_PRIVATE, fileno(f), 0);
 
-		fclose(f);
+		fclose(f);*/
 	}
 
 	~Impl()
 	{
-		if (m_memmap)
-			munmap(m_memmap, m_size);
+		/*if (m_memmap)
+			munmap(m_memmap, m_size);*/
 	}
 
 	size_t size()

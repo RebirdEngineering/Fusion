@@ -47,7 +47,7 @@ public:
 
 	static std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive = false); //201
 
-	static void setPermissions(const std::string& path, int permissions); //214
+	static void setPermissions(const std::string& path, int permissions); //214, unknown parameters.
 };
 
 }
