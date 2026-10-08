@@ -33,7 +33,7 @@ public:
 
 	void copy(const std::string&, const std::string&, bool); //111
 
-	void move(const std::string&, const std::string&); //123
+	void move(const std::string&, const std::string&, bool); //123
 
 	void rename(const std::string&, const std::string&); //132
 
