@@ -29,33 +29,32 @@ P(FileOutputStream) CacheFileSystem::createOutputStream(const std::string& path,
 	return new FileOutputStream(actualPath); //29
 }
 
-#ifndef PLATFORM_IOS //Not on iOS.
-P(MemoryMappedFile) CacheFileSystem::openMemoryMappedFile(const std::string& path)
+P(MemoryMappedFile) CacheFileSystem::openMemoryMappedFile(const std::string& path) //Not on iOS.
 {
 	createCacheDirectory();
 
-	const std::string& actualPath = PathName(detail::fileCachePath(), path).toString();
-
-	return BasicFileSystem::openMemoryMappedFile(actualPath);
+	return BasicFileSystem::openMemoryMappedFile(PathName(detail::fileCachePath(), path).toString());
 }
 
 bool CacheFileSystem::exists(const std::string& path)
 {
 	return BasicFileSystem::exists(PathName(detail::fileCachePath(), path).toString());
 }
-#endif
 
 size_t CacheFileSystem::getSize(const std::string& path) //44-47
 {
 	return BasicFileSystem::getSize(PathName(detail::fileCachePath(), path).toString()); //46
 }
 
-#ifndef PLATFORM_IOS //Not on iOS.
-int64_t CacheFileSystem::getCreationTime(const std::string& path)
+int64_t CacheFileSystem::getCreationTime(const std::string& path) //Not on iOS.
 {
 	return BasicFileSystem::getCreationTime(PathName(detail::fileCachePath(), path).toString());
 }
-#endif
+
+int64_t CacheFileSystem::getLastAccessTime(const std::string& path) //Not on iOS.
+{
+	return BasicFileSystem::getLastAccessTime(PathName(detail::fileCachePath(), path).toString());
+}
 
 int64_t CacheFileSystem::getLastModifiedTime(const std::string& path) //59-62
 {
@@ -67,17 +66,15 @@ void CacheFileSystem::touch(const std::string& path) //64-67
 	BasicFileSystem::touch(PathName(detail::fileCachePath(), path).toString()); //66
 }
 
-#ifndef PLATFORM_IOS //Not on iOS
-void CacheFileSystem::copy(const std::string& path, const std::string& newPath, bool createMissingDirectories)
+void CacheFileSystem::copy(const std::string& path, const std::string& newPath, bool createMissingDirectories) //Not on iOS
 {
 	BasicFileSystem::copy(PathName(detail::fileCachePath(), path).toString(), PathName(detail::fileCachePath(), newPath).toString(), createMissingDirectories);
 }
 
-void CacheFileSystem::move(const std::string& path, const std::string& newPath, bool createMissingDirectories)
+void CacheFileSystem::move(const std::string& path, const std::string& newPath, bool createMissingDirectories) //Not on iOS
 {
 	BasicFileSystem::move(PathName(detail::fileCachePath(), path).toString(), PathName(detail::fileCachePath(), newPath).toString(), createMissingDirectories);
 }
-#endif
 
 void CacheFileSystem::rename(const std::string& path, const std::string& newName) //81-84
 {

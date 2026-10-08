@@ -8,90 +8,84 @@ using namespace lang;
 namespace io
 {
 
-using namespace detail;
-
-class BundleInputStream::Impl :
+class BundleInputStream::Impl : //8
 	public Object
 {
 public:
-	Impl(const std::string& path) :
-		m_in(constructPath(path))
+	Impl(const std::string& path) : //12
+		m_in(constructPath(path)) //13
 	{
 	}
 
-	~Impl()
-	{
-	}
-
-	int read(void* data, int size)
+	int read(void* data, int size) //17
 	{
 		return m_in.read(data, size);
 	}
 
-	int skip(int n)
+	int skip(int n) //22
 	{
 		return m_in.skip(n);
 	}
 
-	bool seek(int offset, InputStream::SeekMode origin)
+	bool seek(int offset, InputStream::SeekMode origin) //27
 	{
 		return m_in.seek(offset, origin);
 	}
 
-	int available() const
+	int available() const //32
 	{
 		return m_in.available();
 	}
 
-	std::string toString() const
+	std::string toString() const //37
 	{
 		return m_in.toString();
 	}
 	
 private:
-	FileInputStream			m_in;
-	std::string constructPath(const std::string& pathname)
+	FileInputStream			m_in; //43
+
+	std::string constructPath(const std::string& pathname) //45
 	{
-		std::string temp = pathname;
-		if ((temp.empty() & 1) == 0 && temp[0] == '/')
-			temp.erase(temp.begin());
-		return PathName(bundlePath(), temp).toString();
+		std::string temp = pathname; //47
+		if ((temp.empty() & 1) == 0 && temp[0] == '/') //48
+			temp.erase(temp.begin()); //49
+		return PathName(detail::bundlePath(), temp).toString(); //50
 	}
 };
 
-BundleInputStream::BundleInputStream( const std::string& path, ReadModeHint hint) :
-	InputStream(this)
+BundleInputStream::BundleInputStream( const std::string& path, ReadModeHint hint ) : InputStream(this) //57-60
 {
-	m_impl = new Impl(path);
+	m_impl = new Impl(path); //59
 }
 
-BundleInputStream::~BundleInputStream()
+BundleInputStream::~BundleInputStream() //62-64
 {
 }
 
-int BundleInputStream::read( void* data, int size )
+int BundleInputStream::read( void* data, int size ) //66-69
 {
-	return m_impl->read(data, size);
+	return m_impl->read(data, size); //68
 }
 
-int BundleInputStream::skip( int n )
+int BundleInputStream::skip( int n ) //71-74
 {
-	return m_impl->skip(n);
+	return m_impl->skip(n); //73
 }
 
-bool BundleInputStream::seek( int offset, SeekMode origin )
+bool BundleInputStream::seek( int offset, SeekMode origin ) //76-79
 {
-	return m_impl->seek(offset, origin);
+	return m_impl->seek(offset, origin); //78
 }
 
-int BundleInputStream::available() const
+int BundleInputStream::available() const //81-84
 {
-	return m_impl->available();
+	return m_impl->available(); //83
 }
 
-std::string BundleInputStream::toString() const
+std::string BundleInputStream::toString() const //86-89
 {
-	return m_impl->toString();
+	return m_impl->toString(); //88
 }
 
 }

@@ -39,13 +39,12 @@ void createMissing(const std::string& path) //76
 namespace io
 {
 
-#ifndef PLATFORM_IOS //Not on iOS
-P(FileInputStream) BasicFileSystem::createInputStream(const std::string& path)
+P(FileInputStream) BasicFileSystem::createInputStream(const std::string& path) //Not on iOS.
 {
 	return new FileInputStream(path);
 }
 
-P(FileOutputStream) BasicFileSystem::createOutputStream(const std::string& path, bool createMissingDirectories)
+P(FileOutputStream) BasicFileSystem::createOutputStream(const std::string& path, bool createMissingDirectories) //Not on iOS.
 {
 	if (createMissingDirectories)
 	{
@@ -57,11 +56,10 @@ P(FileOutputStream) BasicFileSystem::createOutputStream(const std::string& path,
 	return new FileOutputStream(path);
 }
 
-P(MemoryMappedFile) BasicFileSystem::openMemoryMappedFile(const std::string& path)
+P(MemoryMappedFile) BasicFileSystem::openMemoryMappedFile(const std::string& path) //Not on iOS.
 {
 	return new MemoryMappedFile(path);
 }
-#endif
 
 bool BasicFileSystem::exists(const std::string& path) //156
 {
@@ -101,8 +99,7 @@ void BasicFileSystem::touch(const std::string& path) //189
 	assert("void BasicFileSystem::touch(const std::string& path) was not yet decompiled.");
 }
 
-#ifndef PLATFORM_IOS //Functions do not appear on iOS.
-void BasicFileSystem::copy(const std::string& path, const std::string& newPath, bool createMissingDirectories) //TODO
+void BasicFileSystem::copy(const std::string& path, const std::string& newPath, bool createMissingDirectories) //Not on iOS.
 {
 	/*if (createMissingDirectories)
 		createMissing(path);
@@ -133,7 +130,7 @@ void BasicFileSystem::copy(const std::string& path, const std::string& newPath, 
 	assert("void io::BasicFileSystem::copy(const std::string& path, const std::string& newPath, bool createMissingDirectories) was not yet decompiled.");
 }
 
-void BasicFileSystem::move(const std::string& path, const std::string& newPath, bool createMissingDirectories)
+void BasicFileSystem::move(const std::string& path, const std::string& newPath, bool createMissingDirectories) //Not on iOS.
 {
 	if (isDirectory(path))
 		remove(path);
@@ -143,7 +140,6 @@ void BasicFileSystem::move(const std::string& path, const std::string& newPath, 
 	if (status)
 		throwError(IOException(Format("Failed to rename '{0}' to '{1}' with errno {2} ({3})", path, errno, strerror(errno))));
 }
-#endif
 
 void BasicFileSystem::rename(const std::string& source, const std::string& destination) //254
 {
@@ -268,13 +264,11 @@ std::vector<DirEntry> BasicFileSystem::enumerate(const std::string& basedir, con
 	return ret;
 }
 
-#ifdef PLATFORM_IOS
-void BasicFileSystem::setPermissions(const std::string& path, int permissions) //Function does not exist on iOS.
+void BasicFileSystem::setPermissions(const std::string& path, int permissions) //Not on iOS.
 {
 	int status = chmod(path.c_str(), permissions);
 	if (status)
 		throwError(IOException(Format("Failed to change permission for {0} to {1} with errno {2} ({3})", path, permissions, errno, strerror(errno))));
 }
-#endif
 
 }

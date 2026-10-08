@@ -1,29 +1,27 @@
 #ifndef _IO_FILEINPUTSTREAM_H
 #define _IO_FILEINPUTSTREAM_H
 
-
 #include <io/InputStream.h>
 
 namespace io
 { 
-
-
+	
 /**
  * FileInputStream reads bytes from a standard file.
  * 
  * @ingroup io
  */
-class FileInputStream :
+class FileInputStream : //12
 	public InputStream
 {
 public:
 	/** 
 	 * Opens a file input stream. 
 	 */
-	explicit FileInputStream( const std::string& filename );
+	explicit FileInputStream( const std::string& filename ); //19
 
 	///
-	~FileInputStream();
+	~FileInputStream(); //24
 
 	/**
 	 * Tries to read specified number of bytes from the stream.
@@ -31,42 +29,42 @@ public:
 	 *
 	 * @return Number of bytes actually read.
 	 */
-	int				read( void* data, int size );
+	int				read( void* data, int size ); //32
 
 	/**
 	 * Tries to skip over n bytes from the stream.
 	 * @return Number of bytes actually skipped.
 	 * @exception IOException
 	 */
-	int				skip(int n);
+	int				skip(int n); //39
 	
 	/** 
 	 * 
 	 */
-	bool			seek(int offset, SeekMode origin);
+	bool			seek(int offset, SeekMode origin); //46
 
 	/** 
 	 * Returns the number of bytes that can be read from the stream without blocking.
 	 */
-	int				available() const;
+	int				available() const; //51
 
 	/**
 	 * Returns name and seek position of the file.
 	 */
-	std::string	toString() const;
+	std::string	toString() const; //56
 	
 	/**
 	 * 
 	 */
-	std::string			path();
+	std::string			path(); //61
 
 private:
 	class Impl;
-	P(Impl) m_impl;
+	P(Impl) m_impl; //65
 
-	FileInputStream();
-	FileInputStream( const FileInputStream& );
-	FileInputStream& operator=( const FileInputStream& );
+	FileInputStream(); //67
+	FileInputStream( const FileInputStream& ); //68
+	FileInputStream& operator=( const FileInputStream& ); //69
 };
 
 

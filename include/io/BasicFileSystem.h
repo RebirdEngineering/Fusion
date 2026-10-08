@@ -13,9 +13,9 @@ namespace io
 class BasicFileSystem //Used in mobile, RCS client and Seasons 4.0.1 for PC
 {
 public:
-	static P(FileInputStream) createInputStream(const std::string& path); //33
+	P(FileInputStream) createInputStream(const std::string& path); //33
 
-	static P(FileOutputStream) createOutputStream(const std::string& path, bool createMissingDirectories); //42
+	P(FileOutputStream) createOutputStream(const std::string& path, bool createMissingDirectories); //42
 
 	static P(MemoryMappedFile) openMemoryMappedFile(const std::string& path); //52
 
@@ -23,13 +23,13 @@ public:
 
 	static size_t getSize(const std::string& path); //67
 
-	static int64_t getCreationTime(const std::string&); //75
+	static int64_t getCreationTime(const std::string& path); //75
 
-	static int64_t getLastAccessTime(const std::string&); //83
+	static int64_t getLastAccessTime(const std::string& path); //83
 
-	static int64_t getLastModifiedTime(const std::string&); //91
+	static int64_t getLastModifiedTime(const std::string& path); //91
 
-	static void touch(const std::string&); //99
+	static void touch(const std::string& path); //99
 
 	static void copy(const std::string& path, const std::string& newPath, bool createMissingDirectories); //111 | guess
 
@@ -47,7 +47,7 @@ public:
 
 	static std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive = false); //201 | Called by GameLua::removeTemporaryLevels
 
-	static void setPermissions(const std::string& path, int permissions); //214, unknown parameters.
+	void setPermissions(const std::string& path, int permissions); //214, unknown parameters.
 };
 
 }

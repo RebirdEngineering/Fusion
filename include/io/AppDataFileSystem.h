@@ -13,29 +13,29 @@ namespace io
 class AppDataFileSystem //23
 {
 public:
-	static P(AppDataInputStream) createInputStream(const std::string& path); //32
+	P(AppDataInputStream) createInputStream(const std::string& path); //32
 
-	static P(AppDataOutputStream) createOutputStream(const std::string& path, bool createMissingDirectories); //41
+	P(AppDataOutputStream) createOutputStream(const std::string& path, bool createMissingDirectories); //41
 
-	static P(MemoryMappedFile) openMemoryMappedFile(const std::string& path); //51 | A guess
+	P(MemoryMappedFile) openMemoryMappedFile(const std::string& path); //51 | A guess
 
-	static bool exists(const std::string& path); //58 | A guess from BFS and CFS
+	bool exists(const std::string& path); //58 | A guess from BFS and CFS
 
-	static void copy(const std::string& path, const std::string& newPath, bool createMissingDirectories); //70 | guess
+	void copy(const std::string& path, const std::string& newPath, bool createMissingDirectories); //70 | guess
 
-	static void move(const std::string& path, const std::string& newPath, bool createMissingDirectories); //82 | guess
+	void move(const std::string& path, const std::string& newPath, bool createMissingDirectories); //82 | guess
 
-	static void rename(const std::string& path, const std::string& newName); //91 | Recover param name from CFS (source, destination in BFS? We'll go with CFS since BFS converts stuff)
+	void rename(const std::string& path, const std::string& newName); //91 | Recover param name from CFS (source, destination in BFS? We'll go with CFS since BFS converts stuff)
 
-	static void remove(const std::string& path); //99
+	void remove(const std::string& path); //99
 
-	static bool isFile(const std::string& path); //107
+	bool isFile(const std::string& path); //107
 
-	static bool isDirectory(const std::string& path); //115
+	bool isDirectory(const std::string& path); //115
 
-	static void createDirectory(const std::string& path, bool createMissingDirectories); //134
+	void createDirectory(const std::string& path, bool createMissingDirectories); //134
 
-	static std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive); //160
+	std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive); //160
 };
 
 }

@@ -1,4 +1,4 @@
-#include <io/AppDataOutputStream.h>>
+#include <io/AppDataOutputStream.h>
 #include <io/IOException.h>
 #include <io/PathName.h>
 #include <lang/Log.h>
@@ -108,7 +108,7 @@ public:
 		return m_filename;
 	}
 
-	bool good() const
+	bool good() const //Never seen on iOS.
 	{
 		return !m_failure;
 	}
