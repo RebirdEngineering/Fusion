@@ -28,7 +28,7 @@ public:
 	 * Writes specified number of bytes to the stream.
 	 * @exception IOException
 	 */
-	void 			write( const void* data, int size );
+	virtual void 			write( const void* data, int size );
 
 	/** Returns name of the stream. */
 	virtual std::string	toString() const;
