@@ -1,13 +1,12 @@
 #include <io/FileInputStream.h>
 #include <io/IOException.h>
 #include <io/PathName.h>
+#include <direct.h>
 
 using namespace lang;
 
 namespace io
 { 
-
-//const int length = 512; //94
 
 class FileInputStream::Impl : //18
 	public Object
@@ -66,9 +65,13 @@ public:
 		return m_filename;
 	}
 
-	std::string path() //89
+	std::string path() //Not on iOS
 	{
-		return PathName(m_filename).toString();
+		const int length = 512; //96
+		char buf[length];
+		_getcwd(buf, length);
+
+		return PathName(buf).toString();
 	}
 
 private:
