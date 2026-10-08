@@ -3,38 +3,43 @@
 namespace io
 {
 
-ByteArrayInputStream::ByteArrayInputStream(const void* data, int size) :
-	InputStream(this) //?
+ByteArrayInputStream::ByteArrayInputStream() :
+	InputStream(this)
 {
-	reset( data, size );
 }
 
-ByteArrayInputStream::ByteArrayInputStream(InputStream& in) : //Correct?
+ByteArrayInputStream::ByteArrayInputStream(const void* data, int size) : //14
+	InputStream(this) //?
+{
+	reset( data, size ); //16
+}
+
+ByteArrayInputStream::ByteArrayInputStream(InputStream& in) : //19 | Correct?
 	InputStream(in) //?
 {
 	m_index = 0;
 	m_name = in.toString();
-	m_data = toVector(in);
+	m_data = toVector(in); //24
 }
 
-ByteArrayInputStream::~ByteArrayInputStream()
+ByteArrayInputStream::~ByteArrayInputStream() //27-29
 {
 }
 
-void ByteArrayInputStream::reset( const void* data, int size )
+void ByteArrayInputStream::reset( const void* data, int size ) //31
 {
-	m_data.resize( size );
+	m_data.resize( size ); //33
 	if ( size > 0 )
-		memcpy( &m_data.begin(), data, size );
-	m_index = 0;
+		memcpy( &m_data.begin(), data, size ); //35
+	m_index = 0; //36
 }
 
-int ByteArrayInputStream::read( void* data, int size )
+int ByteArrayInputStream::read( void* data, int size ) //39
 {
 	assert( size >= 0 ); //Line 41 of RCSDEBUG
 	
-	int left = available();
-	int count = size;
+	int left = available(); //43
+	int count = size; //44
 	if ( left < count )
 		count = left;
 
@@ -48,20 +53,19 @@ int ByteArrayInputStream::read( void* data, int size )
 	return count;
 }
 
-int ByteArrayInputStream::skip( int n ) //Correct?
+int ByteArrayInputStream::skip( int n ) //55 | Correct?
 {
     assert(m_index+n <= (int)m_data.size()); //[NOTE] DF line 51 or RCSDEBUG line 57
     assert(n >= 0); //RCSDEBUG line 58
 
-	int left = available();
+	int left = available(); //60
+	int count = n; //61
 
-	if (left > n)
-		m_index += left;
-
-	return left;
+	m_index += left < n ? left : count;
+	return count;
 }
 
-bool ByteArrayInputStream::seek(int offset, SeekMode origin) //Correct?
+bool ByteArrayInputStream::seek(int offset, SeekMode origin) //69 | Correct?
 {
 	switch (origin)
 	{
@@ -86,20 +90,25 @@ bool ByteArrayInputStream::seek(int offset, SeekMode origin) //Correct?
 	if (m_index < 0)
 		m_index = 0;
 
-	if (m_index > (int)m_data.size())
-		m_index = (int)m_data.size();
+	if (m_index > (int)m_data.size()) //87
+		m_index = (int)m_data.size(); //93
 
 	return true;
 }
 
+void* ByteArrayInputStream::data()
+{
+	return !m_data.empty() ? &m_data.begin() : 0; //101
+}
+
 int ByteArrayInputStream::available() const
 {
-	return m_data.size() - m_index;
+	return m_data.size() - m_index; //106
 }
 
 std::string ByteArrayInputStream::toString() const
 {
-	return "ByteArrayInputStream";
+	return !m_name.empty() ? "ByteArrayInputStream" : ""; //111
 }
 
 }
