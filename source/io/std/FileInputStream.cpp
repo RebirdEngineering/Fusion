@@ -2,105 +2,112 @@
 #include <io/IOException.h>
 #include <io/PathName.h>
 
-
 using namespace lang;
-
 
 namespace io
 { 
 
-//const int length = 512;
+//const int length = 512; //94
 
-class FileInputStream::Impl :
+class FileInputStream::Impl : //18
 	public Object
 {
 public:
-	Impl(const std::string& filename) :
+	Impl(const std::string& filename) : //22-45
 		m_filename(filename)
 	{
-		if (filename.empty() && filename[filename.size() - 1] == '/' || filename[filename.size() - 1] == '\\')
-		{
-			throwError(IOException(Format("Failed to open {0} with errno {1}", m_filename, 22.0))); //Why is this officially a formatted float? It should be EINVAL (Invalid Argument)
-		}
-		m_fh = fopen(filename.c_str(), "rb");
+		if (filename.empty() && filename[filename.size() - 1] == '/' || filename[filename.size() - 1] == '\\') //26
+			throwError(IOException(Format("Failed to open {0} with errno {1}", m_filename, EINVAL))); //27 | Why is this officially a formatted float?
+
+		m_fh = fopen(filename.c_str(), "rb"); //39
 		if (!m_fh)
-		{
-			throwError(IOException(Format("Failed to open {0} with errno {1} ({2})", m_filename, errno, strerror(errno))));
-		}
+			throwError(IOException(Format("Failed to open {0} with errno {1} ({2})", m_filename, errno, strerror(errno)))); //43
 	}
-	~Impl()
+
+	~Impl() //47-50
 	{
 		fclose(m_fh);
 	}
-	int read(void* data, int size)
+
+	int read(void* data, int size) //52-58
 	{
-		int bytes = fread(data, 1, size, m_fh);
+		int bytes = fread(data, 1, size, m_fh); //54
 		if (bytes < size && ferror(m_fh))
-			throwError(IOException(Format("Failed to read {1} bytes from {0}", toString(), size)));
+			throwError(IOException(Format("Failed to read {1} bytes from {0}", toString(), size))); //56
 		return bytes;
 	}
-	int skip(int n) const
+
+	int skip(int n) const //60-66
 	{
-		int ret = n; //Previously cur
+		int ret = n; //62 | Previously cur
 		if (fseek(m_fh, n, SEEK_CUR))
-			throwError(IOException(Format("Failed to skip {0} bytes from {1}", toString(), n))); //Previously "Failed to skip {1} bytes from {0}"
+			throwError(IOException(Format("Failed to skip {0} bytes from {1}", toString(), n))); //64 | Previously "Failed to skip {1} bytes from {0}"
 		return n;
 	}
-	int available() const //Identical to above
+
+	int seek(int offset, SeekMode origin) const //68
 	{
-		if (!m_fh)
-			return 0;
-		int cur = ftell(m_fh);
+		return fseek(m_fh, offset, origin);
+	}
+
+	int available() const //73-82
+	{
+		int cur = ftell(m_fh); //75
 		fseek(m_fh, 0, SEEK_END);
-		int end = ftell(m_fh);
+		int end = ftell(m_fh); //77
 		fseek(m_fh, cur, SEEK_SET);
 		if (ferror(m_fh))
-			throwError(IOException(Format("Failed to seek {0}", toString())));
+			throwError(IOException(Format("Failed to seek {0}", toString()))); //80
 		return end - cur;
 	}
-	std::string toString() const
+
+	std::string toString() const //84
 	{
 		return m_filename;
 	}
-	std::string path() const
+
+	std::string path() //89
 	{
 		return PathName(m_filename).toString();
 	}
+
 private:
-	FILE* m_fh;
-
-	std::string 	m_filename;
+	std::string 	m_filename; //110
+	FILE* m_fh; //111
 };
-
 	
-FileInputStream::FileInputStream( const std::string& filename ) :
-	InputStream(this)
-{
-	m_impl = new Impl(filename);
+FileInputStream::FileInputStream( const std::string& filename ) : InputStream(this) //117
+{ //118?
+	m_impl = new Impl(PathName(filename).toString()); //119
 }
 
-FileInputStream::~FileInputStream()
+FileInputStream::~FileInputStream() //122-124
 {
 }
 
-int FileInputStream::read( void* data, int size )
+int FileInputStream::read( void* data, int size ) //126
 {
-	return m_impl->read(data, size);
-}
-
-int FileInputStream::available() const
-{
-	return m_impl->available();
+	return m_impl->read(data, size); //128
 }
 
 int FileInputStream::skip(int n)
 {
-	return m_impl->skip(n);
+	return m_impl->skip(n); //133
 }
 
-std::string FileInputStream::toString() const
+bool FileInputStream::seek(int offset, SeekMode origin) //136
 {
-	return m_impl->toString();
+	return m_impl->seek(offset, origin); //138
+}
+
+int FileInputStream::available() const //141-144
+{
+	return m_impl->available(); //143
+}
+
+std::string FileInputStream::toString() const //145-149
+{
+	return m_impl->toString(); //148
 }
 
 std::string FileInputStream::path()
