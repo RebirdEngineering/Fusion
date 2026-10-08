@@ -11,15 +11,15 @@ namespace io
 class BundleFileSystem
 {
 public:
-	P(BundleInputStream) createInputStream(const std::string& path);
+	static P(BundleInputStream) createInputStream(const std::string& path);
 
-	bool exists(const std::string& path);
+	static bool exists(const std::string& path);
 
-	bool isFile(const std::string&);
+	static bool isFile(const std::string&);
 
-	bool isDirectory(const std::string& path);
+	static bool isDirectory(const std::string& path);
 
-	std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive = false);
+	static std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive = false);
 };
 
 }

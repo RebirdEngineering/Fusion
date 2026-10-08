@@ -7,7 +7,6 @@
 
 namespace io
 {
-using namespace detail;
 
 #ifdef PLATFORM_ANDROID //This class only exists on Android as it reads the APK using Java classes.
 #include <java/jni.h>
@@ -16,17 +15,18 @@ using namespace java;
 
 P(BundleInputStream) BundleFileSystem::createInputStream(const std::string& path)
 {
-	return new BundleInputStream(PathName(bundlePath(), path).toString());
+	return new BundleInputStream(PathName(detail::bundlePath(), path).toString());
 }
 
 bool BundleFileSystem::isFile(const std::string& path)
 {
-	
+	std::string jniClass = jni::FindClass("com/rovio/fusion/FileReader");
+	throwError(JavaException(Format("{0}: out of memory", jniClass)));
 }
 
 bool BundleFileSystem::isDirectory(const std::string& path)
 {
-	
+	std::string jniClass = jni::FindClass("com/rovio/fusion/FileReader");
 }
 
 std::vector<DirEntry> BundleFileSystem::enumerate(const std::string& basedir, const string& filepattern, int types, bool recursive);
@@ -44,10 +44,12 @@ bool BundleFileSystem::exists(const std::string& path)
 }
 
 #else
+
 bool BundleFileSystem::exists(const std::string& path) //iOS and Android, it's really just here for AB's LuaManager::findScriptPath. | 14
 {
-	return BasicFileSystem::exists(PathName(bundlePath(), path).toString());
+	return BasicFileSystem::exists(PathName(detail::bundlePath(), path).toString()); //16
 }
+
 #endif
 
 }

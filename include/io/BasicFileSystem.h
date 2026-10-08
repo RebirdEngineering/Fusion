@@ -35,7 +35,7 @@ public:
 
 	static void move(const std::string& path, const std::string& newPath, bool createMissingDirectories); //123 | guess
 
-	static void rename(const std::string& path, const std::string& newPath); //132| guess
+	static void rename(const std::string& path, const std::string& newPath); //132 | guess
 
 	static void remove(const std::string& path); //140
 
@@ -45,7 +45,7 @@ public:
 
 	static void createDirectory(const std::string& path, bool createMissingDirectories); //175
 
-	static std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive = false); //201
+	static std::vector<DirEntry> enumerate(const std::string& basedir, const std::string& filepattern, int types, bool recursive = false); //201 | Called by GameLua::removeTemporaryLevels
 
 	static void setPermissions(const std::string& path, int permissions); //214, unknown parameters.
 };
