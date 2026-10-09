@@ -2,7 +2,7 @@
 #define _FRAMEWORK_OSINTERFACE_H
 
 
-#include <io/PathName.h>
+#include <io/PathName.h> //Redundant?
 #include <gr/Context.h>
 
 
@@ -63,9 +63,9 @@ public:
 
     int 									getArgc( ) const; //115
 
-    char** 									getArgv( ) const; //121
+    char** 									getArgv( ); //121
 
-    void									setCommandLineArguments( const std::vector<std::string>& ); //127
+    void									setCommandLineArguments( const std::vector<std::string>& args ); //127
 
     void									setCommandLineArguments(int, char**); //134
     
