@@ -173,46 +173,59 @@ WebViewLuaInterface::WebViewLuaInterface(LuaState* lua) : //236
 {
 	static bool initialized = false; //240 | It's local var soooo static?
 
-	const luaL_Reg webView_f[] = { //244
-		{ "new", create },
-		{ 0, 0 }
-	};
-
-	const luaL_Reg webView_m[] = { //250
-		{ "show", show },
-		{ "hide", hide },
-		{ "setPosition", setPosition },
-		{ "setSize", setSize },
-		{ "loadPage", loadPage },
-		{ "loadLocalPage", loadLocalPage },
-		{ "reloadPage", reloadPage },
-		{ "setOnLinkClickedCallback", setOnLinkClickedCallback },
-		{ "setOnPageLoadedCallback",setOnPageLoadedCallback },
-		{ "allowCallsFromJavaScript", allowCallsFromJavaScript },
-		{ "executeJavaScript", executeJavaScript },
-		{ "asyncExecuteJavaScript", asyncExecuteJavaScript },
-		{ 0, 0 }
-	};
-
-	if (WebView::isSupported() && !initialized) //TODO
-	//if (WebView::isSupported() && !initialized)
+	if (WebView::isSupported() && !initialized) //242 |TODO?
 	{
+		const luaL_Reg webView_f[] = //244
+		{
+			{ "new", create },
+			{ 0, 0 }
+		};
+
+		const luaL_Reg webView_m[] = //250
+		{
+			{ "delete", destroy },
+			{ "show", show },
+			{ "hide", hide },
+			{ "setPosition", setPosition },
+			{ "setSize", setSize },
+			{ "loadPage", loadPage },
+			{ "loadLocalPage", loadLocalPage },
+			{ "reloadPage", reloadPage },
+			{ "setOnLinkClickedCallback", setOnLinkClickedCallback },
+			{ "setOnPageLoadedCallback",setOnPageLoadedCallback },
+			{ "allowCallsFromJavaScript", allowCallsFromJavaScript },
+			{ "executeJavaScript", executeJavaScript },
+			{ "asyncExecuteJavaScript", asyncExecuteJavaScript },
+			{ 0, 0 }
+		};
+
 		lua_State* L = lua->impl(); //268
-		luaL_newmetatable(L, s_metaTableName);
-		lua_pushvalue(L, -1);
-		lua_setfield(L, -2, "__index");
-		luaL_register(L, 0, webView_m);
-		luaL_register(L, s_tableName, webView_f);
-		lua_settop(L, -3);
-		lua_getglobal(L, s_tableName);
-		lua_pushstring(L, "0");
-		lua_setfield(L, -2, "DONT_LOAD_PAGE");
-		lua_pushstring(L, "1");
-		lua_setfield(L, -2, "LOAD_PAGE_INTO_WEBVIEW");
-		lua_pushstring(L, "2");
-		lua_setfield(L, -2, "LOAD_PAGE_INTO_EXTERNAL_BROWSER");
-		lua_settop(L, -2);
-		s_instance = this;
+
+		luaL_newmetatable(L, s_metaTableName); //270
+
+		lua_pushvalue(L, -1); //272
+		lua_setfield(L, -2, "__index"); //273
+
+		luaL_register(L, 0, webView_m); //275
+		luaL_register(L, s_tableName, webView_f); //276
+
+		lua_settop(L, -3); //278
+
+		lua_getglobal(L, s_tableName); //281
+
+		lua_pushstring(L, "0"); //283
+		lua_setfield(L, -2, "DONT_LOAD_PAGE"); //284
+
+		lua_pushstring(L, "1"); //286
+		lua_setfield(L, -2, "LOAD_PAGE_INTO_WEBVIEW"); //287
+
+		lua_pushstring(L, "2"); //289
+		lua_setfield(L, -2, "LOAD_PAGE_INTO_EXTERNAL_BROWSER"); //290
+
+		lua_settop(L, -2); //292
+
+		s_instance = this; //294
+
 		initialized = true;
 	}
 }
