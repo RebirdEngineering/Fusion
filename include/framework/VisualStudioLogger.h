@@ -13,7 +13,7 @@ public:
 	VisualStudioLogger();
 	~VisualStudioLogger();
 
-	virtual void onLogEvent(const lang::log::Event& Event);
+	void onLogEvent(const lang::log::Event& Event);
 };
 
 }

@@ -12,7 +12,7 @@ public:
 	StdoutLogger(); //11
 	~StdoutLogger(); //12
 
-	virtual void onLogEvent(const lang::log::Event& Event); //14
+	void onLogEvent(const lang::log::Event& Event); //14
 };
 
 } // framework

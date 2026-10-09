@@ -2,6 +2,7 @@
 #define _FRAMEWORK_FILELOGGER_H
 
 #include <lang/Log.h>
+#include <io/OutputStream.h>
 
 //Android only.
 
@@ -10,16 +11,19 @@
 namespace framework
 {
 
-class FileLogger :
+class FileLogger : //Trilogii and Android only, given all the loggers tend to be at the root of the framework folder, we're gonna assume all of them are officially there, even this one.
 	public lang::log::Listener
 {
 public:
 	FileLogger();
 	~FileLogger();
 
-	virtual void onLogEvent(const NS(lang::log, Event)& Event);
+	void onLogEvent(const NS(lang::log, Event)& Event);
+
+private:
+	P(io::OutputStream) m_output;
 };
 
-END_NAMESPACE() // framework
+} // framework
 
 #endif // _FRAMEWORK_FILELOGGER_H
