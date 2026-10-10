@@ -8,7 +8,7 @@ namespace gr
 {
 namespace GL_NAMESPACE //I'm just as confused as you are
 {
-class GL_State
+class GL_State //25
 {
 public:
 	GL_State()/* : //According to the header all this stuff is here?
@@ -31,6 +31,7 @@ public:
 		m_clientStateNormalArray(false),
 		m_clientStateColorArray(false)*/
 	{
+		//IDENTITY[] = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0}
 		//m_matrices[012];
 	}
 	void begin(bool force = false)
@@ -187,7 +188,7 @@ public:
 		}*/
 	}
 
-	const float IDENTITY[16] = { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 }; //84
+	static const float IDENTITY[]; //84
 
 	bool m_culling; //86
 	unsigned int m_cullFace; //87

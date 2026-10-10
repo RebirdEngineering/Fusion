@@ -46,7 +46,7 @@ private:
 
     std::string doubleToString(double value); //Inline
     std::string backslashEscape(const char* s);
-	const int kInvalidIndex = -1;
+	static const int kInvalidIndex = -1;
 };
 
 } // lua

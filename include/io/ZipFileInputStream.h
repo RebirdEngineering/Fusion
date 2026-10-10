@@ -6,14 +6,15 @@
 namespace io
 {
 
-class ZipFile
+class ZipFile //12
 {
 public:
-	const int STATUS_OK = 0;
-	~ZipFile();
-	virtual int open(InputStream& fileInput) = 0;
-	virtual int readHeader(std::vector<std::string>& fileNames) = 0;
-	virtual int extract(int index, std::vector<char>& resultBuffer) = 0;
+	static const int STATUS_OK = 0; //16
+
+	~ZipFile(); //18
+	virtual int open(InputStream& fileInput) = 0; //19
+	virtual int readHeader(std::vector<std::string>& fileNames) = 0; //20
+	virtual int extract(int index, std::vector<char>& resultBuffer) = 0; //21
 };
 
 /**

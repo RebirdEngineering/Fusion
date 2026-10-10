@@ -33,7 +33,7 @@ public:
 		unsigned long m_hash; //34
 	};
 
-	const int MAX_POOL_SIZE = 5242880; //38
+	static const int MAX_POOL_SIZE = 5242880; //38
 
 	class Label : public lang::Object //40
 	{

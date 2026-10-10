@@ -33,7 +33,7 @@ private:
 	JSONImporter& operator=(const JSONImporter&);
     std::stack<State> m_stack;
     LuaTable* m_rootLuaTable;
-    const int kInvalidIndex = -1;
+    static const int kInvalidIndex = -1;
 };
 
 } // lua
