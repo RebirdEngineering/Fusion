@@ -1,9 +1,7 @@
 #ifndef _IO_PATHNAME_H
 #define _IO_PATHNAME_H
 
-
 #include <lang/pp.h>
-
 
 namespace io
 { 
@@ -28,7 +26,7 @@ class FileBundle;
  *
  * @ingroup io
  */
-class PathName
+class PathName //25
 {
 public:
 	enum 
@@ -40,24 +38,24 @@ public:
 	/**
 	 * Empty path.
 	 */
-	PathName();
+	PathName(); //37
 
 	/** 
 	 * Copy by value.
 	 */
-	PathName( const PathName& other );
+	PathName( const PathName& other ); //42
 
 	/**
 	 * Path name from string.
 	 * @exception IOException If path name too long.
 	 */
-	PathName( const char* pathname );
+	PathName( const char* pathname ); //48
 
 	/**
 	 * Path name from string.
 	 * @exception IOException If path name too long.
 	 */
-	PathName( const std::string& pathname );
+	PathName( const std::string& pathname ); //54
 
 	/**
 	 * Combines two path names.
@@ -65,7 +63,7 @@ public:
 	 * with any path.
 	 * @exception IOException If path name too long.
 	 */
-	PathName( const char* first, const char* second );
+	PathName( const char* first, const char* second ); //62
 
 	/**
 	 * Combines two path names.
@@ -73,7 +71,7 @@ public:
 	 * with any path.
 	 * @exception IOException If path name too long.
 	 */
-	PathName( const std::string& first, const std::string& second );
+	PathName( const std::string& first, const std::string& second ); //70
 
 	/**
 	 * Combines two path names.
@@ -81,59 +79,59 @@ public:
 	 * with any path.
 	 * @exception IOException If path name too long.
 	 */
-	PathName(const PathName& first, const PathName& second);
+	PathName(const PathName& first, const PathName& second); //78
 
 	/** 
 	 * Copy by value.
 	 */
-	PathName& operator=( const PathName& other );
+	PathName& operator=( const PathName& other ); //83
 
 	/**
 	 * Returns drive letter of the path name.
 	 * Returns empty string if the component is not in path name.
 	 */
-	const char*		drive() const			{return m_drv;}
+	std::string		drive() const			{return m_drv;} //89
 
 	/**
 	 * Returns basename of the path name.
 	 * Returns empty string if the component is not in path name.
 	 * Basename is the name before suffix and after last directory separator.
 	 */
-	const char*		basename() const		{return m_basename;}
+	std::string		basename() const		{return m_basename;} //96
 
 	/**
 	 * Returns suffix of the path name including preceding dot.
 	 * Returns empty string if the component is not in path name.
 	 */
-	const char*		suffix() const			{return m_suffix;}
+	std::string		suffix() const			{return m_suffix;} //102
 
 	/**
 	 * Returns basename with suffix.
 	 */
-	std::string		filename() const;
+	std::string		filename() const; //107
 
 	/**
 	 * Returns parent path.
 	 * Parent path is path before last directory separator.
 	 */
-	PathName		parent() const;
+	PathName		parent() const; //113
 
 	/**
 	 * Returns path name as 0-terminated string.
 	 */
-	const char*		toString() const		{return m_path;}
+	std::string		toString() const		{return m_path;} //118
 
 private:
-	char*	m_path;
-	char*	m_drv;
-	char*	m_dir;
-	char*	m_basename;
-	char*	m_suffix;
-	int		m_alloc;
-	char	m_buf[MAXLEN*2];
+	char*	m_path; //136
+	char*	m_drv; //137
+	char*	m_dir; //138
+	char*	m_basename; //139
+	char*	m_suffix; //140
+	int		m_alloc; //141
+	char	m_buf[MAXLEN*2]; //142
 
-	char*	allocate( int chars );
-	void	parse( const char* path, const char* second );
+	char*	allocate( int chars ); //144
+	void	parse( const char* path, const char* second ); //145
 };
 
 
