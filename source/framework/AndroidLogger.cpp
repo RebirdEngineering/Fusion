@@ -2,9 +2,9 @@
 
 #include <android/log.h>
 
-using namespace lang;
-
 static int androidLogPrio[5] = { ANDROID_LOG_ERROR, ANDROID_LOG_WARN, ANDROID_LOG_INFO, ANDROID_LOG_DEBUG, ANDROID_LOG_VERBOSE };
+
+using namespace lang;
 
 namespace framework
 {

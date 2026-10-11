@@ -67,7 +67,7 @@ public:
 
 	std::string path() //Not on iOS
 	{
-		const int length = 512; //96
+		const int length = 512; //94
 		char buf[length];
 		_getcwd(buf, length);
 

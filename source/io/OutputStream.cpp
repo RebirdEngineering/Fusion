@@ -3,31 +3,29 @@
 namespace io
 { 
 
-OutputStream::OutputStream(P(OutputStream) sourcePtr)
-	: m_ptr(sourcePtr), m_ref(*this)
-{
-	//This increases by 1?
-}
-
-OutputStream::~OutputStream()
+OutputStream::OutputStream(P(OutputStream) sourcePtr) : //16
+	m_ptr(sourcePtr),
+	m_ref(*this)
 {
 }
 
-void OutputStream::write(const void* data, int size)
+OutputStream::~OutputStream() //22-24
 {
-	getEmbeddedStream().write(data, size);
+}
+
+void OutputStream::write(const void* data, int size) //26
+{
+	getEmbeddedStream().write(data, size); //28
 }
 
 OutputStream& OutputStream::getEmbeddedStream() const
 {
-	if (m_ptr == this)
-		return m_ptr.operator*();
-	return m_ref;
+	return &m_ref == this ? m_ref : *m_ptr; //33
 }
 
 std::string OutputStream::toString() const
 {
-	return getEmbeddedStream().toString();
+	return getEmbeddedStream().toString(); //38
 }
 
 } // io
