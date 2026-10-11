@@ -3,45 +3,52 @@
 #include <io/IOException.h>
 #include <lang/Log.h>
 
+#include <glob>
+
 using namespace lang;
 
 namespace io
 {
 
-static char* TAG = 'FindFile';
-
-int error_func(const char* msg, int errorNum)
+int error_func(const char* msg, int errorNum) //23
 {
-	LANG_LOG(TAG, LANG_LOG_PRIORITY_ERROR, "error_func(%d): %s", errorNum, msg); //25
+	LANG_LOG("FindFile", LANG_LOG_PRIORITY_ERROR, "error_func(% d) : % s", errorNum, msg); //25
 	return 0;
 }
 
-class FindFile::Impl :
+class FindFile::Impl : //29
 	public Object
 {
 public:
-	Impl(const std::string& filter, int flags) :
-		m_filter(PathName(filter).basename() + PathName(filter).suffix()),
-		m_path(PathName(filter).parent().toString()),
+	Impl(const std::string& filter, int flags) : //33
+		m_filter(PathName(filter).basename() + PathName(filter).suffix()), //34
+		m_path(PathName(filter).parent().toString()), //35
 		m_flags(flags),
 		m_subdirs(),
 		m_data(),
-		m_current(0),
+		m_current(0)//,
 		//m_glob()
 	{
-		if (flags & FIND_RECURSE)
+		/*if (flags & FIND_RECURSE)
 			listSubDirs(m_path);
 
-		m_subdirs.push_back(m_path);
-		next();
+		m_subdirs.push_back(m_path); //49
+		next();*/
 	}
-	~Impl()
+	
+	~Impl() //53
 	{
-		globfree(m_lgob);
+		//globfree(m_glob);
 	}
-	void next()
+	
+	void next() //58
 	{
-		/*if (m_fh != -1 && 0 == _findnext(m_fh, &m_fd))
+		/*
+		//.empty() //73
+		
+		//= //75
+		
+		if (m_fh != -1 && 0 == _findnext(m_fh, &m_fd))
 		{
 			m_current++;
 			updateData();
@@ -67,111 +74,111 @@ public:
 			}
 		}*/
 	}
-	bool more() const
+	
+	bool more() const //86
 	{
-		return m_glob && m_glob.gl_pathc >= m_current || m_subdirs.empty() > 0;
+		//return ! m_glob.gl_pathc.size()
+		//return m_glob && m_glob.gl_pathc >= m_current || m_subdirs.empty() > 0;
 		//return m_fh != -1 || m_subdirs.empty() > 0;
 		//return false; // ? m_fh != -1 || m_subdirs.empty() > 0;
+		return false;
 	}
-	const Data& data() const
+	
+	const Data& data() const //91
 	{
 		return m_data;
 	}
+	
 private:
-	std::string			m_filter;
-	std::string			m_path;
-	int				m_flags;
-	std::vector<std::string>	m_subdirs;
-	Data			m_data;
-	unsigned int m_current;
-	glob_t m_glob;
+	std::string			m_filter; //97
+	std::string			m_path; //98
+	int				m_flags; //99
+	std::vector<std::string>	m_subdirs; //100
+	Data			m_data; //101
+	unsigned int m_current; //102
+	//glob_t m_glob; //103 | TODO
 
-	void glob(const std::string& pattern, int flags)
+	void glob(const std::string& pattern, int flags) //105 | TODO
 	{
-		if (glob_INODE64(pattern.c_str(), flags & 0xFFFFFEFF, error_func, m_glob) != -3)
-			throwError(IOException(Format("Error globbing '{0}' with error {1} (errno:{2})", pattern, errno, strerror(errno))));
+		/*if (glob(pattern.c_str(), flags & 0xFFFFFEFF, error_func, m_glob) != -3) //109
+			throwError(IOException(Format("Error globbing '{0}' with error {1} (errno:{2})", pattern, errno, strerror(errno)))); //111*/
 	}
 
-	void updateData()
+	void updateData() //114 | TODO
 	{
-		/*struct stat stats;
-		if (m_glob.gl_pathc == -1)
+		/*if (!m_glob.gl_pathc)
 			return;
 
-		//assert(error == 0 && "Stat failed!"); //Add assert on line 121 (RCSSDKDBG) or 132
+		struct stat stats; //119
+		int error = stat(m_glob.gl_pathv[m_current], &stats); //120, recover from assert
+		assert(error == 0 && "Stat failed!"); //Add assert on line 121 (RCSSDKDBG) or 132
 
-		m_data.attrib = 0;
-		if ((m_fd.attrib & _A_ARCH) == _A_ARCH)
-			m_data.attrib |= ATTRIB_ARCHIVE;
-		if ((m_fd.attrib & _A_HIDDEN) == _A_HIDDEN)
-			m_data.attrib |= ATTRIB_HIDDEN;
-		if ((m_fd.attrib & _A_RDONLY) == _A_RDONLY)
+		m_data.attrib = ATTRIB_NORMAL;
+
+		if ((stats.st_mode & 2) != 0)
 			m_data.attrib |= ATTRIB_READONLY;
-		if ((m_fd.attrib & _A_SUBDIR) == _A_SUBDIR)
-			m_data.attrib |= ATTRIB_SUBDIR;
-		if ((m_fd.attrib & _A_SYSTEM) == _A_SYSTEM)
-			m_data.attrib |= ATTRIB_SYSTEM;
 
-		m_data.writeTime = m_fd.time_write;
-		m_data.size = m_fd.size;
-		m_data.path = PathName(m_path, m_fd.name);*/
+		if ((stats.st_mode & S_IFMT) == S_IFDIR)
+			m_data.attrib |= ATTRIB_SUBDIR; //134
+		else if ((stats.st_mode & S_IFMT) == S_IFREG)
+			m_data.attrib |= ATTRIB_ARCHIVE; //136
+
+		m_data.writeTime = stats.st_mtimespec.tv_sec;
+		m_data.size = stats.st_size;
+		m_data.path = PathName(m_glob.gl_pathv[m_current]); //140*/
 	}
 
-	void listSubDirs(std::string path)
+	void listSubDirs(std::string path) //143 | TODO
 	{
-		struct stat stats;
-		char buf[PathName::MAXLEN];
-		String::cpy(buf, sizeof(buf), PathName(path, "*.*").toString());
+		/*glob(PathName(path, "*").toString(), m_glob.gl_flags); //145
+		
+		struct stat stats; //147
 
-		_finddata_t fd;
-		intptr_t fh = _findfirst(buf, &fd);
-
-		if (fh != -1)
+		//m_subdirs.size(); //149 | ?
+		for (unsigned int i = 0; i < m_glob.gl_pathc; i++) //150
 		{
-			const int oldsubdirs = m_subdirs.size();
-			do
-			{
-				if ((fd.attrib & _A_SUBDIR) != 0 &&
-					strcmp(".", fd.name) != 0 &&
-					strcmp("..", fd.name) != 0)
-				{
-					m_subdirs.add(PathName(path, fd.name).toString());
-				}
-			} while (0 == _findnext(fh, &fd));
-			_findclose(fh);
-
-			const int lastsubdir = m_subdirs.size();
-			for (int i = oldsubdirs; i < lastsubdir; ++i)
-			{
-				int error;
-				listSubDirs(m_subdirs[i]);
-			}
+			int error = errno; //152
+			if (stat(m_glob.gl_pathv[i], &stats))
+				LANG_LOG("FindFile", LANG_LOG_PRIORITY_ERROR, "stat(\"%s\") failed with %s", m_glob.gl_pathv[i], strerror(error)); //154
+			else if ((stats.st_mode & 0xF000) == S_IFDIR)
+				m_subdirs.push_back(PathName(m_glob.gl_pathv[i]).toString()); //156
 		}
-	}
-}
+		
+		globfree(m_glob); //158
 
-FindFile::FindFile(const std::string& filter, int flags)
+		m_subdirs.size(); //160 | ?
+		for (int i = 0; i < m_subdirs.size(); i++) //161
+			listSubDirs(m_subdirs[i]); //162
+		
+		m_glob.gl_pathc = 0;
+		m_glob.gl_pathv = 0;
+		m_glob.gl_offs = 0;
+		memset(m_glob, 0, sizeof(m_glob));*/
+	}
+};
+
+FindFile::FindFile(const std::string& filter, int flags) //171
 {
-	m_impl = new Impl(filter, flags);
+	m_impl = new Impl(filter, flags); //173
 }
 
 FindFile::~FindFile()
 {
 }
 
-void FindFile::next()
+void FindFile::next() //180-183
 {
-	m_impl->next();
+	m_impl->next(); //182
 }
 
-bool FindFile::more() const
+bool FindFile::more() const //185-188
 {
-	return m_impl->more();
+	return m_impl->more(); //187
 }
 
-const FindFile::Data& FindFile::data() const
+const FindFile::Data& FindFile::data() const //190-193
 {
-	return m_impl->data();
+	return m_impl->data(); //192
 }
 
 bool FindFile::isFileExist(const std::string& filter, int flags)
@@ -179,9 +186,5 @@ bool FindFile::isFileExist(const std::string& filter, int flags)
 	FindFile ff(filter, flags);
 	return ff.more();
 }
-
-//assert(error == 0 && errno == 0 && "Error globbing"); //121
-
-//assert(error == 0 && "Error globbing"); //Add assert on line 132
 
 }
