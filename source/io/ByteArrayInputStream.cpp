@@ -36,7 +36,7 @@ void ByteArrayInputStream::reset( const void* data, int size ) //31
 
 int ByteArrayInputStream::read( void* data, int size ) //39
 {
-	assert( size >= 0 ); //Line 41 of RCSDEBUG
+	assert( size >= 0 ); //RCSDEBUG line 41
 	
 	int left = available(); //43
 	int count = size; //44
@@ -67,24 +67,23 @@ int ByteArrayInputStream::skip( int n ) //55 | Correct?
 
 bool ByteArrayInputStream::seek(int offset, SeekMode origin) //69 | Correct?
 {
-	switch (origin)
+	if (SEEKMODE_SET)
 	{
-	case SEEKMODE_SET:
-		assert(offset >= 0); //73
-		assert(offset <= (int)m_data.size()); //74
+		assert(offset >= 0); //73 of RCSSDK
+		assert(offset <= (int)m_data.size()); //RCSDEBUG line 74
 		m_index = offset;
-
-	case SEEKMODE_CUR:
-		assert(m_index+offset >= 0); //79
-		assert(m_index+offset <= (int)m_data.size()); //80
+	}
+	else if (SEEKMODE_CUR)
+	{
+		assert(m_index + offset >= 0); //RCSDEBUG line 79
+		assert(m_index + offset <= (int)m_data.size()); //RCSDEBUG line 80
 		m_index += offset;
-		break;
-
-	case SEEKMODE_END:
-		assert(m_data.size() + offset >= 0); //85
-		assert(m_data.size() + offset <= m_data.size()); //86
+	}
+	else if (SEEKMODE_END)
+	{
+		assert(m_data.size() + offset >= 0); //RCSDEBUG line 85
+		assert(m_data.size() + offset <= m_data.size()); //RCSDEBUG line 86
 		m_index = m_data.size() + offset;
-		break;
 	}
 
 	if (m_index < 0)

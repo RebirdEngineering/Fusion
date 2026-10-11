@@ -1,17 +1,18 @@
 #include <io/ByteArrayOutputStream.h>
+//#include <stdint.h>
+//#include <string.h>
 
 namespace io
 { 
 
-
-ByteArrayOutputStream::ByteArrayOutputStream( int size ) :
+ByteArrayOutputStream::ByteArrayOutputStream( int size ) : //8
 	OutputStream(this),
 	m_userDefined( false )
 {
-	m_buffer->resize( 0 );
+	m_buffer->resize( 0 ); //12
 }
 
-ByteArrayOutputStream::ByteArrayOutputStream( std::vector<uint8_t>* buffer ) :
+ByteArrayOutputStream::ByteArrayOutputStream( std::vector<unsigned char>* buffer ) : //Not seen on iOS.
 	OutputStream(this), //?
 	m_buffer( buffer ),
 	m_userDefined( true )
@@ -30,20 +31,20 @@ ByteArrayOutputStream::~ByteArrayOutputStream()
 	}
 }
 
-void ByteArrayOutputStream::reset()
+void ByteArrayOutputStream::reset() //Not seen on iOS
 {
 	m_buffer->resize( 0 );
 }
 
-void ByteArrayOutputStream::write( const void* data, int size )
+void ByteArrayOutputStream::write( const void* data, int size ) //38
 {
-	int oldsize = m_buffer->size();
-	m_buffer->resize( oldsize + size );
-	for ( int i = 0 ; i < size ; ++i )
-		(*m_buffer)[oldsize+i] = reinterpret_cast<const char*>(data)[i];
+	int oldsize = m_buffer->size(); //40
+	m_buffer->resize( oldsize + size ); //41
+	for ( int i = 0 ; i < size ; ++i ) //42
+		(*m_buffer)[oldsize+i] = reinterpret_cast<const char*>(data)[i]; //43
 }
 
-int ByteArrayOutputStream::size() const
+int ByteArrayOutputStream::size() const //Not seen on iOS
 {
 	return m_buffer->size();
 }
