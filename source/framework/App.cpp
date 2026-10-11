@@ -299,7 +299,7 @@ App::Configuration::Configuration()
 	captureMouse = false;
 	iconResourceID = 0;
     debugMemoryAllocs = false;
-    orientation = gr::Context::ORIENTATION_0;
+    orientation = Context::ORIENTATION_0;
     framerate = 60;
     publisher = "";
     product = "";
@@ -463,7 +463,8 @@ void App::setDataPath( const std::string& datapath ) //447
 
 std::string App::path( const std::string& filename ) const //452
 {
-	return PathName( m_dataPath.toString(), PathName(filename).toString() ).toString(); //454
+    PathName(m_os->getDefaultDataPath(), m_dataPath.toString()); //454
+    return PathName(PathName(m_os->getDefaultDataPath(), m_dataPath), PathName(filename)).toString(); //455
 }
 
 void App::softQuit()
@@ -476,7 +477,7 @@ bool App::setControlsPresent(bool)
 }
 
 #ifndef PLATFORM_IOS //Inexistent on iOS but exists on Android and PC.
-static App::Configuration parseConfigFromLuaTable(App::Configuration& config, LuaTable& table)
+App::Configuration parseConfigFromLuaTable(App::Configuration& config, LuaTable& table) //Would this be here or the game's App.cpp?
 {
 	if (table.isString("name")) config.name = table.getString("name");
 	if (table.isNumber("width")) config.width = table.getNumber("width");
@@ -489,6 +490,7 @@ static App::Configuration parseConfigFromLuaTable(App::Configuration& config, Lu
 	if (table.isString("dllPath")) config.dllPath = table.getString("dllPath");
 	if (table.isString("iconResourceID")) config.iconResourceID = table.getNumber("iconResourceID");
 	if (table.isBoolean("debugMemoryAllocs")) config.debugMemoryAllocs = table.getBoolean("debugMemoryAllocs");
+
 	if (table.isNumber("orientation"))
 	{
         int orientation = table.getNumber("orientation");
@@ -500,15 +502,18 @@ static App::Configuration parseConfigFromLuaTable(App::Configuration& config, Lu
 			default: config.orientation = Context::ORIENTATION_0;
 		}
 	}
+
 	if (table.isTable("autoOrientations"))
 	{
 		LuaTable orientationTypes = table.getTable("autoOrientations");
 		for (int i = 0; i < orientationTypes.isNumber(i); i++)
 			config.autoOrientations.push_back((Context::OrientationType)orientationTypes.getNumber(i));
 	}
+
 	if (table.isNumber("framerate")) config.framerate = table.getNumber("framerate");
 	if (table.isString("publisher")) config.publisher = table.getString("publisher");
 	if (table.isString("product")) config.product = table.getString("product");
+
 	if (table.isTable("renderer"))
 	{
 		LuaTable renderers = table.getTable("renderer");
@@ -524,7 +529,9 @@ static App::Configuration parseConfigFromLuaTable(App::Configuration& config, Lu
             }
         }
 	}
+
 	if (table.isBoolean("singleton")) config.singleton = table.getBoolean("singleton");
+
 	return config;
 }
 #endif
