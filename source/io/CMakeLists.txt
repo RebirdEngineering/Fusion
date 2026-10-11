@@ -8,7 +8,7 @@ if(WIN32 OR WINDOWS_PHONE OR WINDOWS_STORE)
 endif()
 
 if(ANDROID) #On iOS only used in Seasons 4.1.0?
-    file(GLOB IO_ANDROID_SRC "android/*.cpp")
+    file(GLOB IO_ANDROID_SRC "android/*.cpp") #BundleFileSystem
     list(APPEND IO_SRC ${IO_ANDROID_SRC})
 endif()
 
@@ -19,7 +19,7 @@ endif()
 
 if (LINUX) #or apple
 	file(GLOB IO_LINUX_SRC "linux/*.cpp")
-	file(APPEND IO_SRC {IO_LINUX_SRC})
+	list(APPEND IO_SRC ${IO_LINUX_SRC})
 endif()
 
 add_compile_definitions(_LIB)
