@@ -3,36 +3,26 @@
 
 using namespace lang;
 
-//typedef for size_t?
-
 namespace io
 {
 
-size_t copy(InputStream& in, OutputStream& out) //Android and 4.1.0 Seasons, this is only used by DiskCache.
+size_t copy(InputStream& in, OutputStream& out) //8 | Android and 4.1.0 Seasons, this is only used by DiskCache.
 {
-	/*const int MAX_BUFFER = 10240;
-	const int available = in.available();
-	const int BUFFER_SIZE = MAX_BUFFER;
-	SBOBuffer<unsigned char> buffer(MAX_BUFFER);
-	int read;
-	size_t bytes;
+	const int MAX_BUFFER = 10240; //10
+	const int available = in.available(); //11
+	const int BUFFER_SIZE = MAX_BUFFER; //12
+	SBOBuffer<unsigned char> buffer(MAX_BUFFER); //13
 
-	buffer.bytes();
-
-	//buffer *
+	int read; //15
+	size_t bytes; //16
 	while (available >= 1)
 	{
-		available = in.
+		read = in.read(&buffer, buffer.bytes()); //19
+		bytes += read;
+		out.write(&buffer, read); //21
 	}
 
-	return bytes;*/
-
-	//in.read(buffer, )
-
-	//out.write(buffer, )
-
-	assert("size_t io::copy(InputStream& in, OutputStream& out) is not decompiled yet.");
-	return 0;
+	return bytes;
 }
 
 }
