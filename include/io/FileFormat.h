@@ -47,7 +47,7 @@ enum FileFormat //11
 	/** */
 	FILEFORMAT_RAW,
 	/** */
-	FILEFORMAT_WEBP = 16
+	FILEFORMAT_WEBP
 };
 
 FileFormat guessFileFormat(const std::string& filename);

@@ -9,12 +9,25 @@ namespace io
 struct DirEntry
 {
 public:
-    DirEntry(); //15
+    DirEntry() //15
+    {
+        flags = !relativepath.empty() ? TYPE_DIR : TYPE_FILE; //?
+    }
 
-    DirEntry(const std::string&, uint32_t); //20
+    DirEntry(const std::string& relativepath, uint32_t flags = 0) //20
+    {
+        this->relativepath = relativepath, this->flags = flags; //?
+    }
 
-    bool operator==(const DirEntry&) const; //25
-    bool operator<(const DirEntry&) const; //30
+    bool operator==(const DirEntry& other) const //25
+    {
+        return this == &other;
+    }
+
+    bool operator<(const DirEntry& other) const //30
+    {
+        return this < &other;
+    }
 
     std::string relativepath; //43
     uint32_t    flags; //44

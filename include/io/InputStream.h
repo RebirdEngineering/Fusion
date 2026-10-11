@@ -1,9 +1,7 @@
 #ifndef _IO_INPUTSTREAM_H
 #define _IO_INPUTSTREAM_H
 
-
 #include <lang/Object.h>
-
 
 namespace io
 { 
@@ -15,7 +13,7 @@ namespace io
  * @ingroup io
  */
 class InputStream :
-	public NS(lang,Object)
+	public lang::Object
 {
 public:
 	enum SeekMode

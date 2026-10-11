@@ -6,28 +6,29 @@
 namespace io
 {
 
-typedef void* unzFile; //
+typedef void* unzFile; //7
 
-struct ZInputStream
+struct ZInputStream //10
 {
 public:
-	long int pos;
-	long int size;
-	InputStream* s;
+	long pos; //12
+	long size; //13
+	InputStream* s; //14
 };
 
-class ZipFileInfoZip : public ZipFile //Weird name
+class ZipFileInfoZip : public ZipFile //20 | Weird name
 {
 public:
-	ZipFileInfoZip();
-	~ZipFileInfoZip();
+	ZipFileInfoZip(); //26
+	~ZipFileInfoZip(); //27
 
-	virtual int open(InputStream& fileInput);
-	virtual int readHeader(std::vector<std::string>& fileNames);
-	virtual int extract(int index, std::vector<char>& resultBuffer);
+	int open(InputStream& fileInput); //29
+	int readHeader(std::vector<std::string>& fileNames); //30
+	int extract(int index, std::vector<char>& resultBuffer); //31
+
 protected:
-	unzFile uf;
-	ZInputStream zpos;
+	unzFile uf; //35
+	ZInputStream zpos; //36
 };
 
 }

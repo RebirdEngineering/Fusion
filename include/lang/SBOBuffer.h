@@ -3,7 +3,8 @@
 
 #include <lang/pp.h>
 
-BEGIN_NAMESPACE(lang)
+namespace lang
+{
 
 template <class T, unsigned long StackCount = 1024> class SBOBuffer
 {

@@ -1,28 +1,25 @@
 #ifndef _IO_FINDFILE_H
 #define _IO_FINDFILE_H
 
-
 #include <io/PathName.h>
 #include <lang/Object.h>
 #include <time.h>
 
-
 namespace io
-{ 
-
+{
 
 /**
  * FindFile iterates path names in a single directory or recursively in sub-directories. The class can be used to find files or directories by user-specified name or by user specified properties.
  * @ingroup io
  */
-class FindFile :
-	public NS(lang,Object)
+class FindFile : //13
+	public lang::Object
 {
 public:
 	/**
 	 * Options for file finding.
 	 */
-	enum FindFlags
+	enum FindFlags //20
 	{
 		/** Recurses into subdirectories. This is default. */
 		FIND_RECURSE	= 1,
@@ -38,7 +35,7 @@ public:
 	/**
 	 * File attributes.
 	 */
-	enum AttribFlags
+	enum AttribFlags //36
 	{
 		/** Normal. File has no other attributes set, and can be read or written to without restriction. */
 		ATTRIB_NORMAL	= 0,
@@ -57,16 +54,16 @@ public:
 	/** 
 	 * Description of a file.
 	 */
-	struct Data
+	struct Data //55
 	{
 		/** File attributes, see AttribFlags. */
-		int			attrib;
+		int			attrib; //58
 		/** Time when the file was last modified. */
-		time_t		writeTime;
+		time_t		writeTime; //60
 		/** Size of the file in bytes. */
-		size_t		size;
+		size_t		size; //62
 		/** Path name of the file. */
-		PathName	path;
+		PathName	path; //64
 	};
 
 	/**
@@ -77,41 +74,41 @@ public:
 	 * @param filter File name filter with optional initial (root) path.
 	 * @param flags Filter flags, see FindFlags.
 	 */
-	explicit FindFile( const std::string& filter, int flags=FIND_DEFAULT );
+	explicit FindFile( const std::string& filter, int flags=FIND_DEFAULT ); //75
 
 	/**
 	 * Ends iteration.
 	 */
-	~FindFile();
+	~FindFile(); //80
 
 	/**
 	 * Iterates to the next file description if any.
 	 */
-	void			next();
+	void			next(); //85
 
 	/**
 	 * Returns true if there is more file descriptions available.
 	 */
-	bool			more() const;
+	bool			more() const; //90
 
 	/**
 	 * Returns description of current file in iteration.
 	 */
-	const Data&		data() const;
+	const Data&		data() const; //45
 
 	/**
 	 * Returns true if specified file exists. Accepts wild-cards.
 	 * @param filter File name filter with optional initial (root) path.
 	 * @param flags Filter flags, see FindFlags.
 	 */
-	static bool		isFileExist( const std::string& filter, int flags=FIND_DEFAULT );
+	static bool		isFileExist( const std::string& filter, int flags=FIND_DEFAULT ); //102
 
 private:
 	class Impl;
-	P(Impl)	m_impl;
+	P(Impl)	m_impl; //106
 
-	FindFile( const FindFile& );
-	FindFile& operator=( const FindFile& );
+	FindFile( const FindFile& ); //108
+	FindFile& operator=( const FindFile& ); //109
 };
 
 
