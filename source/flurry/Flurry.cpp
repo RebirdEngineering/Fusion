@@ -52,9 +52,9 @@ namespace flurry
 
 		for (std::map<std::string, std::string>::const_iterator i = combinedParams.begin(); i != combinedParams.end(); i++) //48
 		{
-			combinedParams[i->first] = i->second; //?
+			if (i->first == i->second)
+				combinedParams[i->first] = i->second; //?
 		}
-
 		m_impl->logEvent(event.event, combinedParams); //53
 	}
 

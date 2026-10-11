@@ -1,5 +1,6 @@
 #include <framework/FileLogger.h>
 #include <lang/Format.h>
+
 #include <time.h>
 
 using namespace lang;
@@ -17,7 +18,7 @@ FileLogger::~FileLogger()
 	removeListener(this);
 }
 
-void FileLogger::onLogEvent(const log::Event& e)
+void FileLogger::onLogEvent(const log::Event& e) //Correct?
 {
 	time_t timer = e.timestamp / 1000;
 	tm* lp = localtime(&timer);
@@ -26,9 +27,9 @@ void FileLogger::onLogEvent(const log::Event& e)
 	if (e.filename)
 	{
 		if (!e.tag.empty())
-			m_output->write(Format("{0}.{1,0000} [{2}] ({3}): {4}\n", tbuf, (_mm_unpacklo_epi32(_mm_cvtsi32_si128(e.timestamp % 1000), _mm_cvtsi32_si128((e.timestamp % 1000) >> 32)).m128i_i64[0]), log::priorityToString(e.priority), e.tag, e.message).format().c_str(), e.message.size());
+			m_output->write(Format("{0}.{1,0000} [{2}] ({3}): {4}\n", tbuf, (double)(_mm_unpacklo_epi32(_mm_cvtsi32_si128(e.timestamp % 1000), _mm_cvtsi32_si128((e.timestamp % 1000) >> 32)).m128i_i64[0]), log::priorityToString(e.priority), e.tag, e.message).format().c_str(), e.message.size());
 		else
-			m_output->write(Format("{0}.{1,0000} [{2}]: {3}\n", tbuf, (_mm_unpacklo_epi32(_mm_cvtsi32_si128(e.timestamp % 1000), _mm_cvtsi32_si128((e.timestamp % 1000) >> 32)).m128i_i64[0]), log::priorityToString(e.priority), e.message).format().c_str(), e.message.size());
+			m_output->write(Format("{0}.{1,0000} [{2}]: {3}\n", tbuf, (double)(_mm_unpacklo_epi32(_mm_cvtsi32_si128(e.timestamp % 1000), _mm_cvtsi32_si128((e.timestamp % 1000) >> 32)).m128i_i64[0]), log::priorityToString(e.priority), e.message).format().c_str(), e.message.size());
 	}
 
 	else
