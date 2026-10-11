@@ -1,8 +1,10 @@
 #include <gr/gl/GL_State.h>
 #include <gr/GraphicsException.h>
 
-BEGIN_NAMESPACE(gr)
-BEGIN_NAMESPACE(GL_NAMESPACE) //GL2 on OSX ABC 3.0.0
+namespace gr
+{
+namespace GL_NAMESPACE //GL2 on OSX ABC 3.0.0
+{
 
 using namespace lang;
 

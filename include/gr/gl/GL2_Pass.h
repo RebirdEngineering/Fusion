@@ -5,8 +5,10 @@
 #include "GL_State.h"
 #include <lang/Object.h>
 
-BEGIN_NAMESPACE(gr)
-BEGIN_NAMESPACE(GL_NAMESPACE) //I'm just as confused as you are
+namespace gr
+{
+namespace GL_NAMESPACE
+{
 
 class GL_Shader_Platform;
 

@@ -1,8 +1,10 @@
 #include <gr/gl/GL2_Pass.h>
 #include <gr/gl/GL2_Shader_Platform.h>
 
-BEGIN_NAMESPACE(gr)
-BEGIN_NAMESPACE(GL_NAMESPACE)
+namespace gr
+{
+namespace GL_NAMESPACE
+{
 
 GL_Pass::GL_Pass(const std::string& name) : //12-16
 	m_name(name),

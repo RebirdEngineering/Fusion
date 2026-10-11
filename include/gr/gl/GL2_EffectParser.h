@@ -6,8 +6,10 @@
 
 //Not on OGL1
 
-BEGIN_NAMESPACE(gr)
-BEGIN_NAMESPACE(GL_NAMESPACE) //I'm just as confused as you are
+namespace gr
+{
+namespace GL_NAMESPACE
+{
 
 class GL_Context;
 class GL_Shader;

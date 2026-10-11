@@ -5,11 +5,13 @@
 #include <gr/GraphicsException.h>
 #include <lang/Math.h>
 
-USING_NAMESPACE(img)
-USING_NAMESPACE(lang)
+using namespace img;
+using namespace lang;
 
-BEGIN_NAMESPACE(gr)
-BEGIN_NAMESPACE(GL_NAMESPACE)
+namespace gr
+{
+namespace GL_NAMESPACE
+{
 
 static void getGLFormat(SurfaceFormat fmt, GLenum* type, GLenum* format) //17
 {

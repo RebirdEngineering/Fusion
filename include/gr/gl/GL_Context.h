@@ -231,13 +231,13 @@ public:
     /**
      * Swaps back buffer to screen and clears viewport.
      */
-    virtual void        present(); //470
+    void        present(); //470
 
     /**
      * Clears viewport on active render target.
      * Don't need to be called for back buffer since present() takes care of this.
      */
-    virtual void        clear(unsigned int color, bool clearColor, bool clearDepth, bool clearStencil); //479
+    void        clear(unsigned int color, bool clearColor, bool clearDepth, bool clearStencil); //479
 
     /**
      * Captures back buffer contents to a file.

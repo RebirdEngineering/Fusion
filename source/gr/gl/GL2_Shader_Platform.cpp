@@ -9,8 +9,10 @@
 using namespace lang;
 using namespace math;
 
-BEGIN_NAMESPACE(gr)
-BEGIN_NAMESPACE(GL_NAMESPACE)
+namespace gr
+{
+namespace GL_NAMESPACE
+{
 
 GL_Shader_Platform::GL_Shader_Platform() :
 	m_vertexShader(0),

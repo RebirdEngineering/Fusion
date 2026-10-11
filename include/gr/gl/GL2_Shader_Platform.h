@@ -6,12 +6,16 @@
 
 //Not on OGL1
 
-BEGIN_NAMESPACE(math) 
-	class float4x4;END_NAMESPACE()
+namespace math
+{
+    class float4x4;
+}
 
-BEGIN_NAMESPACE(gr)
+namespace gr
+{
 
-BEGIN_NAMESPACE(GL_NAMESPACE)
+namespace GL_NAMESPACE
+{
 
 class GL_Texture;
 
@@ -57,47 +61,47 @@ public:
 	/**
      * Sets shader 4-vector parameter.
      */
-    void    setVector( Shader::ParamType param, const NS(math,float4)& value ); //92
+    void    setVector( Shader::ParamType param, const math::float4& value ); //92
  
     /**
      * Sets custom shader 4-vector parameter which is not defined in ParamType.
      */
-    void    setVector( const char* name, const NS(math,float4)& value ); //97
+    void    setVector( const char* name, const math::float4& value ); //97
 
     /**
      * Sets custom shader 4-vector parameter which is not defined in ParamType.
      */
-    void    setVector( int handle, const NS(math,float4)& value ); //102
+    void    setVector( int handle, const math::float4& value ); //102
 
 	/**
      * Sets shader 4x4 matrix parameter.
      */
-    void    setMatrix(Shader::ParamType param, const NS(math,float4x4)& value ); //107
+    void    setMatrix(Shader::ParamType param, const math::float4x4& value ); //107
  
     /**
      * Sets custom shader 4x4 matrix parameter which is not defined in ParamType.
      */
-    void    setMatrix( const char* name, const NS(math,float4x4)& value ); //112
+    void    setMatrix( const char* name, const math::float4x4& value ); //112
 
     /**
      * Sets custom shader 4x4 matrix parameter which is not defined in ParamType.
      */
-    void    setMatrix( int handle, const NS(math,float4x4)& value ); //117
+    void    setMatrix( int handle, const math::float4x4& value ); //117
 
     /**
      * Sets shader 4x4 matrix array parameter.
      */
-    void	setMatrixArray(Shader::ParamType param, NS(math, float4x4)* values, int count); //122
+    void	setMatrixArray(Shader::ParamType param, math::float4x4* values, int count); //122
 
     /**
      * Sets shader 4x4 matrix array parameter.
      */
-    void    setMatrixArray( const char* name, NS(math,float4x4)* values, int count ); //127
+    void    setMatrixArray( const char* name, math::float4x4* values, int count ); //127
 
     /**
      * Sets shader 4x4 matrix array parameter.
      */
-    void    setMatrixArray(int handle, NS(math, float4x4)* values, int count); //132
+    void    setMatrixArray(int handle, math::float4x4* values, int count); //132
 
     /**
      * Sets shader texture parameter.
@@ -127,22 +131,22 @@ public:
     /**
      * Gets shader vector parameter or 0 if texture not set.
      */
-    NS(math,float4) getVector( int handle ); //162
+    math::float4 getVector( int handle ); //162
 
     /**
      * Gets shader vector parameter or 0 if texture not set.
      */
-    NS(math,float4) getVector( const char* name ); //167
+    math::float4 getVector( const char* name ); //167
 
     /**
      * Gets shader matrix parameter or 0 if texture not set.
      */
-    NS(math,float4x4)   getMatrix( int handle ); //172
+    math::float4x4   getMatrix( int handle ); //172
 
     /**
      * Gets shader matrix parameter or 0 if texture not set.
      */
-    NS(math,float4x4)   getMatrix( const char* name ); //177
+    math::float4x4   getMatrix( const char* name ); //177
 
     /**
      * Gets shader texture parameter or 0 if texture not set.

@@ -10,8 +10,10 @@
 using namespace io;
 using namespace lang;
 
-BEGIN_NAMESPACE(gr)
-BEGIN_NAMESPACE(GL_NAMESPACE) //GRGLES2.dll on PC
+namespace gr
+{
+namespace GL_NAMESPACE //GRGLES2.dll on PC
+{
 
 void GL_EffectParser::readEffect(GL_Context* context, const std::string& name, const std::string& filename, GL_Shader* shader) //21-50
 {
