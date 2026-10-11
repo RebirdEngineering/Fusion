@@ -5,58 +5,74 @@
 
 using namespace lang;
 
-//Unused here
-//typedef void* voidpf
-//typedef uLong long unsigned int
-//typedef zlib_filefunc_def_s zlib_filefunc_def
-
-//These anonmymous functions are here but not standalone except in Android
-
-voidpf fopen_stream_func(voidpf opaque, const char*, int)
+voidpf ZCALLBACK fopen_stream_func(voidpf opaque, const char* filename, int mode) //15
 {
 	return opaque;
 }
 
-uLong fread_stream_func(voidpf opaque, voidpf stream, void* buf, uLong size) //?
+uLong ZCALLBACK fread_stream_func(voidpf opaque, voidpf stream, void* buf, uLong size) //20 | ?
 {
-	uLong ret; // = stream;
+	uLong ret = ((io::ZInputStream*)stream)->s->read(buf, size); //22 = stream;
+
 	return ret;
 }
 
-uLong fwrite_stream_func(voidpf, voidpf, const void*, uLong)
+uLong ZCALLBACK fwrite_stream_func(voidpf, voidpf, const void*, uLong) //28
 {
 	return -1;
 }
 
-long int ftell_stream_func(voidpf opaque, voidpf)
+long ZCALLBACK ftell_stream_func(voidpf opaque, voidpf stream) //33
 {
-	return (long int)opaque; //?
+	return 0; //?
 }
 
-long int fseek_stream_func(voidpf opaque, voidpf stream, uLong offset, int origin)
+long ZCALLBACK fseek_stream_func(voidpf opaque, voidpf stream, uLong offset, int origin) //38
 {
-	io::ZInputStream* zip;
-	long int ret;
-	/*io::InputStream::SeekMode feek_origin = (io::InputStream::SeekMode) origin;
-	if (feek_origin == io::InputStream::SeekMode::SEEKMODE_END)
+	io::ZInputStream* zip = (io::ZInputStream*)stream; //40
+
+	long int ret; //42
+	io::InputStream::SeekMode fseek_origin = (io::InputStream::SeekMode)origin; //43
+
+	if (fseek_origin == io::InputStream::SeekMode::SEEKMODE_SET)
 	{
-		ret = 2;
-	}*/
+		ret = SEEK_SET;
+		zip->s->seek((offset + 1) - offset, fseek_origin);
+	}
+
+	if (fseek_origin == io::InputStream::SeekMode::SEEKMODE_CUR)
+	{
+		ret = SEEK_CUR;
+		zip->s->seek(offset + offset, fseek_origin);
+	}
+
+	if (fseek_origin == io::InputStream::SeekMode::SEEKMODE_END)
+	{
+		ret = SEEK_END;
+		zip->s->seek(offset + offset, fseek_origin);
+	}
+
+	else
+	{
+		ret = Z_ERRNO;
+		zip->s->seek(offset, fseek_origin);
+	}
+
 	return ret;
 }
 
-int fclose_stream_func(voidpf, voidpf)
+int ZCALLBACK fclose_stream_func(voidpf, voidpf) //69
 {
 	return 0;
 }
 
-int ferror_stream_func(voidpf, voidpf)
+int ZCALLBACK ferror_stream_func(voidpf, voidpf) //74
 {
-	throwError(Exception(Format("Error")));
+	throwError(Exception(Format("Error"))); //76
 	return 1;
 }
 
-void fill_stream_filefunc(zlib_filefunc_def* pzlib_filefunc_def)
+void fill_stream_filefunc(zlib_filefunc_def* pzlib_filefunc_def) //79
 {
 	pzlib_filefunc_def->zopen_file = fopen_stream_func;
 	pzlib_filefunc_def->zread_file = fread_stream_func;
@@ -65,7 +81,7 @@ void fill_stream_filefunc(zlib_filefunc_def* pzlib_filefunc_def)
 	pzlib_filefunc_def->zseek_file = fseek_stream_func;
 	pzlib_filefunc_def->zclose_file = fclose_stream_func;
 	pzlib_filefunc_def->zerror_file = ferror_stream_func;
-	pzlib_filefunc_def->opaque = 0; //?
+	pzlib_filefunc_def->opaque = 0;
 }
 
 namespace io
@@ -74,112 +90,85 @@ namespace io
 ZipFileInfoZip::ZipFileInfoZip()
 {
 	uf = 0;
-	zpos.pos = 0;
-	zpos.size = 0;
-	zpos.s = 0;
 }
 
 ZipFileInfoZip::~ZipFileInfoZip()
 {
-	unzClose(uf);
+	if (uf)
+		unzClose(uf); //104
+	delete uf;
 }
 
-int ZipFileInfoZip::open(InputStream& fileInput)
+int ZipFileInfoZip::open(InputStream& fileInput) //108
 {
 	if (uf)
 	{
-		unzClose(uf);
-		uf = 0;
+		unzClose(uf); //112
+		uf = 0; //113
 	}
 
-	zlib_filefunc_def ffunc;
 	zpos.pos = 0;
-	fill_stream_filefunc(&ffunc);
-	uf = unzOpen2("stream", &ffunc);
+	zpos.size = fileInput.available(); //117
+	zpos.s = &fileInput;
+
+	zlib_filefunc_def ffunc; //120
+	fill_stream_filefunc(&ffunc); //121
+
+	uf = unzOpen2("stream", &ffunc); //123
+
 	return uf == 0;
 }
 
-int ZipFileInfoZip::readHeader(std::vector<std::string>& fileNames) //Correct?
+int ZipFileInfoZip::readHeader(std::vector<std::string>& fileNames) //128 | Correct?
 {
-	char filename_inzip[256];
-	unz_global_info gi;
-	unz_file_info file_info;
-	int err = unzGetGlobalInfo(uf, &gi);
-	if (err != STATUS_OK)
-		return 1;
+	char filename_inzip[256]; //130
+	unz_global_info gi; //131
+	unz_file_info file_info; //132
+	int err = unzGetGlobalInfo(uf, &gi); //133
 
-	if (!gi.number_entry)
-		return 1;
-
-	for (uLong i = 0 < gi.number_entry; i++;)
+	for (uLong i = 0 < gi.number_entry; i++;) //135
 	{
-		err = unzGetCurrentFileInfo(uf, &file_info, filename_inzip, sizeof(filename_inzip), 0, 0, "", 0);
-		std::string path = filename_inzip;
-		if (!path.empty())
-		{
-			fileNames.push_back(filename_inzip);
-		}
-		err = unzGoToNextFile(uf);
-		if (err != UNZ_OK)
-			return 1;
+		err = unzGetCurrentFileInfo(uf, &file_info, filename_inzip, sizeof(filename_inzip), 0, 0, "", 0); //137
+
+		std::string path = filename_inzip; //139
+
+		if (!path.empty()) //141
+			fileNames.push_back(filename_inzip); //143
+
+		err = unzGoToNextFile(uf); //146
 	}
-	return 0;
+
+	return STATUS_OK;
 }
 
-int ZipFileInfoZip::extract(int index, std::vector<char>& resultBuffer)
+int ZipFileInfoZip::extract(int index, std::vector<char>& resultBuffer) //152 | Correct?
 {
-	unz_global_info gi;
-	int err = unzGoToFirstFile(uf);
-	if (err != STATUS_OK)
-		return 1;
+	/*unz_global_info gi; //154
+	int err = unzGoToFirstFile(uf); //155
 
-	err = unzGetGlobalInfo(uf, &gi);
+	err = unzGetGlobalInfo(uf, &gi); //157
+	for (int i = 0; i < gi.number_entry; i++) //158
+		err = unzGoToNextFile(uf); //160
 
-	int i;
+	unz_file_info file_info; //164
+	err = unzGetCurrentFileInfo(uf, &file_info, 0, 0, 0, 0, 0, 0); //165	
 
-	unz_file_info file_info;
+	err = unzOpenCurrentFile(uf); //167
 
-	if (gi.number_entry >= 1)
+	resultBuffer.resize(4096); //170
+	std::vector<char> buf(resultBuffer); //171
+	int offset = buf.size(); //172
+
+	while (unzReadCurrentFile(uf, &buf, offset))
 	{
-		for (i = 0; i < gi.number_entry; i++)
-		{
-			if (i >= index)
-				break;
-			if (err < STATUS_OK)
-				break;
-			err = unzGoToNextFile(uf);
-		}
+		offset = unzReadCurrentFile(uf, &buf, buf.size()); //175
+		memcpy(&resultBuffer, &buf, offset);
 	}
 
-	if (err != STATUS_OK)
-		return 1;
+	err = unzCloseCurrentFile(uf); //184*/
 
-	err = unzGetCurrentFileInfo(uf, &file_info, 0, 0, 0, 0, "", 0);
-
-	if (err != STATUS_OK)
-		return 1;
-
-	err = unzOpenCurrentFile(uf);
-
-	if (err != STATUS_OK)
-		return 1;
-
-	resultBuffer.resize(0);
-
-	std::vector<char> buf = resultBuffer;
-	int offset = buf.size();
-
-	for (i = 0; i += offset; i++)
-	{
-		offset = unzReadCurrentFile(uf, &buf, buf.size());
-		memcpy(&resultBuffer[i], &buf, offset);
-	}
-
-	err = unzCloseCurrentFile(uf);
-	if (err != STATUS_OK)
-		return 0;
-
-	return offset;
+	assert("int io::ZipFileInfoZip::extract(int index, std::vector<char>& resultBuffer) is not yet decompiled.");
+	return 0; //STATUS_OK
 }
 
 }
