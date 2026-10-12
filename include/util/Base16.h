@@ -12,6 +12,7 @@ public:
 	static std::string encode(const std::string& str); //19
 
 	static std::string decode(const std::string& str); //26
+
 private:
 	Base16(); //29
 	static BaseN<1, 2> sm_impl; //30
