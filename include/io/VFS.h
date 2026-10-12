@@ -12,39 +12,38 @@ class VFS
 {
 public:
     class URIIterator;
-
     //typedef InputStream** ReadHandler(const URI*);
     //typedef InputStream* (*)(const URI&);
-    typedef InputStream *(*ReadHandler)(const URI&);
-
     //typedef OutputStream** WriteHandler(const URI*);
-    typedef OutputStream *(*WriteHandler)(const URI&);
 
-    static P(InputStream) openRead(const URI&);
+    typedef InputStream *(*ReadHandler)(const URI&); //37
+    typedef OutputStream *(*WriteHandler)(const URI&); //38
 
-    static P(OutputStream) openWrite(const URI&);
+    P(InputStream) openRead(const URI&); //44
 
-    static void link(const URI& destination, const std::string& alias);
+    P(OutputStream) openWrite(const URI&); //50
 
-    static void addSchemeReadHandler(const std::string& scheme, ReadHandler handler);
+    void link(const URI& destination, const std::string& alias); //68
 
-    static void addSchemeWriteHandler(const std::string& scheme, WriteHandler handler);
+    static void addSchemeReadHandler(const std::string& scheme, ReadHandler handler); //73
 
-    static void copy(const URI&, const URI&);
+    static void addSchemeWriteHandler(const std::string& scheme, WriteHandler handler); //78
 
-    static void move(const URI&, const URI&);
+    void copy(const URI&, const URI&); //84
 
-    static void rename(const URI&, const std::string&);
+    void move(const URI&, const URI&); //90
 
-    static void remove(const URI&);
+    void rename(const URI&, const std::string&); //96
 
-    static void mkdir(const URI&);
+    void remove(const URI&); //101
 
-    static void setMappings(const std::map<char, char>&);
+    void mkdir(const URI&); //107
 
-    static std::map<char, char>& getMappings();
+    void setMappings(const std::map<char, char>&); //112
 
-    static URIIterator enumerate(const URI&);
+    std::map<std::string, std::string>& getMappings(); //117
+
+    URIIterator enumerate(const URI&); //124
 };
 
 }

@@ -6,8 +6,10 @@
 #include <lang/Ptr.h>
 
 
-BEGIN_NAMESPACE(lang) 
-BEGIN_NAMESPACE(detail) 
+namespace lang
+{
+namespace detail
+{
 
 struct Token //10
 {
@@ -36,7 +38,7 @@ private:
  * 
  * @ingroup lang
  */
-class Object
+class Object //12 in ABS 4.1.0, 8 in ABC 3.0.1
 {
 public:
 	/** 
@@ -88,7 +90,7 @@ public:
 
 private:
 	int				m_refs;
-    NS(detail, Token)*   m_token;
+    NS(detail, Token)*   m_token; //Doesn't exist in ABC 3.0.1
 };
 
 

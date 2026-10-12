@@ -1,40 +1,38 @@
 #ifndef _IO_ZIPENTRYINPUTSTREAM_H
 #define _IO_ZIPENTRYINPUTSTREAM_H
 
-
 #include <io/ByteArrayInputStream.h>
 
 namespace io
 {
-
 
 /**
  *
  *
  * @ingroup io
  */
-	class ZipEntryInputStream :
+class ZipEntryInputStream : //13
 	public ByteArrayInputStream
 {
 public:
 	/**
 	 *
 	 */
-	ZipEntryInputStream(const std::string& filename, const std::vector<char> buffer);
+	ZipEntryInputStream(const std::string& filename, const std::vector<char> buffer); //20
 
 	///
-	~ZipEntryInputStream();
+	~ZipEntryInputStream(); //23
 
-	const std::string& getFilename() const;
+	const std::string& getFilename() const; //28
 
-	std::string toString() const;
+	std::string toString() const; //33
 
 private:
-	std::string m_filename;
-	std::vector <char> m_buffer;
+	std::string m_filename; //36
+	std::vector <char> m_buffer; //37
 
-	ZipEntryInputStream(const ZipEntryInputStream&);
-	ZipEntryInputStream& operator=(const ZipEntryInputStream&);
+	ZipEntryInputStream(const ZipEntryInputStream&); //39
+	ZipEntryInputStream& operator=(const ZipEntryInputStream&); //40
 };
 
 

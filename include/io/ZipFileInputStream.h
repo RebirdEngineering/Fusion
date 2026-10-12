@@ -23,7 +23,7 @@ public:
  * @ingroup io
  */
 class ZipFileInputStream :
-	public NS(lang,Object)
+	public lang::Object
 {
 public:
 	enum FileFormat
