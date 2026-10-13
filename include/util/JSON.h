@@ -217,7 +217,7 @@ public:
 
 	std::string toString(bool pretty) const; //543
 
-	void patch(const JSON&); //558
+	void patch(const JSON& other); //558 | Undefined on iOS, variable is guessed
 
 private:
 	void checkType(Type type) const; //569

@@ -664,9 +664,47 @@ void JSON::visit(Visitor& visitor) const //722
 	visit("", visitor);
 }
 
-void JSON::visit(const std::string& name, Visitor& visitor) const //727 | TODO
+void JSON::visit(const std::string& name, Visitor& visitor) const //727 | Correct? Pseudo gives a giant switch statement but it doesn't match lines as well, using if statements instead.
 {
-	/*switch (m_type) //Convert to if statements?
+	if (m_type == Null) //729
+		visitor.visit(name); //732
+
+	else if (m_type == Bool)
+		visitor.visit(name, getBool()); //740
+
+	else if (m_type == Number)
+		visitor.visit(name, getDouble(), getInt64()); //744
+
+	else if (m_type == Array)
+	{
+		visitor.startArray(name); //749
+
+		const array_type& arr = getArray(); //751
+		for (array_type::const_iterator it = arr.begin(); it != arr.end(); it++) //752
+			it->visit("", visitor); //754
+
+		visitor.endArray(); //757
+	}
+
+	else if (m_type == Object)
+	{
+		visitor.startObject(name); //763
+
+		const object_type& objects = getObject(); //765
+		for (object_type::const_iterator it = objects.begin(); it != objects.end(); it++) //766
+			it->second.visit(it->first, visitor); //768
+
+		visitor.endObject(); //771
+	}
+
+	else
+	{
+		assert(0); //776 of RCSSDKDBG
+		throw; //std::exception
+	}
+
+	//OLD CODE
+	/*switch (m_type)
 	{
 	case Null: visitor.visit(name); break; //732
 	case Bool: visitor.visit(name, getBool()); break; //736
@@ -707,11 +745,218 @@ std::string JSON::toString(bool pretty) const //789
 	return writer.getText();
 }
 
-JSON& JSON::operator=(json_value* value) //895
+void JSON::patch(const JSON& other) //Correct? Pseudo gives a giant switch statement but it doesn't match lines as well, using if statements instead.
 {
-	/*switch (value->type)
+	if (other.m_type == Bool)
 	{
-	case JSON_NULL: m_type = Null; return *this;
+		m_type = Bool;
+		m_int64 = other.getBool();
+		m_object.clear();
+		m_array.clear();
+	}
+
+	else if (other.m_type == Number)
+	{
+		m_type = Number;
+		m_double = other.getDouble();
+		m_int64 = other.getInt64();
+		m_object.clear();
+		m_array.clear();
+	}
+
+	else if (other.m_type == String)
+	{
+		m_type = String;
+		m_string = other.getString();
+		m_object.clear();
+		m_array.clear();
+	}
+
+	else if (other.m_type == Array)
+	{
+		if (m_type != Array)
+		{
+			m_type = Array;
+			m_array.clear();
+		}
+
+		const array_type& array = other.getArray();
+
+		for (int i = 0; i < m_array.size(); i++)
+		{
+			JSON j = m_array[i];
+
+			if (j.isNull())
+				m_array.erase(m_array.begin() + i); //?
+			else
+			{
+				if (i >= m_array.size())
+					m_array.push_back(j);
+				else
+					m_array[i].patch(j);
+			}
+		}
+	}
+
+	else if (other.m_type)
+	{
+		if (m_type != Object)
+		{
+			m_type = Object;
+			m_object.clear();
+		}
+
+		const object_type& objects = other.getObject();
+		for (object_type::const_iterator it = objects.begin(); it != objects.end(); it++)
+		{
+			if (it->second.isNull())
+				remove(it->first);
+			else
+				m_object[it->first].patch(it->second);
+		}
+	}
+
+	//OLD CODE
+	/*switch (other.m_type)
+	{
+	case Bool:
+		m_type = Bool;
+		m_int64 = other.getBool();
+		m_object.clear();
+		m_array.clear();
+		break;
+	case Number:
+		m_type = Number;
+		m_double = other.getDouble();
+		m_int64 = other.getInt64();
+		m_object.clear();
+		m_array.clear();
+		break;
+	case String:
+		m_type = String;
+		m_string = other.getString();
+		m_object.clear();
+		m_array.clear();
+		break;
+	case Array:
+		if (m_type != Array)
+		{
+			m_type = Array;
+			m_array.clear();
+		}
+
+		const array_type& array = other.getArray();
+
+		for (int i = 0; i < m_array.size(); i++)
+		{
+			JSON j = m_array[i];
+			if (j.isNull())
+			{
+				m_array.erase(m_array.begin() + i); //?
+			}
+
+			else
+			{
+				if (m_array.size())
+					m_array.push_back(j);
+				else
+					m_array[i].patch(j);
+			}
+		}
+
+		break;
+
+	case Object:
+		if (m_type != Object)
+		{
+			m_type = Object;
+			m_object.clear();
+		}
+
+		const object_type& objects = other.getObject();
+		for (object_type::const_iterator it = objects.begin(); it != objects.end(); it++)
+		{
+			if (it->second.isNull())
+				remove(it->first);
+			else
+				m_object[it->first].patch(it->second);
+		}
+
+		break;
+	default: return;
+	}*/
+}
+
+JSON& JSON::operator=(json_value* value) //895 | TODO | Correct? Pseudo gives a giant switch statement but it doesn't match lines as well, using if statements instead.
+{
+	if (value->type == JSON_NULL) //897
+		m_type = Null;
+
+	else if (value->type == JSON_OBJECT)
+	{
+		m_type = Object; //907
+		m_object.clear(); //908
+		for (json_value* it = value->first_child; it != value->next_sibling; it++) //909
+		{
+			if (!it->name) //911
+				throwError(ParseError(Format("Parsing JSON failed!\nReason: Object \"{0}\" contains value without key", value->name ? value->name : ""))); //912
+
+			m_object[it->name] = it->name;
+		}
+	}
+
+	else if (value->type == JSON_ARRAY)
+	{
+		m_type = Array;
+		m_array.clear(); //921
+
+		int count = 0; //924
+		for (json_value* it = value->first_child; it != value->next_sibling; it++) //925
+			count++;
+
+		m_array.resize(count, JSON());
+
+		int i = 0; //930
+		for (json_value* it = value->first_child; it != value->next_sibling; it++) //931
+		{
+			m_array[i] = it->first_child; //933
+			i++;
+		}
+	}
+
+	else if (value->type == JSON_STRING)
+	{
+		m_type = String; //941
+		m_string = value->string_value; //942
+	}
+
+	else if (value->type == JSON_INT)
+	{
+		m_type = Number; //948
+		m_double = (double)value->int_value; //949
+		m_int64 = value->int_value; //950
+	}
+
+	else if (value->type == JSON_FLOAT)
+	{
+		m_type = Number;
+		m_double = (float)value->int_value;
+		m_int64 = (int64_t)value->int_value;
+	}
+
+	else if (value->type == JSON_BOOL)
+	{
+		m_type = Bool; //964
+		m_int64 = value->int_value; //965
+	}
+
+	else
+		throwError(ParseError(Format("Unidentified object type"))); //970
+
+	//OLD CODE
+	/*switch (value->type) //897
+	{
+	case JSON_NULL: m_type = Null;
 	case JSON_OBJECT:
 		m_type = Object; //907
 		m_object.clear(); //908
@@ -744,6 +989,8 @@ JSON& JSON::operator=(json_value* value) //895
 	case JSON_BOOL: m_type = Bool; m_int64 = value->int_value; break;
 	default: throwError(ParseError(Format("Unidentified object type"))); //970
 	}*/
+
+	//OLD
 
 	//int count; //924
 	//json_value* it; //925
