@@ -16,16 +16,18 @@ std::vector<unsigned char> decryptAndDecompress(InputStream& input, optional<std
 	{
 		AES crypt(encryptionKey.get(), AES::KEY_LENGTH_AUTODETECT, AES::PAD_MODE_PKCS7); //13
 		std::vector<unsigned char> decrypted; //14
-		crypt.decrypt(data, decrypted);
+		crypt.decrypt(data, decrypted); //15
 		data = decrypted;
 	}
+
 	if (zipped)
 	{
 		MemoryAliasInputStream dataStream(data.data(), input.available(), ""); //21
 		ZipFileInputStream zip(dataStream, ZipFileInputStream::FORMAT_7ZIP); //22
 		P(ZipEntryInputStream) entry = zip.getEntryStream(); //23
-		data = toVector(*entry); //?
+		data = toVector(*entry); //24
 	}
+
 	return data;
 }
 
