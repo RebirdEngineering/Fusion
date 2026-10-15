@@ -261,7 +261,7 @@ int WebViewLuaInterface::create(lua_State* L) //305
 
 	WebView* view = new WebView(x, y, width, height, true); //312
 
-	WebViewLuaListener* listener = new WebViewLuaListener(); //314
+	WebViewLuaListener* listener = new WebViewLuaListener(view, L); //314
 	view->setListener(listener); //315
 
 	lua_pushlightuserdata(L, view); //317
