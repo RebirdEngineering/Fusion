@@ -80,7 +80,7 @@ static std::string stringify(const char* fmt, va_list args)
 	return s_data->buffer.data(); //?
 }
 
-static void log(const std::string& tag, const char* file, const char* function, int line, int priority, const char* message, ...) //TODO
+static void log(const std::string& tag, const char* file, const char* function, int line, int priority, const char* message, ...) //Correct?
 {
 	if (!s_data)
 		return;
