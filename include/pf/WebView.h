@@ -23,9 +23,9 @@ public:
 	void show(); //40
 	void hide(); //41
 
-	void setPosition(int, int); //48
+	void setPosition(int x, int y); //48
 
-	void setSize(int, int); //55
+	void setSize(int width, int height); //55 | Recover params from common/WebView.h
 
 	void setListener(WebViewListener* listener); //57
 	WebViewListener* getListener(); //58

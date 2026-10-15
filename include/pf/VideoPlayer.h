@@ -27,7 +27,7 @@ public:
 		BOTTOM_RIGHT
 	};
 
-	VideoPlayer(bool separateActivityOnAndroid);
+	VideoPlayer(bool separateActivityOnAndroid); //39
 
 	~VideoPlayer(); //44
 

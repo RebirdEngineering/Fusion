@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class VideoPlayer::VideoPlayerImpl : public Object //ABFM 113-115, OSX ABC 3.0.1
+	class VideoPlayer::VideoPlayerImpl : public Object //ABFM 113-115, OSX ABC 3.0.1, TODO MAKE THIS USE VIDEOPLAYERIMPLBASE
 	{
 	public:
 		VideoPlayerImpl(bool separateActivityOnAndroid)
@@ -32,7 +32,7 @@ namespace pf
 		{
 		}
 
-		void setSource(const std::vector<VideoPlayerPlayListItem>&) //Recover from iOS VideoPlayerImplBase
+		void setSource(const std::vector<VideoPlayerPlayListItem>& item) //Recover from iOS VideoPlayerImplBase
 		{
 		}
 

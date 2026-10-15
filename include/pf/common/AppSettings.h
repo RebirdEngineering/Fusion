@@ -47,4 +47,4 @@ std::string AppSettings::getString(const std::string& key) const //40
 	return m_impl->getString(key.c_str()); //42
 }
 
-#endif
+#endif // !_PF_COMMON_APPSETTINGS_H

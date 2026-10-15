@@ -11,10 +11,6 @@ namespace pf
 		{
 		}
 
-		~LocaleImpl()
-		{
-		}
-
 		bool isSupported()
 		{
 			return false;

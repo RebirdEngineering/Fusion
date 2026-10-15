@@ -37,11 +37,11 @@ namespace pf
 		{
 		}
 
-		void setPosition(int, int)
+		void setPosition(int x, int y)
 		{
 		}
 
-		void setSize(int, int)
+		void setSize(int width, int height)
 		{
 		}
 

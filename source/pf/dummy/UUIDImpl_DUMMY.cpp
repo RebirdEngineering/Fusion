@@ -15,17 +15,17 @@ namespace pf
 		{
 		}
 
-		static bool isSupported()
+		bool isSupported()
 		{
 			return false;
 		}
 
-		static std::string generateUUID()
+		std::string generateUUID()
 		{
 			return "";
 		}
 	};
 
-//#include <pf/common/UUID.h> //TODO
+#include <pf/common/UUID.h> //Correct?
 
 }

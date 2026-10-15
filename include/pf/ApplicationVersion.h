@@ -6,7 +6,7 @@
 namespace pf //6
 {
 
-class ApplicationVersion //15
+class ApplicationVersion //15, not seen on Windows.
 {
 public:
 	static bool isSupported(); //24

@@ -12,10 +12,6 @@ namespace pf
 		{
 		}
 
-		~Impl()
-		{
-		}
-
 		bool isSupported()
 		{
 			return false;

@@ -12,17 +12,17 @@ namespace net
  *
  * @ingroup net
  */
-class HttpFileInputStream :
+class HttpFileInputStream : //19
 	public io::InputStream
 {
 public:
 	/**
 	 *
 	 */
-	HttpFileInputStream(const std::string& name);
+	HttpFileInputStream(const std::string& name); //27
 
 
-	HttpFileInputStream(const std::string& name, HttpRequest&);
+	HttpFileInputStream(const std::string& name, HttpRequest&); //33
 
 	/**
 	 * Tries to read specified number of bytes from the stream.
@@ -30,33 +30,35 @@ public:
 	 * @return Number of bytes actually read.
 	 * @exception IOException
 	 */
-	int				read(void* data, int size);
+	int				read(void* data, int size); //41
 
 	/**
 	 * Tries to skip over n bytes from the stream.
 	 * @return Number of bytes actually skipped.
 	 * @exception IOException
 	 */
-	int				skip(int n);
+	int				skip(int n); //50
 
 	/**
 	 *
 	 * @return
 	 * @exception IOException
 	 */
-	bool				seek(int offset, SeekMode origin);
-
-	const void* data() const;
+	bool				seek(int offset, SeekMode origin); //55
 
 	/**
 	 * Returns the number of bytes that can be read from the stream without blocking.
 	 */
-	int available() const;
+	int available() const; //61
 
-	std::string toString() const;
+	/**
+	 * Returns string description of the stream.
+	 */
+	std::string toString() const; //66
+
 private:
-	io::ByteArrayInputStream m_message;
-	std::string m_url;
+	io::ByteArrayInputStream m_message; //69
+	std::string m_url; //70
 
 	HttpFileInputStream();
 	HttpFileInputStream(const HttpFileInputStream&);

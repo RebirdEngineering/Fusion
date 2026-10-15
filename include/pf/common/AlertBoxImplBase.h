@@ -3,30 +3,26 @@
 
 #include <lang/Object.h>
 
-BEGIN_NAMESPACE(pf)
+namespace pf
+{
 
-
-class AlertBoxImplBase :
+class AlertBoxImplBase : //11
 	public Object
 {
 public:
-	AlertBoxImplBase()
+	AlertBoxImplBase() //15
 	{
 	}
 
-	~AlertBoxImplBase()
-	{
-	}
-
-	void setCustomButtons(const std::vector<std::string>& customButtons)
+	void setCustomButtons(const std::vector<std::string>& customButtons) //19
 	{
 		m_customButtons = customButtons;
 	}
 
 protected:
-	std::vector<std::string> m_customButtons;
+	std::vector<std::string> m_customButtons; //25
 };
 
 }
 
-#endif // !_PF_TEXTINPUT_H
+#endif // !_PF_COMMON_ALERTBOXIMPLBASE_H

@@ -11,9 +11,9 @@ class VideoPlayer;
 class VideoPlayerImplBase : public lang::Object //15
 {
 public:
-	VideoPlayerImplBase(VideoPlayer*); //20
+	VideoPlayerImplBase(VideoPlayer* videoPlayer); //20 | Guess from iOS impl
 
-	virtual bool play(const std::string&, bool, float) = 0; //27
+	virtual bool play(const std::string& filename, bool enableUserControl, float startPositionSeconds) = 0; //27 | Recover names from pf::VideoPlayer
 	virtual void show() = 0; //28
 	virtual void hide() = 0; //29
 	virtual void close() = 0; //30
@@ -208,6 +208,8 @@ public:
 		return false; //?
 	}
 protected:
+	//friend class VideoPlayer;
+
 	VideoPlayer* m_videoPlayer; //274
 	std::set<VideoPlayerListener*> m_listeners; //275
 	std::vector<VideoPlayerPlayListItem> m_playList; //276
