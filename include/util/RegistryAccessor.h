@@ -7,16 +7,17 @@
 namespace util
 {
 
-class RegistryAccessor
+class RegistryAccessor //13
 {
 public:
-	RegistryAccessor();
+	RegistryAccessor(); //20
 
-	~RegistryAccessor();
+	~RegistryAccessor(); //26
 
-	JSON& registry();
+	JSON& registry(); //31
+
 private:
-	lang::Mutex::Lock m_lock;
+	lang::Mutex::Lock m_lock; //34
 };
 
 }

@@ -1,42 +1,49 @@
 #include <util/traverseJSON.h>
 #include <lang/Exception.h>
 #include <external/cJSON/cJSON.h>
-#include <external/vJSON/vJSON.h>
 
 using namespace lang;
 
 namespace util
 {
 
-void traverseJSON(const cJSON* item, JSONVisitor& visitor) //?
+void traverseJSON(const cJSON* item, JSONVisitor& visitor) //17 | Correct?
 {
 	while (item)
 	{
-		const int type = item->type;
-		const char* name = item->string;
+		const char* name = item->string; //20
+
+		const int type = item->type; //22
+
 		switch (type)
 		{
-		case JSON_NULL: visitor.visit(name, false); break;
-		case JSON_OBJECT: visitor.visit(name, true); break;
-		case JSON_ARRAY: visitor.visit(name); break;
-		case JSON_STRING: visitor.visit(name, item->valuedouble); break; //?
-		case JSON_INT: visitor.visit(name, item->valuestring); item = item->next; continue; //?
-		case JSON_FLOAT: break; visitor.startArray(name); traverseJSON(item->child, visitor); visitor.endArray(); break; //?
-		case JSON_BOOL: break; visitor.startObject(name); traverseJSON(item->child, visitor); visitor.endObject(); break; //?
+		case cJSON_False: visitor.visit(name, false); item->next; continue; //27
+		case cJSON_True: visitor.visit(name, true); item->next; continue; //30
+		case cJSON_NULL: visitor.visit(name); item = item->next; continue; //33
+		case cJSON_Number: visitor.visit(name, item->valuedouble); item = item->next; break; //36 | ?
+		case cJSON_String: visitor.visit(name, item->valuestring); item = item->next; continue; //39 | ?
+		case cJSON_Array: break; visitor.startArray(name); traverseJSON(item->child, visitor); visitor.endArray(); break; //
+		case cJSON_Object: break; visitor.startObject(name); traverseJSON(item->child, visitor); visitor.endObject(); break; //?
 		default: item = item->next; break;
 		}
 	}
 }
 
-void traverseJSON(const char* json, JSONVisitor& visitor)
+void traverseJSON(const char* json, JSONVisitor& visitor) //60
 {
-	if (!json)
-		return;
-	cJSON* root = cJSON_Parse(json);
-	if (!root)
-		throwError(Exception(Format("JSON parsing failed here: {0}", cJSON_GetErrorPtr())));
-	traverseJSON(root->child, visitor);
-	cJSON_Delete(root);
+	if (json)
+	{
+		cJSON* root = cJSON_Parse(json); //64
+
+		if (root)
+		{
+			traverseJSON(root->child, visitor); //68
+			cJSON_Delete(root); //69
+		}
+
+		else
+			throwError(Exception(Format("JSON parsing failed here: {0}", cJSON_GetErrorPtr()))); //73
+	}
 }
 
 }

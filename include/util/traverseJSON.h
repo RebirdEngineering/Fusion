@@ -3,14 +3,14 @@
 
 #include <util/JSONVisitor.h>
 
-class cJSON;
+struct cJSON;
 
 namespace util
 {
 
-void traverseJSON(const cJSON* item, JSONVisitor& visitor);
+static void traverseJSON(const cJSON* item, JSONVisitor& visitor);
 
-void traverseJSON(const char* json, JSONVisitor& visitor);
+static void traverseJSON(const char* json, JSONVisitor& visitor);
 
 }
 
