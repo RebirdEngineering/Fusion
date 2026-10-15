@@ -6,19 +6,20 @@
 namespace util
 {
 
-class SHA1
+class SHA1 //13
 {
 public:
-	static std::string hash(const void* src, int length);
+	static std::string hash(const void* src, int length); //22
 
-	static std::string hash(const std::string& str);
+	static std::string hash(const std::string& str); //29
 
-	static std::string hash(const std::vector<char>& buffer);
+	static std::string hash(const std::vector<unsigned char>& buffer); //36
 
-	static std::string hash(const std::vector<unsigned char>& buffer); // new
+	static std::string hash(const std::vector<char>& buffer); //44
+
 private:
-	SHA1(const SHA1&);
-	SHA1& operator=(const SHA1&);
+	SHA1(const SHA1&); //47
+	SHA1& operator=(const SHA1&); //48
 };
 
 }
