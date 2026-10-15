@@ -34,6 +34,7 @@ namespace pf
 		bool isVirtualKeyboardVisible(); //74
 
 		void  hideVirtualKeyboard(); //79
+		
 	private:
 		class TextInputImpl;
 		P(TextInputImpl) m_impl; //85 | Impl sizes [iOS: 16 bytes, Android: 16 bytes, WP8: 12 bytes {DUMMY}, Win32: 44 bytes, OSX: 24 bytes}
