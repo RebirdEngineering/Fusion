@@ -9,7 +9,9 @@ std::string getInstallationID() //8
 {
 	util::RegistryAccessor store; //10
 	util::JSON& id(store.registry()["fusion"]["installationId"]); //11
-	return id.isString() ? id.getString() : UUID::generateUUID();
+	if (!id.isString()) //12
+		return UUID().generateUUID(); //13
+	return id.getString(); //14
 }
 
 }
