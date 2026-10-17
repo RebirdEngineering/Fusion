@@ -5,12 +5,12 @@
 
 BEGIN_NAMESPACE(lang)
 
-class FuncBase
+class FuncBase //6
 {
 public:
-    virtual void operator()();
-    virtual FuncBase* clone();
-    ~FuncBase();
+    virtual void operator()() = 0; //9
+    virtual FuncBase* clone() = 0; //10
+    virtual ~FuncBase(); //11
 };
 
 class Functor

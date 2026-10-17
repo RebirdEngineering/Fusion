@@ -20,7 +20,7 @@ class BaseTexture;
  * Surface shader.
  * @ingroup gr
  */
-class Shader :
+class Shader : //18
 	public ContextObject
 {
 public:

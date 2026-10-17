@@ -9,7 +9,7 @@ namespace pf
 class WebViewImpl; //Should be outside webview
 class WebViewListener;
 
-class WebView :
+class WebView : //21
 	public lang::Object
 {
 public:
@@ -46,7 +46,7 @@ private:
 	WebView& operator=(const WebView&); //76
 };
 
-class WebViewListener
+class WebViewListener //85
 {
 public:
 	enum LinkClickedResult //91

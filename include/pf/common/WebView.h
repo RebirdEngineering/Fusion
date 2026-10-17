@@ -2,8 +2,7 @@ WebView::WebView(int x, int y, int height, int width, bool backgroundIsTranspare
 {
 	m_func_ref = -1;
 	m_callback = -1;
-
-	m_impl = new WebViewImpl(x, y, height, width, backgroundIsTransparent);
+	m_impl = new WebViewImpl(x, y, height, width, backgroundIsTransparent); //5
 }
 
 WebView::~WebView() //-10
@@ -45,7 +44,7 @@ void WebView::setSize(int width, int height) //43
 	m_impl->setSize(width, height);
 }
 
-void WebView::setListener(WebViewListener* listener)
+void WebView::setListener(WebViewListener* listener) //48
 {
 	//listener->setWebViewInstance(this); //51
 	m_impl->setListener(listener); //52

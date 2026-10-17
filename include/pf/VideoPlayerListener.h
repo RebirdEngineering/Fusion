@@ -2,7 +2,6 @@
 #define _PF_VIDEOPLAYERLISTENER_H
 
 #include <pf/VideoPlayerPlayListItem.h>
-//#include <pf/VideoPlayer.h>
 
 namespace pf
 {

@@ -14,41 +14,41 @@ BEGIN_NAMESPACE(lang)
  * 
  * @ingroup lang
  */
-class Throwable :
+class Throwable : //14
 	public std::exception //Now uses std::exception
 {
 public:
 	/** 
 	 * Creates throwable object with no error description. 
 	 */
-	Throwable();
+	Throwable(); //21
 	
-	virtual ~Throwable();
+	virtual ~Throwable(); //26
 
 	/** 
 	 * Creates throwable object with error description. 
 	 * @exception FormatException If message is not valid.
 	 */
-	Throwable( const Format& msg );
+	Throwable( const Format& msg ); //32
 
 	/** 
 	 * Returns the error message format object. 
 	 */
-	const Format& getMessage() const;
+	const Format& getMessage() const; //37
 	
 	/** 
 	 * 
 	 */
-	const char* what() const;
+	const char* what() const; //42
 
 	/*
 	 * Used by implementation to show error message dialog box.
 	 */
-	void showExceptionDialog();
+	void showExceptionDialog(); //47
 
 private:
-	Format	m_msg;
-	std::string	m_str;
+	Format	m_msg; //50
+	std::string	m_str; //51
 };
 /** 
  * Wrapper for throwing exceptions.

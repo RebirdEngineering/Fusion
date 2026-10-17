@@ -112,13 +112,13 @@ public:
 		ACTIVE,
 	};
 
-	virtual ~CommerceListener();
+	virtual ~CommerceListener(); //223
 
-	virtual void initFinished(PaymentProviderStatus); //227
+	virtual void paymentFinished(const std::string&, PaymentStatus, Commerce::CommerceError) = 0; //225
 
-	virtual void getPurchaseHistoryFinished(const std::string&); //236
+	virtual void initFinished(PaymentProviderStatus) = 0; //227
 
-	virtual void paymentFinished(const std::string&, PaymentStatus, Commerce::CommerceError); //225
+	virtual void getPurchaseHistoryFinished(const std::string&) = 0; //236
 };
 
 }

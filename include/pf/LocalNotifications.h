@@ -6,7 +6,7 @@
 namespace pf
 {
 
-class LocalNotificationsListener //This reeks of identical code
+class LocalNotificationsListener //8 | This reeks of identical code
 {
 public:
 	virtual ~LocalNotificationsListener(); //11

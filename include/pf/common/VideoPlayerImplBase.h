@@ -1,7 +1,6 @@
 #ifndef _PF_COMMON_VIDEOPLAYERIMPLBASE_H
 #define _PF_COMMON_VIDEOPLAYERIMPLBASE_H
 
-#include <lang/Object.h>
 #include <pf/VideoPlayer.h>
 
 namespace pf

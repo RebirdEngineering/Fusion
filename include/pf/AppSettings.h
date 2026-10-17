@@ -10,7 +10,7 @@ class AppSettings : //14
 	public lang::Object
 {
 public:
-	explicit AppSettings(); //21
+	AppSettings(); //21
 
 	~AppSettings(); //26
 

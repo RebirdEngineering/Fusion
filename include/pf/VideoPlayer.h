@@ -10,7 +10,7 @@ namespace pf
 //class VideoPlayerImplBase;
 class VideoPlayerListener;
 
-class VideoPlayer :
+class VideoPlayer : //15
 	public lang::Object
 {
 public:

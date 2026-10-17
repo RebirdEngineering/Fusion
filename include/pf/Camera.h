@@ -21,11 +21,13 @@ public:
 
 		Size(int w, int h); //30
 	};
+
 	enum Position //36
 	{
 		CAMERA_BACK,
 		CAMERA_FRONT
 	};
+
 	enum Status //46
 	{
 		STATUS,
@@ -67,6 +69,7 @@ public:
 	virtual unsigned char* getBuffer(size_t); //160
 
 	virtual void onCameraStatus(Camera::Status, const std::string&); //167
+
 protected:
 	std::vector<unsigned char> m_buffer; //170
 };

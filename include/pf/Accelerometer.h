@@ -6,7 +6,7 @@
 
 BEGIN_NAMESPACE(pf)
 
-class Accelerometer : //16 bytes
+class Accelerometer : //29 | 16 bytes
 	public lang::Object
 {
 public:
@@ -23,6 +23,7 @@ public:
 	NS(math, float3) getData(); //65
 
 	NS(math, float3) getDataFiltered(); //72
+
 private:
 	class Impl;
 	P(Impl) m_impl; //77 | Impl sizes: [Win32+OSX+WP8: 12 bytes {DUMMY}, iOS: 44 bytes, Android: 80 bytes]

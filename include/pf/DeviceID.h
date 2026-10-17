@@ -23,6 +23,7 @@ public:
 	std::string getDeviceIDHash(); //70
 
 	std::string emptyID(); //76
+
 private:
 	class Impl;
 	P(Impl) m_impl; //80 | All are 12 bytes.

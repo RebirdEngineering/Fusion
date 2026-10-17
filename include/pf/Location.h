@@ -23,10 +23,10 @@ class LocationListener //36
 {
 public:
 	~LocationListener(); //39
-	virtual void locationPermissionDenied(); //40
-	virtual void locationChanged(); //41
-	virtual void regionEntered(const Region&); //42
-	virtual void regionExited(const Region&); //43
+	virtual void locationPermissionDenied() = 0; //40
+	virtual void locationChanged() = 0; //41
+	virtual void regionEntered(const Region&) = 0; //42
+	virtual void regionExited(const Region&) = 0; //43
 };
 
 class Location : //52 | Not mentioned in any other build?

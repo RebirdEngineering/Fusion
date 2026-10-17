@@ -167,7 +167,7 @@ public:
     /**
 	 * 
 	 */
-	virtual void	setAlignEach( int alignment );
+	void	setAlignEach( int alignment );
 
 	/**
 	 * Returns number of texture coordinates in the vertex format information. 
