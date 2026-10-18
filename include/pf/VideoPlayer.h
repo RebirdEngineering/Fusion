@@ -7,7 +7,7 @@
 namespace pf
 {
 
-//class VideoPlayerImplBase;
+class VideoPlayerImplBase;
 class VideoPlayerListener;
 
 class VideoPlayer : //15
@@ -70,7 +70,7 @@ public:
 	void clearCuePoints(); //147
 private:
 	class VideoPlayerImpl;
-	P(VideoPlayerImpl) m_impl; //152 | Impl sizes: [Win32: 160 bytes, OSX: 68 bytes, iOS: 108 bytes, WP8: 160 bytes, Android: 160 bytes]
+	P(VideoPlayerImpl) m_impl; //152 | Impl sizes: [Win32: 160 bytes, OSX: 68 [200?] bytes, iOS: 108 bytes, WP8: 160 bytes, Android: 160 bytes]
 	VideoPlayer(const VideoPlayer&); //153
 	VideoPlayer& operator=(const VideoPlayer&); //154
 };

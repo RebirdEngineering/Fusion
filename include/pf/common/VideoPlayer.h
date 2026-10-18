@@ -54,7 +54,7 @@ void VideoPlayer::hide()
 
 void VideoPlayer::play()
 {
-	m_impl->play(); //64
+	m_impl->playStart(); //64
 }
 
 void VideoPlayer::pause()

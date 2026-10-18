@@ -26,14 +26,15 @@ public:
 
 	void setUrl(std::string); //51
 
-	const std::string& getUrl() const; //56
+	const std::string& getUrl() const { return m_url; } //56
 
-	void setInterfaceType(InterfaceType);
+	void setInterfaceType(InterfaceType newInterfaceType);
 
-	InterfaceType getInterfaceType() const; //66
+	InterfaceType getInterfaceType() const { return m_interfaceType; } //66
 
-	float getStartPositionSeconds(); //68
-	void setStartPositionSeconds(float); //69
+	float getStartPositionSeconds() { return m_startPositionSeconds; } //68
+	void setStartPositionSeconds(float seconds) { m_startPositionSeconds = seconds; } //69
+
 private:
 	std::string m_url; //72
 	InterfaceType m_interfaceType; //73
