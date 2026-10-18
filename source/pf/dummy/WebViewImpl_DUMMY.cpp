@@ -4,11 +4,12 @@ using namespace lang;
 
 namespace pf
 {
-	class WebViewImpl : public Object //Win32
+	class WebViewImpl : public Object //Win32, OSX
 	{
 	public:
 		WebViewImpl(int x, int y, int height, int width, bool backgroundIsTransparent)
 		{
+			m_listener = 0;
 		}
 
 		~WebViewImpl()
@@ -17,16 +18,19 @@ namespace pf
 
 		void loadUrl(const std::string& url)
 		{
-			//if (url.size() > 0)
+			if (m_listener)
+				m_listener->onWebViewPageLoaded(false, "");
 		}
 
 		void loadLocalUrl(const std::string& url)
 		{
-			//if (url.size() > 0)
+			if (m_listener)
+				m_listener->onWebViewPageLoaded(false, "");
 		}
 
 		void reload()
 		{
+			m_listener->onWebViewPageLoaded(false, "");
 		}
 
 		void show()
@@ -75,9 +79,10 @@ namespace pf
 			return false;
 		}
 
+	private:
 		WebViewListener* m_listener; //unknown
 	};
 
-//#include <pf/common/WebView.h> //TODO
+#include <pf/common/WebView.h>
 
 }
