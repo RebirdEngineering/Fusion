@@ -48,6 +48,7 @@ public:
 	void setReceipt(const std::vector<char>& receipt); //87
 
 	CommerceItem& operator=(CommerceItem&) const; //92
+
 protected:
 	std::string m_id; //106
 	ItemType m_type; //107
@@ -87,6 +88,7 @@ public:
 	bool isPurchaseHistoryImplemented(); //191
 
 	bool getPurchaseHistory(CommerceListener*); //198
+
 private:
 	class CommerceImpl;
 	P(CommerceImpl) m_impl; //203 | Impl sizes [iOS: 24 bytes]

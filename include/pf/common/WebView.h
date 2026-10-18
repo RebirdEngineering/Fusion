@@ -46,8 +46,11 @@ void WebView::setSize(int width, int height) //43
 
 void WebView::setListener(WebViewListener* listener) //48
 {
-	//listener->setWebViewInstance(this); //51
-	m_impl->setListener(listener); //52
+	if (listener)
+	{
+		//listener->setWebViewInstance(this); //51 //TODO
+		m_impl->setListener(listener); //52
+	}
 }
 
 WebViewListener* WebView::getListener()

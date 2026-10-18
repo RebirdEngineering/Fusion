@@ -9,9 +9,9 @@ namespace pf //6
 class ApplicationVersion //15, not seen on Windows.
 {
 public:
-	static bool isSupported(); //24
+	bool isSupported(); //24
 
-	static std::string getVersionString(); //31
+	std::string getVersionString(); //31
 
 	class Impl; //No m_impl?
 };

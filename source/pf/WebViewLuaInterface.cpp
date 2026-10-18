@@ -12,9 +12,6 @@ namespace pf
 class WebViewLuaListener : public WebViewListener //12 | Originally in lua in ABC <3.1.2, Friends (Fusion) <1.1.0, ABR <1.6.1, ABS <3.3.0, ABSP <1.5.2, ABSW <1.2.2 and Croods <1.1.0
 {
 public:
-	const char* s_tableName = "WebView";
-	const char* s_metaTableName = "rovio.webview";
-
 	WebViewLuaListener(WebView* webView, lua_State* lua) //15
 	{
 		mNameSpaceForJSCalls = "";
@@ -184,13 +181,17 @@ private:
 	}
 };
 
-WebViewLuaInterface::WebViewLuaInterface(LuaState* lua) : //236
-	LuaObject(lua),
-	mLuaState(lua)
-{
-	static bool initialized = false; //240 | It's local var soooo static?
+//WebViewLuaInterface* WebViewLuaInterface::s_instance;
+const char* WebViewLuaInterface::s_tableName = "WebView";
+const char* WebViewLuaInterface::s_metaTableName = "rovio.webview";
 
-	if (WebView::isSupported() && !initialized) //242 |TODO?
+WebViewLuaInterface::WebViewLuaInterface(LuaState* lua) : //236
+	LuaObject(lua)
+{
+	mLuaState = lua; //239
+	static bool initialized = false; //240
+
+	if (WebView(lua_tointeger(lua->impl(), 1), lua_tointeger(lua->impl(), 2), lua_tointeger(lua->impl(), 3), lua_tointeger(lua->impl(), 4), true).isSupported() && !initialized) //242 | Correct?
 	{
 		const luaL_Reg webView_f[] = //244
 		{

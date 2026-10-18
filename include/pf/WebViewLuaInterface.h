@@ -8,7 +8,7 @@ namespace pf
 
 class WebView;
 
-class WebViewLuaInterface :
+class WebViewLuaInterface : //19
 	public lua::LuaObject
 {
 public:

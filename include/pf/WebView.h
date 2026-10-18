@@ -33,7 +33,7 @@ public:
 	std::string* executeJavaScript(std::string javaScript); //61
 	void asyncExecuteJavaScript(std::string javaScript); //62
 
-	static bool isSupported(); //64 | Is this supposed to be static?
+	bool isSupported(); //64
 	bool isWebViewSupported(); //65
 
 	int m_func_ref; //68
@@ -56,7 +56,10 @@ public:
 		LOAD_PAGE_INTO_EXTERNAL_BROWSER
 	};
 
-	WebViewListener(); //101
+	WebViewListener() //101
+	{
+		m_instance = 0;
+	}
 
 	virtual ~WebViewListener(); //106
 
@@ -69,10 +72,16 @@ public:
 private:
 	WebView* m_instance; //133
 
-	void setWebViewInstance(WebView* instance); //139
+	void setWebViewInstance(WebView* instance) //139
+	{
+		m_instance = instance;
+	}
 
 public:
-	void onWebViewPageLoaded(bool success, const std::string& pageTitle); //147
+	void onWebViewPageLoaded(bool success, const std::string& pageTitle) //147
+	{
+		
+	}
 
 	LinkClickedResult onWebViewLinkClicked(const std::string& url); //154
 
