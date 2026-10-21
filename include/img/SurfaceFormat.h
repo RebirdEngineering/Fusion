@@ -114,86 +114,86 @@ public:
 	/**
 	 * Creates surface format of SURFACE_UNKNOWN type.
 	 */
-	SurfaceFormat();
+	SurfaceFormat(); //117
 
 	/**
 	 * Creates surface format from string description.
 	 * @param desc Format description, e.g. R8G8B8.
 	 * @exception GraphicsException If format unknown.
 	 */
-	explicit SurfaceFormat( const char* desc );
+	explicit SurfaceFormat( const char* desc ); //124
 
 	/**
 	 * Creates surface format from enumerated pixel format type. 
 	 */
-	SurfaceFormat( SurfaceFormatType type );
+	SurfaceFormat( SurfaceFormatType type ); //129
 
 	/**
 	 * Creates a surface format from bit count and 4 masks. 
 	 * Format is set to SURFACE_UNKNOWN if match not found.
 	 */
-	SurfaceFormat( int bitCount, uint32_t redMask, uint32_t greenMask, uint32_t blueMask, uint32_t alphaMask );
+	SurfaceFormat( int bitCount, uint32_t redMask, uint32_t greenMask, uint32_t blueMask, uint32_t alphaMask ); //135
 
 	/**
 	 * Returns type of surface format. 
 	 */
-	SurfaceFormatType	type() const;
+	SurfaceFormatType	type() const; //140
 
 	/** 
 	 * Returns number of bits per pixel in the surface format.
 	 * Returns 0 if the format is unknown or compressed.
 	 */
-	int			bitsPerPixel() const;
+	int			bitsPerPixel() const; //146
 
 	/**
 	 * Returns true if the pixels of this format have alpha channel information. 
 	 */
-	bool		hasAlpha() const;
+	bool		hasAlpha() const; //151
 
 	/** 
 	 * Returns ith channel bit mask. 
 	 * Order of channel indices are (r,g,b,a).
 	 * If the format does not have specified channel then the return value is 0.
 	 */
-	uint32_t 	getChannelMask( int i ) const;
+	uint32_t 	getChannelMask( int i ) const; //158
 
 	/** 
 	 * Returns ith channel bit count. 
 	 * Order of channel indices are (r,g,b,a).
 	 * If the format does not have specified channel then the return value is 0.
 	 */
-	int			getChannelBitCount( int i ) const;
+	int			getChannelBitCount( int i ) const; //165
 
 	/**
 	 * Returns number of palette entries in this pixel format.
 	 * @return Number of palette entries or 0 if the format is not palettized.
 	 */
-	int 		paletteEntries() const;
+	int 		paletteEntries() const; //171
 
 	/**
 	 * Returns true if the formats are the same. 
 	 */
-	bool		operator==( const SurfaceFormat& other ) const			{return m_type==other.m_type;}
+	bool		operator==( const SurfaceFormat& other ) const			{return m_type==other.m_type;} //176
 
 	/**
 	 * Returns true if the formats are different. 
 	 */
-	bool		operator!=( const SurfaceFormat& other ) const			{return m_type!=other.m_type;}
+	bool		operator!=( const SurfaceFormat& other ) const			{return m_type!=other.m_type;} //181
 
 	/**
-	 * Returns true if this is DXT compressed pixel format.
+	 * Returns true if this is a compressed pixel format.
 	 */
-	bool		compressed() const		{return m_type >= SURFACE_DXT1 && m_type <= SURFACE_ETC1_RGB_4BPP;} //[EDIT] Prob would point to ETC1 but for now set to PVRTCRGBA4BPP
+	bool		compressed() const		{return m_type >= SURFACE_DXT1 && m_type <= SURFACE_ETC1_RGB_4BPP;} //186 | [EDIT] Prob would point to ETC1 but for now set to PVRTCRGBA4BPP
 
 	/**
 	 * Returns true if this is HDR (float) pixel format.
 	 */
-	bool		hdr() const				{return m_type >= SURFACE_R16F && m_type <= SURFACE_A32B32G32R32F;}  //[NOTE] Not in ABSW Console fork
+	bool		hdr() const				{return m_type >= SURFACE_R16F && m_type <= SURFACE_A32B32G32R32F;}  //191 | [NOTE] Not in ABSW Console fork
 
 	/**
 	 * Returns true if this is palettized pixel format. 
 	 */
-	bool		palettized() const		{return m_type == SURFACE_P8 || m_type == SURFACE_P4;} //[NOTE] Not in ABSW Console fork
+	bool		palettized() const		{return m_type == SURFACE_P8 || m_type == SURFACE_P4;} //196 | [NOTE] Not in ABSW Console fork
 
 	/** 
 	 * Copies row of pixels from one surface pixel format to another.
@@ -207,7 +207,7 @@ public:
 	 */
 	void		copyPixels( void* dst, const SurfaceFormat& dstpalfmt, const void* dstpal,
 					const SurfaceFormat& srcfmt, const void* src, const SurfaceFormat& srcpalfmt, const void* srcpal, 
-					int pixels ) const;
+					int pixels ) const; //208
 
 	/** 
 	 * Copies rectangle of pixels from one surface pixel format to another.
@@ -215,7 +215,7 @@ public:
 	 */
 	void		copyPixels( void* dst, int dstpitch, const SurfaceFormat& dstpalfmt, const void* dstpal,
 					const SurfaceFormat& srcfmt, const void* src, int srcpitch, const SurfaceFormat& srcpalfmt, const void* srcpal,
-					int width, int height ) const;
+					int width, int height ) const; //216
 
 	/** 
 	 * Returns RGBA pixel as 4-vector at specified coordinate.
@@ -225,15 +225,16 @@ public:
 	void		getPixel( int x, int y,
 						const void* data, int pitch, 
 						const SurfaceFormat& palfmt, const void* pal,
-						float* rgba ) const;
+						float* rgba ) const; //225
 
 	/** Returns memory usage of a surface of specified size. */
-	int			getMemoryUsage( int w, int h ) const;
+	int			getMemoryUsage( int w, int h ) const; //231
 
 	/** Returns string description of the format. */
-	const char*	toString() const;
+	const char*	toString() const; //234
 
-	SurfaceFormatType m_type;
+private:
+	SurfaceFormatType m_type; //237
 };
 
 
