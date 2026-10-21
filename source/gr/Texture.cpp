@@ -1,10 +1,11 @@
 #include <gr/Texture.h>
 
 
-BEGIN_NAMESPACE(gr) 
+namespace gr
+{
 
 
-Texture::Texture() : 
+Texture::Texture() : //Does not exist on iOS.
 	BaseTexture(CLASSID_TEXTURE) 
 {
 }

@@ -5,14 +5,14 @@
 #include <gr/BaseTexture.h>
 
 
-BEGIN_NAMESPACE(gr) 
-
+namespace gr
+{
 	
 /**
  * Base class for platform dependent 2D textures.
  * @ingroup gr
  */
-class Texture :
+class Texture : //14
 	public BaseTexture
 {
 public:
@@ -32,38 +32,38 @@ public:
 	 * @param pal Palette of source image (if any).
 	 * @param palfmt Palette format of source image (or SURFACE_UNKNOWN).
 	 */
-	virtual void					blt( int x, int y, const void* data, int pitch, int miplevel, int w, int h, const NS(img, SurfaceFormat)& fmt ) = 0;
+	virtual void					blt( int x, int y, const void* data, int pitch, int miplevel, int w, int h, const NS(img, SurfaceFormat)& fmt ) = 0; //32
 
 	/**
 	 * Clears texture surface.
 	 * Texture must be unlocked before the method is called.
 	 */
-	virtual void					clear() = 0;
+	virtual void					clear() = 0; //38
 	
 	/**
 	 * Returns area of the texture surface.
 	 */
-	virtual Rect					rect() const = 0;
+	virtual Rect					rect() const = 0; //43
 	
 	
 	/**
 	 * Returns access to locked data. Requires that texture is locked before calling this.
 	 */
-	virtual void			getData( void** bits, int* pitch ) const = 0;
+	virtual void			getData( void** bits, int* pitch ) const = 0; //48
     
     /**
 	 * 
 	 */
-	virtual const std::string&	getName() const = 0;
+	virtual const std::string&	getName() const = 0; //53
     
     /**
 	 * 
 	 */
-	virtual void					setName( const std::string & name );
+	virtual void					setName( const std::string & name ) = 0; //58
 };
 
 
-END_NAMESPACE() // gr
+} // gr
 
 
 #endif // _GR_TEXTURE_H
