@@ -1,32 +1,31 @@
 #ifndef _LANG_SIGNAL_H
 #define _LANG_SIGNAL_H
 
-#include <lang/Object.h>
-#include <stdint.h>
+#include <lang/pp.h>
 
 BEGIN_NAMESPACE(lang)
 
 class Signal
 {
 public:
-    Signal(bool set);
+    Signal(bool set); //17
 
-    ~Signal();
+    ~Signal(); //23
 
-    void set();
+    void set(); //28
 
-    void reset();
+    void reset(); //33
 
-    void wait();
+    void wait(); //48
 
-    bool wait(uint32_t timeout_msec);
+    bool wait(uint32_t timeout_msec); //45
 
 private:
-    class Impl;
-    Impl* m_impl;
+    Signal(const Signal&); //48
+    Signal& operator=(const Signal&); //49
 
-    Signal(const Signal&);
-    Signal& operator=(const Signal&);
+    class Impl;
+    Impl* m_impl; //52
 };
 
 }
