@@ -11,7 +11,7 @@ using namespace math;
 namespace gr
 {
 
-static const char* const DATATYPE_NAMES[] =
+static const char* const DATATYPE_NAMES[] = //14
 {
 	/** Vertex has model space position data. */
 	"DT_POSITION",
@@ -73,20 +73,21 @@ const char* const DATAFORMAT_NAMES[] =
 
 
 VertexFormat::VertexFormat() :
-	m_align( 1 )
+	m_align( 1 ),
+	m_alignEach( 1 )
 {
 	assert( sizeof(m_data)*2 >= DT_SIZE ); // too little space for data types
 
-	for ( int i = 0 ; i < DT_SIZE ; ++i )
-		setDataFormat( (DataType)i, DF_NONE );
+	for ( int i = 0 ; i < DT_SIZE ; ++i ) //86
+		setDataFormat( (DataType)i, DF_NONE ); //87
 }
 
-VertexFormat& VertexFormat::addPosition( DataFormat df )
+VertexFormat& VertexFormat::addPosition( DataFormat df ) //90
 {
 	assert( getDataFormat(DT_POSITION) == DF_NONE ); //[NOTE] Line 96 DF/AA
 	assert( getDataFormat(DT_POSITIONT) == DF_NONE ); //[NOTE] Line 97 DF/AA
 	
-	setDataFormat( DT_POSITION, df );
+	setDataFormat( DT_POSITION, df ); //95
 	return *this;
 }
 
@@ -110,11 +111,11 @@ VertexFormat& VertexFormat::addNormal( DataFormat df )
 	return *this;
 }
 
-VertexFormat& VertexFormat::addDiffuse( DataFormat df )
+VertexFormat& VertexFormat::addDiffuse( DataFormat df ) //119
 {
 	assert( getDataFormat(DT_DIFFUSE) == DF_NONE ); //[NOTE] DF + AA 125
 
-	setDataFormat( DT_DIFFUSE, df );
+	setDataFormat( DT_DIFFUSE, df ); //123
 	return *this;
 }
 	
@@ -144,18 +145,18 @@ VertexFormat& VertexFormat::addWeights( DataFormat weightdf, DataFormat indexdf 
 	return *this;
 }
 
-VertexFormat& VertexFormat::addTextureCoordinate( DataFormat df )
+VertexFormat& VertexFormat::addTextureCoordinate( DataFormat df ) //153
 {
-	int layer = textureCoordinates();
+	int layer = textureCoordinates(); //155
 	assert( layer < MAX_TEXCOORDS && "Too many texture coordinate layers in vertex format" ); //[NOTE] DF / AA line 160
 	if ( layer < MAX_TEXCOORDS )
-		setDataFormat( (DataType)(DT_TEX0+layer), df );
+		setDataFormat( (DataType)(DT_TEX0+layer), df ); //158
 	return *this;
 }
 
 int VertexFormat::textureCoordinates() const
 {
-	int layers = 0;
+	int layers = 0; //164
 	if ( m_data[DT_TEX0>>1] & (0xF<<((DT_TEX0&1)<<2)) )
 	{
 		++layers;
@@ -191,13 +192,13 @@ VertexFormat::DataFormat VertexFormat::getTextureCoordinateFormat( int layer ) c
 		return DF_NONE;
 }
 
-void VertexFormat::setDataFormat( DataType dt, DataFormat value )
+void VertexFormat::setDataFormat( DataType dt, DataFormat value ) //200
 {
 	//assert( (unsigned)dt < sizeof(m_data)*2 ); //[NOTE] DF Line 206, not in AA
 	assert( value >= 0 && value <= 0xF ); //[NOTE] Line 207
 
-	int index = dt;
-	int shift = (index&1) << 2;
+	int index = dt; //205
+	int shift = (index&1) << 2; //206
 	index >>= 1;
 	uint8_t* data = reinterpret_cast<uint8_t*>( m_data );
 	data[index] = (uint8_t)( ((int)data[index] & (0xF0>>shift)) + (value << shift) );
@@ -209,55 +210,47 @@ void VertexFormat::setAlign( int alignment )
 	m_align = (uint8_t)alignment;
 }
 
-void VertexFormat::setAlignEach( int alignment )
+void VertexFormat::setAlignEach( int alignment ) //218
 {
 	assert( alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8 || alignment == 16 );
 	m_alignEach = (uint8_t)alignment;
 }
 
-VertexFormat::DataFormat VertexFormat::getDataFormat( DataType dt ) const
+VertexFormat::DataFormat VertexFormat::getDataFormat( DataType dt ) const //234
 {
 	assert( (unsigned)dt < (unsigned)DT_SIZE ); //[NOTE] DF/AA Line 240
 	
-	int index = dt;
-	int shift = (index&1) << 2;
+	int index = dt; //238
+	int shift = (index&1) << 2; //239
 	index >>= 1;
-	const uint8_t* data = reinterpret_cast<const uint8_t*>( m_data );
+	const uint8_t* data = reinterpret_cast<const uint8_t*>( m_data ); //241
 	return (DataFormat)(  ( (int)data[index] & (0xF<<shift) ) >> shift  );
 }
 
-/*std::string VertexFormat::toString() const
+std::string VertexFormat::toString() const //Not on iOS.
 {
-	
-}*/
-
-int VertexFormat::getDataDim(DataFormat df)
-{
-	switch (df)
+	char str[DT_SIZE * 50];
+	char buf[50];
+	bool first = true;
+	strcpy(str, "(");
+	for (int i = 0; i < DT_SIZE; ++i)
 	{
-	case DF_S_32:	return 1;
-	case DF_S_16:	return 1;
-	case DF_S_8:	return 1;
-	case DF_V2_32:	return 2;
-	case DF_V2_16:	return 2;
-	case DF_V2_8:	return 2;
-	case DF_V3_32:	return 3;
-	case DF_V3_16:	return 3;
-	case DF_V3_8:	return 3;
-	case DF_V4_32:	return 4;
-	case DF_V4_16:	return 4;
-	case DF_V4_8:	return 4;
-	case DF_V4_5:	return 4;
-	case DF_V2_16F:	return 2;
-	case DF_V3_16F:	return 3;
-	case DF_V4_16F:	return 4;
-	case DF_NONE:	return 0;
-	case DF_SIZE:	return 0;
+		DataType dt = DataType(i);
+		DataFormat df = getDataFormat(dt);
+		if (df != DF_NONE)
+		{
+			if (!first)
+				strcat(str, ", ");
+			sprintf(buf, "%s=%s", toString(dt), toString(df));
+			strcat(str, buf);
+			first = false;
+		}
 	}
-	return 0;
+	strcat(str, ")");
+	return str;
 }
 
-int VertexFormat::getDataSize( DataFormat df )
+int VertexFormat::getDataSize( DataFormat df ) //268
 {
     switch ( df )
 	{
@@ -283,32 +276,38 @@ int VertexFormat::getDataSize( DataFormat df )
 	return 0;
 }
 
-int VertexFormat::getDataSizeAligned( DataFormat df, int align )
+int VertexFormat::getDataSizeAligned( DataFormat df, int align ) //294
 {
-	int alignmask = align - 1;
 	//assert(alignment == 1 || alignment == 2 || alignment == 4 || alignment == 8 || alignment == 16); //[ADD] DF / AA line 300
-    switch ( df )
+
+	int alignmask = align - 1; //298
+	return (getDataSize(df) + alignmask) & -align; //299
+}
+
+int VertexFormat::getDataDim(DataFormat df) //302
+{
+	switch (df)
 	{
-	    case DF_S_32:	align = 4;
-	    case DF_S_16:	align = 2;
-	    case DF_S_8:	align = 1;
-	    case DF_V2_32:	align = 8;
-	    case DF_V2_16:	align = 4;
-	    case DF_V2_8:	align = 2;
-	    case DF_V3_32:	align = 12;
-	    case DF_V3_16:	align = 6;
-	    case DF_V3_8:	align = 3;
-	    case DF_V4_32:	align = 16;
-	    case DF_V4_16:	align = 8;
-	    case DF_V4_8:	align = 4;
-	    case DF_V4_5:	align = 2;
-        case DF_V2_16F:	align = 4;
-        case DF_V3_16F:	align = 6;
-        case DF_V4_16F:	align = 8;
-	    case DF_NONE:	align = 0;
-	    case DF_SIZE:	align = 0;
+	case DF_S_32:	return 1;
+	case DF_S_16:	return 1;
+	case DF_S_8:	return 1;
+	case DF_V2_32:	return 2;
+	case DF_V2_16:	return 2;
+	case DF_V2_8:	return 2;
+	case DF_V3_32:	return 3;
+	case DF_V3_16:	return 3;
+	case DF_V3_8:	return 3;
+	case DF_V4_32:	return 4;
+	case DF_V4_16:	return 4;
+	case DF_V4_8:	return 4;
+	case DF_V4_5:	return 4;
+	case DF_V2_16F:	return 2;
+	case DF_V3_16F:	return 3;
+	case DF_V4_16F:	return 4;
+	case DF_NONE:	return 0;
+	case DF_SIZE:	return 0;
 	}
-	return (df + align - 1) & -align;
+	return 0;
 }
 
 int VertexFormat::getDataSize( DataFormat df, int n )
@@ -340,19 +339,14 @@ int VertexFormat::getDataSize( DataFormat df, int n )
 	return (bytes+3) & ~3;
 }
 
-int VertexFormat::getDataSize(int n) //?
-{
-	return 0;
-}
-
-const char*	VertexFormat::toString( DataFormat df )
+const char*	VertexFormat::toString( DataFormat df ) //Not on iOS
 {
 	//assert( sizeof(DATAFORMAT_NAMES)/sizeof(DATAFORMAT_NAMES[0]) == DF_SIZE ); //[NOTE] completely removed
 	assert( df < DF_SIZE ); //[NOTE] Line 364
 	return DATAFORMAT_NAMES[df];
 }
 
-const char*	VertexFormat::toString( DataType dt )
+const char*	VertexFormat::toString( DataType dt ) //364
 {
 	//assert( sizeof(DATATYPE_NAMES)/sizeof(DATATYPE_NAMES[0]) == DT_SIZE ); //[NOTE] completely removed
 	assert( dt < DT_SIZE ); //[NOTE] Line 371
@@ -361,15 +355,15 @@ const char*	VertexFormat::toString( DataType dt )
 
 int VertexFormat::vertexSize() const
 {
-	int size = 0;
-	for ( int i = 0 ; i < DT_SIZE ; ++i )
+	int size = 0; //373
+	for ( int i = 0 ; i < DT_SIZE ; ++i ) //374
 	{
 		DataType dt = (DataType)i;
-		if ( hasData(dt) )
-			size += getDataSize( getDataFormat(dt) );
+		if ( hasData(dt) ) //377
+			size += getDataSizeAligned( getDataFormat(dt), m_alignEach ); //378
 	}
 
-	int alignmask = m_align - 1;
+	int alignmask = m_align - 1; //381
 	size = (size+alignmask) & ~alignmask;
 	return size;
 }
@@ -384,15 +378,15 @@ int VertexFormat::alignEach() const
 	return m_alignEach;
 }
 
-bool VertexFormat::operator==( const VertexFormat& other ) const
+bool VertexFormat::operator==( const VertexFormat& other ) const //386
 {
 	for ( int i = 0 ; i < DT_SIZE ; ++i )
-		if ( getDataFormat( (DataType)i ) != other.getDataFormat( (DataType)i ) )
+		if ( getDataFormat( (DataType)i ) != other.getDataFormat( (DataType)i ) ) //389
 			return false;
 	return true;
 }
 
-void VertexFormat::getData( DataFormat df, const void* data, float4* out )
+void VertexFormat::getData( DataFormat df, const void* data, float4* out ) //394 | TODO
 {
 	switch ( df )
 	{
@@ -481,13 +475,20 @@ void VertexFormat::getData( DataFormat df, const void* data, float4* out )
 		break;
 
 	case DF_V4_5:{
-		/*out->x = reinterpret_cast<const int8_t*>(data)[0];
-		out->y = reinterpret_cast<const int8_t*>(data)[1];
-		out->z = reinterpret_cast<const int8_t*>(data)[2];
-		out->w = reinterpret_cast<const int8_t*>(data)[3];*/
+		//const uint16_t* s; //483
+
+		//math::halfToFloat(s); //491
+		//math::halfToFloat(s); //492
+		/*out->x = reinterpret_cast<const uint16_t*>(data)[0];
+		out->y = reinterpret_cast<const uint16_t*>(data)[1];
+		out->z = reinterpret_cast<const uint16_t*>(data)[2];
+		out->w = reinterpret_cast<const uint16_t*>(data)[3];*/
 		break;}
 
 	case DF_V2_16F: {
+		//math::halfToFloat(); //498
+		//math::halfToFloat(); //499
+		//math::halfToFloat(); //500
 		/*out->x = reinterpret_cast<const int16_t*>(data)[0];
 		out->y = reinterpret_cast<const int16_t*>(data)[1];
 		out->z = 0.f;
@@ -496,6 +497,10 @@ void VertexFormat::getData( DataFormat df, const void* data, float4* out )
 	}
 
 	case DF_V3_16F: {
+		//math::halfToFloat(); //505
+		//math::halfToFloat(); //506
+		//math::halfToFloat(); //507
+		//math::halfToFloat(); //508
 		/*out->x = reinterpret_cast<const int16_t*>(data)[0];
 		out->y = reinterpret_cast<const int16_t*>(data)[1];
 		out->z = reinterpret_cast<const int16_t*>(data)[2];
@@ -511,12 +516,12 @@ void VertexFormat::getData( DataFormat df, const void* data, float4* out )
 	}
 }
 
-void VertexFormat::setData( DataFormat df, void* data, const float4& v )
+void VertexFormat::setData( DataFormat df, void* data, const float4& v ) //519
 {
 	switch ( df )
 	{
 	case VertexFormat::DF_V4_32:{
-		float* d = reinterpret_cast<float*>(data);
+		float* d = reinterpret_cast<float*>(data); //524
 		d[0] = v.x;
 		d[1] = v.y;
 		d[2] = v.z;
@@ -524,25 +529,25 @@ void VertexFormat::setData( DataFormat df, void* data, const float4& v )
 		break;}
 
 	case VertexFormat::DF_V3_32:{
-		float* d = reinterpret_cast<float*>(data);
+		float* d = reinterpret_cast<float*>(data); //532
 		d[0] = v.x;
 		d[1] = v.y;
 		d[2] = v.z;
 		break;}
 
 	case VertexFormat::DF_V2_32:{
-		float* d = reinterpret_cast<float*>(data);
+		float* d = reinterpret_cast<float*>(data); //539
 		d[0] = v.x;
 		d[1] = v.y;
 		break;}
 
 	case VertexFormat::DF_S_32:{
-		float* d = reinterpret_cast<float*>(data);
+		float* d = reinterpret_cast<float*>(data); //545
 		d[0] = v.x;
 		break;}
 		
 	case VertexFormat::DF_V4_16:{
-		uint16_t* d = reinterpret_cast<uint16_t*>(data);
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //550
 		d[0] = (uint16_t)v.x;
 		d[1] = (uint16_t)v.y;
 		d[2] = (uint16_t)v.z;
@@ -550,25 +555,25 @@ void VertexFormat::setData( DataFormat df, void* data, const float4& v )
 		break;}
 
 	case VertexFormat::DF_V3_16:{
-		uint16_t* d = reinterpret_cast<uint16_t*>(data);
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //558
 		d[0] = (uint16_t)v.x;
 		d[1] = (uint16_t)v.y;
 		d[2] = (uint16_t)v.z;
 		break;}
 
 	case VertexFormat::DF_V2_16:{
-		uint16_t* d = reinterpret_cast<uint16_t*>(data);
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //565
 		d[0] = (uint16_t)v.x;
 		d[1] = (uint16_t)v.y;
 		break;}
 
 	case VertexFormat::DF_S_16:{
-		uint16_t* d = reinterpret_cast<uint16_t*>(data);
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //571
 		d[0] = (uint16_t)v.x;
 		break;}
 
 	case VertexFormat::DF_V4_8:{
-		uint8_t* d = reinterpret_cast<uint8_t*>(data);
+		uint8_t* d = reinterpret_cast<uint8_t*>(data); //576
 		d[0] = (uint8_t)v.x;
 		d[1] = (uint8_t)v.y;
 		d[2] = (uint8_t)v.z;
@@ -576,25 +581,25 @@ void VertexFormat::setData( DataFormat df, void* data, const float4& v )
 		break;}
 
 	case VertexFormat::DF_V3_8:{
-		uint8_t* d = reinterpret_cast<uint8_t*>(data);
+		uint8_t* d = reinterpret_cast<uint8_t*>(data); //584
 		d[0] = (uint8_t)v.x;
 		d[1] = (uint8_t)v.y;
 		d[2] = (uint8_t)v.z;
 		break;}
 
 	case VertexFormat::DF_V2_8:{
-		uint8_t* d = reinterpret_cast<uint8_t*>(data);
+		uint8_t* d = reinterpret_cast<uint8_t*>(data); //591
 		d[0] = (uint8_t)v.x;
 		d[1] = (uint8_t)v.y;
 		break;}
 
 	case VertexFormat::DF_S_8:{
-		uint8_t* d = reinterpret_cast<uint8_t*>(data);
+		uint8_t* d = reinterpret_cast<uint8_t*>(data); //597
 		d[0] = (uint8_t)v.x;
 		break;}
 
 	case VertexFormat::DF_V4_5:{
-		uint16_t* d = reinterpret_cast<uint16_t*>(data);
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //602
 		d[0] = (uint16_t)( ((int32_t)v.x & 0x1F)
 			+ (((int32_t)v.y & 0x1F) << 5)
 			+ (((int32_t)v.z & 0x1F) << 10)
@@ -602,16 +607,25 @@ void VertexFormat::setData( DataFormat df, void* data, const float4& v )
 		break;}
 
 	case VertexFormat::DF_V2_16F:{
-		
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //610
+		d[0] = floatToHalf(v.x); //611
+		d[1] = floatToHalf(v.y); //612
 		break;}
 
 	case VertexFormat::DF_V3_16F: {
-		
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //616
+		d[0] = floatToHalf(v.x); //617
+		d[1] = floatToHalf(v.y); //618
+		d[2] = floatToHalf(v.z); //619
 		break;
 	}
 
 	case VertexFormat::DF_V4_16F: {
-
+		uint16_t* d = reinterpret_cast<uint16_t*>(data); //623
+		d[0] = floatToHalf(v.x); //624
+		d[1] = floatToHalf(v.y); //625
+		d[2] = floatToHalf(v.z); //626
+		d[3] = floatToHalf(v.w); //627
 		break;
 	}
 		
@@ -621,24 +635,24 @@ void VertexFormat::setData( DataFormat df, void* data, const float4& v )
 }
 
 void VertexFormat::copyData(
-	void* ddata, int dpitch, DataFormat df,
-	const void* sdata, int spitch, DataFormat sf, int count )
+	void* ddata, int dpitch, DataFormat df, //636
+	const void* sdata, int spitch, DataFormat sf, int count ) //637
 {
-	const uint8_t* sd = reinterpret_cast<const uint8_t*>(sdata);
-	uint8_t* dd = reinterpret_cast<uint8_t*>(ddata);
+	const uint8_t* sd = reinterpret_cast<const uint8_t*>(sdata); //639
+	uint8_t* dd = reinterpret_cast<uint8_t*>(ddata); //640
 
 	if ( sf == df )
 	{
-		const int compsize = VertexFormat::getDataSize( df );
+		const int compsize = VertexFormat::getDataSize( df ); //644
 		if ( compsize == spitch && compsize == dpitch )
 		{
 			memcpy( dd, sd, compsize*count );
 		}
 		else
 		{
-			for ( int i = 0 ; i < count ; ++i )
+			for ( int i = 0 ; i < count ; ++i ) //651
 			{
-				for ( int k = 0 ; k < compsize ; ++k )
+				for ( int k = 0 ; k < compsize ; ++k ) //653
 					dd[k] = sd[k];
 				sd += spitch;
 				dd += dpitch;
@@ -647,9 +661,9 @@ void VertexFormat::copyData(
 	}
 	else
 	{
-		for ( int i = 0 ; i < count ; ++i )
+		for ( int i = 0 ; i < count ; ++i ) //662
 		{
-			float4 v(0,0,0,0);
+			float4 v(0,0,0,0); //664
 
 			// get data float4
 			VertexFormat::getData( sf, sd, &v );

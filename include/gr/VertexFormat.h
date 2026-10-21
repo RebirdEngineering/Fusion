@@ -19,7 +19,7 @@ namespace gr
  * Describes vertex bit layout.
  * @ingroup gr
  */
-class VertexFormat
+class VertexFormat //15
 {
 public:
 	enum //18
@@ -107,37 +107,37 @@ public:
 	/**
 	 * Empty vertex format description.
 	 */	
-	VertexFormat();
+	VertexFormat(); //103
 
 	/**
 	 * Adds vertex position information to the vertex format.
 	 */
-	VertexFormat&	addPosition( DataFormat df=DF_V3_32 );
+	VertexFormat&	addPosition( DataFormat df=DF_V3_32 ); //108
 
 	/**
 	 * Adds transformed vertex position information to the vertex format.
 	 */
-	VertexFormat&	addTransformedPosition( DataFormat df=DF_V4_32 );
+	VertexFormat&	addTransformedPosition( DataFormat df=DF_V4_32 ); //113
 
 	/**
 	 * Adds vertex normal information to the vertex format. 
 	 */
-	VertexFormat&	addNormal( DataFormat df=DF_V3_32 );
+	VertexFormat&	addNormal( DataFormat df=DF_V3_32 ); //118
 	
 	/** 
 	 * Adds diffuse color information to the vertex format. 
 	 */
-	VertexFormat&	addDiffuse( DataFormat df=DF_V4_8 );
+	VertexFormat&	addDiffuse( DataFormat df=DF_V4_8 ); //123
 	
 	/** 
 	 * Adds specular color information to the vertex format. 
 	 */
-	VertexFormat&	addSpecular( DataFormat df=DF_V4_8 );
+	VertexFormat&	addSpecular( DataFormat df=DF_V4_8 ); //128
 
 	/** 
 	 * Adds tangent information to the vertex format. 
 	 */
-	VertexFormat&	addTangent( DataFormat df=DF_V3_32 );
+	VertexFormat&	addTangent( DataFormat df=DF_V3_32 ); //133
 
 	/** 
 	 * Sets vertex weight information to the model vertex format.
@@ -147,124 +147,118 @@ public:
 	 * @param weightdf Data format of weights per vertex.
 	 * @param indexdf Data format of bone indices per vertex.
 	 */
-	VertexFormat&	addWeights( DataFormat weightdf, DataFormat indexdf );
+	VertexFormat&	addWeights( DataFormat weightdf, DataFormat indexdf ); //143
 	
 	/**
 	 * Adds a texture coordinate layer. 
 	 */
-	VertexFormat&	addTextureCoordinate( DataFormat df );
+	VertexFormat&	addTextureCoordinate( DataFormat df ); //148
 
 	/**
 	 * Override specific data type format which has been previously added.
 	 */
-	void			setDataFormat( DataType dt, DataFormat x );
+	void			setDataFormat( DataType dt, DataFormat x ); //153
 
 	/**
 	 * Sets alignment (in bytes) to be used when returning vertex size.
 	 */
-	void			setAlign( int alignment );
+	void			setAlign( int alignment ); //158
     
     /**
 	 * 
 	 */
-	void	setAlignEach( int alignment );
+	void	setAlignEach( int alignment ); //163
 
 	/**
 	 * Returns number of texture coordinates in the vertex format information. 
 	 */
-	int				textureCoordinates() const;
+	int				textureCoordinates() const; //168
 
 	/**
 	 * Returns texture coordinate layer format.
 	 */
-	DataFormat		getTextureCoordinateFormat( int layer ) const;
+	DataFormat		getTextureCoordinateFormat( int layer ) const; //173
 
 	/**
 	 * Returns format of specified semantic type.
 	 * @return DF_NONE if format of specified type is not set.
 	 */
-	DataFormat		getDataFormat( DataType dt ) const;
+	DataFormat		getDataFormat( DataType dt ) const; //179
 
 	/**
 	 * Returns true if vertex format has specified component.
 	 */
-	bool			hasData( DataType dt ) const				{return getDataFormat(dt) != DF_NONE;}
+	bool			hasData( DataType dt ) const				{return getDataFormat(dt) != DF_NONE;} //184
 
 	/**
 	 * Returns string representation of this format.
 	 * Format is returned as "(TYPE1=FORMAT1, TYPE2=FORMAT2, ..., TYPEN=FORMATN)".
 	 */
-	std::string	toString() const;
+	std::string	toString() const; //190
 
 	/**
 	 * Returns size of single vertex in bytes, ignoring padding
 	 * and platform specific considerations.
 	 */
-	int				vertexSize() const;
+	int				vertexSize() const; //195
 	
 	/**
 	 * 
 	 */
-	int	    		align() const;
+	int	    		align() const; //200
     
     /**
 	 * 
 	 */
-	int    			alignEach() const;
+	int    			alignEach() const; //205
 
 	/**
 	 * Returns true if vertex formats match.
 	 */
-	bool			operator==( const VertexFormat& other ) const;
+	bool			operator==( const VertexFormat& other ) const; //210
 
 	/**
 	 * Returns true if vertex formats do not match.
 	 */
-	bool			operator!=( const VertexFormat& other ) const		{return !this->operator==(other);}
+	bool			operator!=( const VertexFormat& other ) const		{return !this->operator==(other);} //215
 
 	/**
 	 * Returns data dimensions (in number of components) of specified data format.
 	 */
-	static int		getDataDim( DataFormat df );
+	static int		getDataDim( DataFormat df ); //220
 
 	/**
 	 * Returns data size (in bytes) of specified data format.
 	 */
-	static int		getDataSize( DataFormat df );
+	static int		getDataSize( DataFormat df ); //225
 
 	/**
 	 *
-	 *
 	 */
-	static int		getDataSizeAligned( DataFormat df, int align );
+	static int		getDataSizeAligned( DataFormat df, int align ); //230
 
 	/**
 	 * Returns data size (in bytes) of specified data format and n vertices.
 	 * Data size is aligned to 32-bit boundary.
 	 */
-	static int		getDataSize( DataFormat df, int n );
-	
-	 /**
-	 * 
-	 */
-	static int		getDataSize( int  );
+	static int		getDataSize( DataFormat df, int n ); //236
 
 	/**
 	 * Returns data from specified format.
 	 * If the data format does not have specified components,
 	 * 0 is returned in that 4-vector component instead.
 	 */
-	static void		getData( DataFormat df, const void* data, math::float4* out );
+	static void		getData( DataFormat df, const void* data, math::float4* out ); //243
 
 	/**
 	 * Sets data to specified format from float4.
 	 */
-	static void		setData( DataFormat df, void* data, const math::float4& v );
+	static void		setData( DataFormat df, void* data, const math::float4& v ); //248
 
 	/**
 	 * Copies data from one vertex format to another.
 	 */
-	static void		copyData(
+	static void		copyData( //253
 						void* ddata, int dpitch, DataFormat df,
 						const void* sdata, int spitch, DataFormat sf, 
 						int count );
@@ -272,7 +266,7 @@ public:
 	/**
 	 * Copies data from one vertex format to another, scales and offsets the source.
 	 */
-	static void		copyData(
+	static void		copyData( //261
 						void* ddata, int dpitch, DataFormat df,
 						const void* sdata, int spitch, DataFormat sf, 
 						const math::float4& sscale, const math::float4& sbias,
@@ -282,7 +276,7 @@ public:
 	 * Computes bounding box and sphere of vertex data.
 	 * @param scalebias X=scale, YZW=bias
 	 */
-	static void		getBound( const void* data, DataFormat df, int vertices,
+	static void		getBound( const void* data, DataFormat df, int vertices, //277
 						const math::float4& scalebias,
 						math::float4* boundmin, math::float4* boundmax,
 						float* boundradius );
@@ -290,29 +284,29 @@ public:
 	/**
 	 * Converts data format to string.
 	 */
-	static const char*	toString( DataFormat df );
+	static const char*	toString( DataFormat df ); //285
 
 	/**
 	 * Converts data type to string.
 	 */
-	static const char*	toString( DataType dt );
+	static const char*	toString( DataType dt ); //290
 
 	/**
 	 * Converts vertex data format string to type.
 	 * @return DF_SIZE if not match.
 	 */
-	static DataFormat	toDataFormat( const char* str );
+	static DataFormat	toDataFormat( const char* str ); //296
 
 	/**
 	 * Converts vertex data type string to type.
 	 * @return DT_SIZE if not match.
 	 */
-	static DataType		toDataType( const char* str );
+	static DataType		toDataType( const char* str ); //302
 
 private:
-	uint8_t m_data[7];
-	uint8_t	m_align;
-    uint8_t	m_alignEach;
+	uint8_t m_data[7]; //305
+	uint8_t	m_align; //306
+    uint8_t	m_alignEach; //307
 };
 
 
