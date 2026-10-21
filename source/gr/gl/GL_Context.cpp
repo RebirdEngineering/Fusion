@@ -49,7 +49,6 @@ GL_Context::GL_Context(int w, int h, OrientationType orientation, void (*present
     //setOrthographicProjection();
     //setViewTransform();
 
-
     LANG_LOG_DEBUG("GL", LANG_LOG_PRIORITY_INFO, "Vendor: %s", getGraphicsDriverVendor()); //In MacOS 3.0.0 this moved to log::log | 228 (OSX ABC 3.0.1, OSX ABS 3.1.1)
     LANG_LOG_DEBUG("GL", LANG_LOG_PRIORITY_INFO, "Renderer: %s", getGraphicsDriverRenderer()); //229 (OSX ABC 3.0.1, OSX ABS 3.1.1)
     LANG_LOG_DEBUG("GL", LANG_LOG_PRIORITY_INFO, "Version: %s", getGraphicsDriverVersion()); //230 (OSX ABC 3.0.1, OSX ABS 3.1.1)
@@ -146,11 +145,11 @@ Texture* GL_Context::createTexture(const std::string& filename) //565
     P(ImageReader) rd = new ImageReader(in, guessFileFormat(filename)); //569
     int w = rd->surfaceWidth(); //570
     int h = rd->surfaceHeight(); //571
-    SurfaceFormat fmt = rd->format(); //572
+    img::SurfaceFormat fmt = rd->format(); //572
     
     Texture* tex = createTexture(w, h, rd->mipLevels() - 1, fmt, USAGE_STATIC); //575
     tex->setName(filename);
-    SurfaceFormat texfmt = tex->format(); //577
+    img::SurfaceFormat texfmt = tex->format(); //577
 
     LANG_LOG_DEBUG("GL", LANG_LOG_PRIORITY_INFO, "Loading texture %s: %dx%d %s (as %s) mips: %d'", filename, w, h, fmt.toString(), texfmt.toString(), rd->mipLevels() - 1); //521 (OSX ABC 3.0.1, OSX ABS 3.1.1)
 
@@ -163,7 +162,7 @@ Texture* GL_Context::createTexture(const std::string& filename) //565
         int dataSize = fmt.getMemoryUsage(w, h); //587
 
         int pitch = fmt.getMemoryUsage(w, 1); //590
-        rd->readSurface(&texData, pitch, w, h, texfmt, 0, SurfaceFormat()); //Correct?
+        rd->readSurface(&texData, pitch, w, h, texfmt, 0, img::SurfaceFormat()); //Correct?
         tex->blt(0, 0, &texData, pitch, mipLevel, w, h, texfmt);
 
         if (mipLevel >= 1)
@@ -195,11 +194,11 @@ Image* GL_Context::createImage(InputStream& in, const std::string& filename) //6
     P(ImageReader) rd = new ImageReader(inPtr, guessFileFormat(filename)); //621
     int w = rd->surfaceWidth(); //622
     int h = rd->surfaceHeight(); //623
-    SurfaceFormat fmt = rd->format(); //624
+    img::SurfaceFormat fmt = rd->format(); //624
     
     Image* img = createImage(w, h, rd->mipLevels() - 1, fmt, USAGE_STATIC); //627
     img->getTexture()->setName(filename);
-    SurfaceFormat imgfmt = img->format(); //629
+    img::SurfaceFormat imgfmt = img->format(); //629
     LANG_LOG_DEBUG("GL", LANG_LOG_PRIORITY_INFO, "Loading image %s: %dx%d %s (as %dx%d %s) mips: %d", filename, w, h, fmt.toString(), imgfmt.toString(), rd->mipLevels() - 1 ); //573 (ABC OSX, ABS 3.1.1 OSX)
 
     for (int mipLevel = 0; mipLevel < rd->mipLevels(); mipLevel++) //633
@@ -211,7 +210,7 @@ Image* GL_Context::createImage(InputStream& in, const std::string& filename) //6
         int dataSize = imgfmt.getMemoryUsage(w, h); //639
 
         int pitch = imgfmt.getMemoryUsage(w, 1); //642
-        rd->readSurface(&imgdata, pitch, w, h, imgfmt, 0, SurfaceFormat());
+        rd->readSurface(&imgdata, pitch, w, h, imgfmt, 0, img::SurfaceFormat());
         img->blt(0, 0, &imgdata, pitch, mipLevel, w, h, imgfmt);
 
         if (mipLevel >= 1)
@@ -480,7 +479,7 @@ const Rect& GL_Context::viewport() const
     return m_viewport;
 }
 
-SurfaceFormat GL_Context::surfaceFormat() const
+SurfaceFormat GL_Context::SurfaceFormat() const
 {
     return SurfaceFormat::SURFACE_B8G8R8;
 }
@@ -764,7 +763,7 @@ P(Image) GL_Context::capture(P(Image) image) //1368 | TODO
     int height = m_renderTarget ? m_renderTarget->height() : m_height; //1373
 
     if (!image) //1376
-        image = createFlippedImage(width, height, 0, surfaceFormat(), Context::USAGE_DEFAULT); //1377
+        image = createFlippedImage(width, height, 0, img::SurfaceFormat(), Context::USAGE_DEFAULT); //1377
 
     if (image->width() != width || image->height() != height) //1379
         throwError(Exception(Format("Wrong size capture target image"))); //1380
@@ -857,8 +856,8 @@ void GL_Context::resetCachedState()
 
 void GL_Context::getColorF(int color, float* colorf) //1491
 {
-    SurfaceFormat fmt(SurfaceFormat::SURFACE_A32B32G32R32F); //1493
-    fmt.copyPixels(colorf, SurfaceFormat(), 0, SurfaceFormat::SURFACE_A8R8G8B8, this, SurfaceFormat(), 0, 1);
+    img::SurfaceFormat fmt(SurfaceFormat::SURFACE_A32B32G32R32F); //1493
+    fmt.copyPixels(colorf, img::SurfaceFormat(), 0, SurfaceFormat::SURFACE_A8R8G8B8, this, img::SurfaceFormat(), 0, 1);
 }
 
 bool GL_Context::isExtensionSupported(const char* extension) //1497

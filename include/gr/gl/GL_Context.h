@@ -119,9 +119,9 @@ public:
     const Rect& viewport() const; //283
 
     /**
-     * Returns surface format of the back buffer.
+     * Returns surface format of the back buffer. [NOTE CHANGED TO UPPERCASE]
      */
-    img::SurfaceFormat   surfaceFormat() const; //288
+    img::SurfaceFormat   SurfaceFormat() const; //288
 
     /**
      * Returns screen buffer width.

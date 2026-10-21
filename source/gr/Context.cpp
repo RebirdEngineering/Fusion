@@ -3,7 +3,8 @@
 
 USING_NAMESPACE(io)
 
-BEGIN_NAMESPACE(gr)
+namespace gr
+{
 
 const char* const PLATFORM_NAME[] = //8
 {
@@ -79,7 +80,7 @@ const char* Context::platformString() const
 	return PLATFORM_NAME[platform()];
 }
 
-void Context::transformPointToScreen(int& x, int& y) const //Correct?
+void Context::transformPointToScreen(int& x, int& y) const //Correct? Not on iOS.
 {
 	switch (orientation())
 	{
@@ -104,6 +105,6 @@ Image* Context::createImagefromBundle(const std::string& filename) //121
 	return createImage(inputStream, filename);
 }
 
-END_NAMESPACE() // gr
+} // gr
 
 // Copyright (C) 2004-2006 Pixelgene Ltd. All rights reserved. Consult your license regarding permissions and restrictions.
