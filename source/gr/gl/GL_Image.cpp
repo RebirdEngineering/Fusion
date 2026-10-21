@@ -14,7 +14,7 @@ GL_Image::GL_Image(GL_Context* context, int width, int height, int mipcount, Con
 	m_height(height),
 	m_flipped(flipped)
 {
-	m_texture = context->createTexture(width, height, mipcount, format.m_type, usage); //53-60
+	m_texture = context->createTexture(width, height, mipcount, format.type(), usage); //53-60
 }
 
 GL_Image::~GL_Image()

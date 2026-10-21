@@ -114,7 +114,7 @@ void GL_Context::releaseBackBuffer()
 
 static SurfaceFormat convertToCompatibleSurfaceFormat(const SurfaceFormat& fmt) //515
 {
-    switch (fmt.m_type)
+    switch (fmt.type())
     {
     case SurfaceFormat::SURFACE_R8G8B8: return SurfaceFormat(SurfaceFormat::SURFACE_B8G8R8);
     case SurfaceFormat::SURFACE_A8R8G8B8:
