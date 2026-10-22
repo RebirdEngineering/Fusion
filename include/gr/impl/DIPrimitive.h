@@ -1,12 +1,10 @@
 #ifndef _GR_DIPRIMITIVE_H
 #define _GR_DIPRIMITIVE_H
 
-
 #include <gr/Primitive.h>
 #include <gr/VertexFormat.h>
 #include <gr/impl/SortBuffer.h>
 #include <math/float4.h>
-
 
 namespace math
 { 
@@ -14,12 +12,10 @@ namespace math
 	class float4;
 	class float4x4;}
 
-
-BEGIN_NAMESPACE(gr) 
-
+namespace gr
+{
 
 class Shader;
-
 
 /**
  * System memory device independent geometry primitive list.
@@ -27,7 +23,7 @@ class Shader;
  * primitive list base class to get better startpoint for the 
  * platform specific implementation.
  */
-class DIPrimitive :
+class DIPrimitive : //25
 	public Primitive
 {
 public:
@@ -35,15 +31,15 @@ public:
 	 * Leaves buffers uninitialized.
 	 * Call setFormat to initialize buffers.
 	 */
-	DIPrimitive();
+	DIPrimitive(); //35
 
-	~DIPrimitive();
+	~DIPrimitive(); //35
 
 	/** 
 	 * Sets new vertex format and initializes buffers accordingly.
 	 * Warning: All previously set data in the primitive is lost.
 	 */
-	void	setFormat( const VertexFormat& fmt, int vertices, int indices );
+	void	setFormat( const VertexFormat& fmt, int vertices, int indices ); //41
 
 	/**
 	 * Sets vertex position coordinates.
@@ -53,7 +49,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	setVertexPositions( int index, const NS(math,float4)* data, int count );
+	void	setVertexPositions( int index, const math::float4* data, int count ); //51
 
 	/**
 	 * Sets transformed vertex position coordinates.
@@ -63,7 +59,7 @@ public:
 	 * @param data Position coordinate data.
 	 * @param count Position coordinate count.
 	 */
-	void	setVertexTransformedPositions( int index, const NS(math,float4)* data, int count );
+	void	setVertexTransformedPositions( int index, const math::float4* data, int count ); //61
 
 	/**
 	 * Sets vertex normals.
@@ -73,7 +69,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	setVertexNormals( int index, const NS(math,float4)* data, int count );
+	void	setVertexNormals( int index, const math::float4* data, int count ); //71
 
 	/**
 	 * Sets vertex diffuse RGBA colors.
@@ -84,7 +80,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	setVertexDiffuseColors( int index, const NS(math,float4)* data, int count );
+	void	setVertexDiffuseColors( int index, const math::float4* data, int count ); //82
 
 	/**
 	 * Sets vertex specular RGBA colors.
@@ -95,7 +91,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	setVertexSpecularColors( int index, const NS(math,float4)* data, int count );
+	void	setVertexSpecularColors( int index, const math::float4* data, int count ); //93
 
 	/**
 	 * Sets vertex tangents.
@@ -105,7 +101,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	setVertexTangents( int index, const NS(math,float4)* data, int count );
+	void	setVertexTangents( int index, const math::float4* data, int count ); //103
 
 	/**
 	 * Sets vertex bone blending weights used in skinning.
@@ -113,7 +109,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	setVertexBoneWeights( int index, const NS(math,float4)* data, int count );
+	void	setVertexBoneWeights( int index, const math::float4* data, int count ); //111
 
 	/**
 	 * Sets vertex bone blending indices used in skinning.
@@ -121,7 +117,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	setVertexBoneIndices( int index, const NS(math,float4)* data, int count );
+	void	setVertexBoneIndices( int index, const math::float4* data, int count ); //119
 
 	/**
 	 * Sets vertex texture coordinates.
@@ -132,21 +128,21 @@ public:
 	 * @param data Texture coordinate data.
 	 * @param count Texture coordinate count.
 	 */
-	void	setVertexTextureCoordinates( int index, int layer, const NS(math,float4)* data, int count );
+	void	setVertexTextureCoordinates( int index, int layer, const math::float4* data, int count ); //130
 
 	/**
 	 * Sets scale & bias for unpacking texture coordinate data.
 	 * @param scalebias scale=x, bias=yzw
 	 * v(1) = v(0) * scale + bias
 	 */
-	void	setVertexTextureCoordinateScaleBias( const NS(math,float4)& scalebias );
+	void	setVertexTextureCoordinateScaleBias( const math::float4& scalebias ); //137
 
 	/**
 	 * Sets scale & bias for unpacking vertex position coordinate data.
 	 * @param scalebias scale=x, bias=yzw
 	 * v(1) = v(0) * scale + bias
 	 */
-	void	setVertexPositionScaleBias( const NS(math,float4)& scalebias );
+	void	setVertexPositionScaleBias( const math::float4& scalebias ); //144
 
 	/**
 	 * Sets primitive vertex indices.
@@ -156,7 +152,7 @@ public:
 	 * @param data Index data.
 	 * @param count Number of indices to set.
 	 */
-	void	setIndices( int index, const int* data, int count );
+	void	setIndices( int index, const int* data, int count ); //154
 
 	/**
 	 * Optimizes bone list so that the bones used by this primitive are
@@ -168,7 +164,7 @@ public:
 	 * @see usedBoneArray
 	 * @see usedBones
 	 */
-	void	packBones();
+	void	packBones(); //166
 
 	/**
 	 * Sets list of bones used by this primitive. List contains indices
@@ -180,7 +176,7 @@ public:
 	 * @see usedBoneArray
 	 * @see usedBones
 	 */
-	void	setUsedBones( const uint8_t* usedbonearray, int usedbones );
+	void	setUsedBones( const uint8_t* usedbonearray, int usedbones ); //178
 
 	/**
 	 * Sorts primitive polygons front-to-back order.
@@ -193,8 +189,8 @@ public:
 	 * @param boneworldtmcount Number of bone-to-world transforms.
 	 * @param tmp Temporary buffer used in sorting.
 	 */
-	void	sortFrontToBack( const NS(math,float3)& refpos, const NS(math,float4x4)& worldtm,
-				const NS(math,float4x4)* boneworldtm, int boneworldtmcount,
+	void	sortFrontToBack( const math::float3& refpos, const math::float4x4& worldtm, //191
+				const math::float4x4* boneworldtm, int boneworldtmcount,
 				SortBuffer& tmp );
 
 	/**
@@ -208,8 +204,8 @@ public:
 	 * @param boneworldtmcount Number of bone-to-world transforms.
 	 * @param tmp Temporary buffer used in sorting.
 	 */
-	void	sortBackToFront( const NS(math,float3)& refpos, const NS(math,float4x4)& worldtm,
-				const NS(math,float4x4)* boneworldtm, int boneworldtmcount, 
+	void	sortBackToFront( const math::float3& refpos, const math::float4x4& worldtm, //206
+				const math::float4x4* boneworldtm, int boneworldtmcount, 
 				SortBuffer& tmp );
 
 	/**
@@ -219,7 +215,7 @@ public:
 	 * does might leave buffer well-defined state.
 	 * @param tmp Temporary buffer used in sorting.
 	 */
-	void	sortInsideOut( SortBuffer& tmp );
+	void	sortInsideOut( SortBuffer& tmp ); //217
 
 	/**
 	 * Sorts primitive polygons outside-in order.
@@ -228,53 +224,53 @@ public:
 	 * does might leave buffer well-defined state.
 	 * @param tmp Temporary buffer used in sorting.
 	 */
-	void	sortOutsideIn( SortBuffer& tmp );
+	void	sortOutsideIn( SortBuffer& tmp ); //226
 
 	/**
 	 * Returns pointer to vertex data of specified component.
 	 * Primitive needs to be locked before calling this method.
 	 */
-	virtual void	getVertexDataPtr( VertexFormat::DataType dt, uint8_t** data, int* pitch );
+	virtual void	getVertexDataPtr( VertexFormat::DataType dt, uint8_t** data, int* pitch ); //232
 
 	/**
 	 * Returns pointer to face index data.
 	 * Primitive needs to be locked before calling this method.
 	 */
-	virtual void	getIndexDataPtr( uint16_t** data, int* indexsize );
+	virtual void	getIndexDataPtr( uint16_t** data, int* indexsize ); //238
 
 	/**
 	 * Sets range of vertices used in rendering.
 	 * Range must be below maximum vertex count specified in object creation.
 	 * Range specifies the first vertex used to render the primitive.
 	 */
-	void	setVertexRangeBegin( int begin );
+	void	setVertexRangeBegin( int begin ); //245
 
 	/**
 	 * Sets range of vertices used in rendering.
 	 * Range must be below or equal to maximum vertex count specified in object creation.
 	 * Range specifies one beyond the last vertex used to render the primitive.
 	 */
-	void	setVertexRangeEnd( int end );
+	void	setVertexRangeEnd( int end ); //252
 
 	/**
 	 * Sets range of indices used in rendering.
 	 * Range must be below maximum index count specified in object creation.
 	 * Range specifies the first index used to render the primitive.
 	 */
-	void	setIndexRangeBegin( int begin );
+	void	setIndexRangeBegin( int begin ); //259
 
 	/**
 	 * Sets range of indices used in rendering.
 	 * Range must be below or equal to maximum index count specified in object creation.
 	 * Range specifies one beyond the last index used to render the primitive.
 	 */
-	void	setIndexRangeEnd( int end );
+	void	setIndexRangeEnd( int end ); //266
 
 	/** 
 	 * Sets vertex components. Supports format conversion. 
 	 */
-	void 	setVertexData( VertexFormat::DataType dt, int index,
-				const NS(math,float4)* data, int count );
+	void 	setVertexData( VertexFormat::DataType dt, int index, //271
+				const math::float4* data, int count );
 
 	/** 
 	 * Sets vertex indices. Supports format conversion. 
@@ -284,7 +280,7 @@ public:
 	 * @param indexsize Byte size of single index (1,2 or 4).
 	 * @param count Number of indices to set.
 	 */
-	void 	setIndexData( int v0, const void* data, int indexsize, int count );
+	void 	setIndexData( int v0, const void* data, int indexsize, int count ); //282
 
 	/** 
 	 * Sets vertex components. Supports format conversion. 
@@ -295,14 +291,13 @@ public:
 	 * @param df Format of source data. 
 	 * @param count Number of vertices to set.
 	 */
-	void 	setVertexData( VertexFormat::DataType dt, int index,
+	void 	setVertexData( VertexFormat::DataType dt, int index, //293
 				const void* data, VertexFormat::DataFormat df, int count );
-
 
 	/**
 	 * Sets primitive bounding volume.
 	 */
-	void	setBound( const NS(math,float3)& boundmin, const NS(math,float3)& boundmax, float boundradius );
+	void	setBound( const math::float3& boundmin, const math::float3& boundmax, float boundradius ); //299
 
 	/** 
 	 * Gets vertex components. Supports format conversion. 
@@ -311,39 +306,39 @@ public:
 	 * @param data Pointer to buffer for data.
 	 * @param count Number of vertices to get.
 	 */
-	void 	getVertexData( VertexFormat::DataType dt, int index, NS(math,float4)* data, int count ) const;
+	void 	getVertexData( VertexFormat::DataType dt, int index, math::float4* data, int count ) const; //308
 
 	/**
 	 * Gets range of vertices used in rendering.
 	 */
-	int		vertexRangeBegin() const;
+	int		vertexRangeBegin() const; //313
 
 	/**
 	 * Gets range of vertices used in rendering.
 	 */
-	int		vertexRangeEnd() const;
+	int		vertexRangeEnd() const; //318
 
 	/**
 	 * Gets range of indices used in rendering.
 	 */
-	int		indexRangeBegin() const;
+	int		indexRangeBegin() const; //323
 
 	/**
 	 * Gets range of indices used in rendering.
 	 */
-	int		indexRangeEnd() const;
+	int		indexRangeEnd() const; //328
 
 	/**
 	 * Returns vertex format.
 	 */
-	const VertexFormat&	vertexFormat() const;
+	const VertexFormat&	vertexFormat() const; //333
 
 	/**
 	 * Returns vertex format.
 	 * Used in drivers as optimization to avoid virtual call involved
 	 * in using vertexFormat() method.
 	 */
-	const VertexFormat&	vf() const 			{return m_vf;}
+	const VertexFormat&	vf() const 			{return m_vf;} //340
 
 	/**
 	 * Returns list of bones used by this primitive.
@@ -351,37 +346,37 @@ public:
 	 * Beware that changing skin mesh might invalidate the indices
 	 * returned by the primitive, unless primitive is updated accordingly.
 	 */
-	const uint8_t*	usedBoneArray() const;
+	const uint8_t*	usedBoneArray() const; //348
 
 	/**
 	 * Returns number of bones used by this primitive.
 	 */
-	int		usedBones() const;
+	int		usedBones() const; //353
 
 	/** 
 	 * Returns number of bytes used by single vertex. 
 	 */
-	int		vertexSize() const;
+	int		vertexSize() const; //358
 
 	/** 
 	 * Returns number of bytes used by single index. 
 	 */
-	int		indexSize() const;
+	int		indexSize() const; //363
 
 	/**
 	 * Returns number of vertices in the primitive. (from Primitive)
 	 */
-	int		vertices() const;
+	int		vertices() const; //368
 
 	/**
 	 * Returns number of indices in the primitive. (from Primitive)
 	 */
-	int		indices() const;
+	int		indices() const; //373
 
 	/**
 	 * Returns number of bytes of heap memory allocated by this primitive.
 	 */
-	int		memoryUsed() const;
+	int		memoryUsed() const; //378
 
 	/**
 	 * Gets vertex position coordinates.
@@ -391,7 +386,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	getVertexPositions( int index, NS(math,float4)* data, int count ) const;
+	void	getVertexPositions( int index, math::float4* data, int count ) const; //388
 
 	/**
 	 * Gets vertex normals.
@@ -401,7 +396,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	getVertexNormals( int index, NS(math,float4)* data, int count ) const;
+	void	getVertexNormals( int index, math::float4* data, int count ) const; //398
 
 	/**
 	 * Gets vertex diffuse RGBA colors.
@@ -412,7 +407,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	getVertexDiffuseColors( int index, NS(math,float4)* data, int count ) const;
+	void	getVertexDiffuseColors( int index, math::float4* data, int count ) const; //409
 
 	/**
 	 * Gets vertex specular RGBA colors.
@@ -423,7 +418,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	getVertexSpecularColors( int index, NS(math,float4)* data, int count ) const;
+	void	getVertexSpecularColors( int index, math::float4* data, int count ) const; //420
 
 	/**
 	 * Gets vertex tangents.
@@ -433,7 +428,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	getVertexTangents( int index, NS(math,float4)* data, int count ) const;
+	void	getVertexTangents( int index, math::float4* data, int count ) const; //430
 
 	/**
 	 * Gets vertex bone blending weights used in skinning.
@@ -441,7 +436,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	getVertexBoneWeights( int index, NS(math,float4)* data, int count ) const;
+	void	getVertexBoneWeights( int index, math::float4* data, int count ) const; //438
 
 	/**
 	 * Gets vertex bone blending indices used in skinning.
@@ -449,7 +444,7 @@ public:
 	 * @param data Vertex data.
 	 * @param count Vertex count.
 	 */
-	void	getVertexBoneIndices( int index, NS(math,float4)* data, int count ) const;
+	void	getVertexBoneIndices( int index, math::float4* data, int count ) const; //446
 
 	/**
 	 * Gets vertex texture coordinates.
@@ -460,7 +455,7 @@ public:
 	 * @param data Texture coordinate data.
 	 * @param count Texture coordinate count.
 	 */
-	void	getVertexTextureCoordinates( int index, int layer, NS(math,float4)* data, int count ) const;
+	void	getVertexTextureCoordinates( int index, int layer, math::float4* data, int count ) const; //457
 
 	/**
 	 * Gets primitive vertex indices.
@@ -470,7 +465,7 @@ public:
 	 * @param data Index data.
 	 * @param count Number of indices to get.
 	 */
-	void	getIndices( int index, int* data, int count ) const;
+	void	getIndices( int index, int* data, int count ) const; //467
 
 	/**
 	 * Returns distances of individual triangle (in world space) to specified world space point.
@@ -486,7 +481,7 @@ public:
  	 * @param tridist [out] Receives squared triangle center distances to specified world space point.
 	 * @param tricount Number of triangles in primitive.
 	 */
-	void	getTriangleDistances( const NS(math,float3)& worldpos, const NS(math,float4x4)& worldtm, const NS(math,float4x4)* boneworldtm, int boneworldtmcount, uint16_t* trix, float* tridist, int tricount ) const;
+	void	getTriangleDistances( const math::float3& worldpos, const math::float4x4& worldtm, const math::float4x4* boneworldtm, int boneworldtmcount, uint16_t* trix, float* tridist, int tricount ) const; //483
 
 	/**
 	 * Computers axis aligned bounding box center point of the primitive.
@@ -495,19 +490,19 @@ public:
 	 * @see NS(ContextObject,Lock)
 	 * @return Axis aligned bounding box center point of the primitive.
 	 */
-	NS(math,float3)			center() const;
+	math::float3			center() const; //492
 
-	bool vertexTextureCoordinateScaleBiasIsIdentity() const;
+	bool vertexTextureCoordinateScaleBiasIsIdentity() const; //494
 
 	/**
 	 * Returns vertex texture coordinate scale/bias.
 	 */
-	const NS(math,float4)&		vertexTextureCoordinateScaleBias() const;
+	const math::float4&		vertexTextureCoordinateScaleBias() const; //499
 
 	/**
 	 * Returns vertex position scale/bias.
 	 */
-	const NS(math,float4)&		vertexPositionScaleBias() const;
+	const math::float4&		vertexPositionScaleBias() const; //504
 
 	/**
 	 * Tries to find two set of faces which divide primitive so that
@@ -523,49 +518,49 @@ public:
 	 * @param faceset1 [out] Receives the first face set (1 index/triangle).
 	 * @param faceset2 [out] Receives the second face set (1 index/triangle).
 	 */
-	void	findSplit( int maxbones, std::vector<int>& faceset1, std::vector<int>& faceset2 ) const;
+	void	findSplit( int maxbones, std::vector<int>& faceset1, std::vector<int>& faceset2 ) const; //520
 
 	/**
 	 * Returns bounding box min.
 	 */
-	const NS(math,float3)&		boundMin() const;
+	const math::float3&		boundMin() const; //525
 
 	/**
 	 * Returns bounding box max.
 	 */
-	const NS(math,float3)&		boundMax() const;
+	const math::float3&		boundMax() const; //530
 
 	/**
 	 * Returns bounding radius.
 	 */
-	float						boundRadius() const;
+	float						boundRadius() const; //535
 
 protected:
 	/** Non-virtual version of vertices(), for optimization. */
-	int						vertexCount() const		{return m_vertices;}
+	int						vertexCount() const		{return m_vertices;} //539
 	
 	/** Non-virtual version of vertexRangeBegin(), for optimization. */
-	int						vertexBegin() const		{return m_vertexRangeBegin;}
+	int						vertexBegin() const		{return m_vertexRangeBegin;} //542
 	
 	/** Non-virtual version of vertexRangeEnd(), for optimization. */
-	int						vertexEnd() const		{return m_vertexRangeEnd;}
+	int						vertexEnd() const		{return m_vertexRangeEnd;} //545
 	
 	/** Non-virtual version of indices(), for optimization. */
-	int						indexCount() const		{return m_indices;}
+	int						indexCount() const		{return m_indices;} //548
 	
 	/** Non-virtual version of indexRangeBegin(), for optimization. */
-	int						indexBegin() const		{return m_indexRangeBegin;}
+	int						indexBegin() const		{return m_indexRangeBegin;} //551
 	
 	/** Non-virtual version of indexRangeEnd(), for optimization. */
-	int						indexEnd() const		{return m_indexRangeEnd;}
+	int						indexEnd() const		{return m_indexRangeEnd;} //554
 	
 	/** Allocates device vertex buffer. */
-	void			allocate( const VertexFormat& vf, int vertices, int indices );
+	virtual void			allocate( const VertexFormat& vf, int vertices, int indices ); //557
 
 	/** Allocates device vertex buffer. */
-	void			deallocate();
+	virtual void			deallocate(); //560
 	
-	bool					m_interleaved;
+	bool					m_interleaved; //562
 
 private:
 	enum { BUFFER_HEADER_SIZE = ((VertexFormat::DT_SIZE+48)*4+15&~15) }; //Previously 64, idk how this was generated
@@ -577,25 +572,25 @@ private:
 	 * If default data buffer is not used then allocate() and deallocate() methods 
 	 * are overriden by derived class, as well as getVertexDataPtr() and getIndexDataPtr().
 	 */
-	NS(math,float4)			m_posScaleBias;
-	NS(math,float4)			m_texcoordScaleBias;
-	NS(math,float3)			m_boundMin;
-	NS(math,float3)			m_boundMax;
-	float					m_boundRadius;
-	uint8_t**				m_sysMemData;
-	uint8_t*				m_usedBone;
-	int						m_vertices;
-	int						m_indices;
-	int						m_vertexRangeBegin;
-	int						m_vertexRangeEnd;
-	int						m_indexRangeBegin;
-	int						m_indexRangeEnd;
-	NS(gr,VertexFormat)		m_vf;
-	uint8_t					m_usedBones;
-	bool					m_texcoordScaleBiasIsIdentity;
+	math::float4			m_posScaleBias; //574
+	math::float4			m_texcoordScaleBias; //575
+	math::float3			m_boundMin; //576
+	math::float3			m_boundMax; //577
+	float					m_boundRadius; //578
+	uint8_t**				m_sysMemData; //579
+	uint8_t*				m_usedBone; //580
+	int						m_vertices; //581
+	int						m_indices; //582
+	int						m_vertexRangeBegin; //583
+	int						m_vertexRangeEnd; //584
+	int						m_indexRangeBegin; //585
+	int						m_indexRangeEnd; //586
+	gr::VertexFormat		m_vf; //587
+	uint8_t					m_usedBones; //588
+	bool					m_texcoordScaleBiasIsIdentity;//589
 
 	/** Resets primitive to original (uninitialized) state. */
-	void			reset();
+	void			reset(); //592
 
 	/**
 	 * Re-orders primitive triangles.
@@ -604,10 +599,10 @@ private:
 	 * @param order Triangle indices representing new order. Size must be number of indices / 3.
 	 * @param buffer Temporary buffer. Size must be at least number of indices.
 	 */
-	void			reorderTriangles( const uint16_t* order, uint16_t* buffer );
+	void			reorderTriangles( const uint16_t* order, uint16_t* buffer ); //601
 
 	/** Returns number of bytes used by vertex data. */
-	int				vertexDataSize() const;
+	int				vertexDataSize() const; //604
 };
 	
 	
