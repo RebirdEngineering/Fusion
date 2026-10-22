@@ -8,15 +8,15 @@ Primitive::Primitive() :
 {
 }
 
-void Primitive::setPerspectiveCorrection( int /*quality*/ )
+void Primitive::setPerspectiveCorrection( int /*quality*/ ) //11
 {
 }
 
-void Primitive::setWireframeColor( int /*color*/ )
+void Primitive::setWireframeColor( int /*color*/ ) //15
 {
 }
 
-void Primitive::setOpacity( int /*opacity*/ )
+void Primitive::setOpacity( int /*opacity*/ ) //19
 {
     assert(false); //[ADD] Recover from Darkest Fear and AA 24 | 24 ABS 3.0.0
 }

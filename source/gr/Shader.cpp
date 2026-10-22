@@ -68,7 +68,7 @@ Shader::Shader() :
 {
 }
 
-const char* Shader::toString( ParamType param )
+const char* Shader::toString( ParamType param ) //72
 {
 	//assert( PARAM_COUNT == sizeof(PARAM_NAMES)/sizeof(PARAM_NAMES[0]) ); //No longer in 1.0.0 MacOS
 	assert( (int)param < (int)(sizeof(PARAM_NAMES)/sizeof(PARAM_NAMES[0])) );
@@ -76,7 +76,7 @@ const char* Shader::toString( ParamType param )
 	return PARAM_NAMES[param];
 }
 
-Shader::ParamType Shader::toParamType( const char* sz )
+Shader::ParamType Shader::toParamType( const char* sz ) //Not on iOS.
 {
 	assert( PARAM_COUNT == sizeof(PARAM_NAMES)/sizeof(PARAM_NAMES[0]) );
 

@@ -8,7 +8,7 @@ const float		Math::E		= 2.718281828459045f;
 const float		Math::PI	= 3.141592653589793f;
 
 	
-/*float Math::random() //Never seen anymore.
+/*float Math::random() //Never seen anymore. If it's not in the header it's likely dead
 {
 	const float RAND_SCALE = 1.f / ( float(RAND_MAX) + 1.f );
 	return RAND_SCALE * float(rand());
