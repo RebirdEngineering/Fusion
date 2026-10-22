@@ -202,7 +202,8 @@ void GL_Shader_Platform::end()
 
 void GL_Shader_Platform::setFloat(Shader::ParamType param, float value)
 {
-	setFloat(param, value);
+	int handle = getHandle(param);
+	setFloat(handle, value);
 }
 
 void GL_Shader_Platform::setFloat(const char* name, float value) //303
