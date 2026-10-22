@@ -35,14 +35,13 @@ public:
 		 * Cube texture resource.
 		 */
 		CLASSID_CUBETEXTURE,
-		/**
-		 * Palette resource.
-		 */
-		CLASSID_PALETTE,
         /**
 		 * 
 		 */
 		CLASSID_IMAGE,
+		/**
+		 *
+		 */
 		CLASSID_COUNT
 	};
 
