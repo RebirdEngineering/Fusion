@@ -10,26 +10,26 @@ BEGIN_NAMESPACE(gr)
  * Base class for platform dependent cube textures.
  * @ingroup gr
  */
-class CubeTexture :
+class CubeTexture : //13
 	public BaseTexture
 {
 public:
-	CubeTexture();
+	CubeTexture(); //17
 
 	/**
 	 * Returns single texture top level surface width in pixels.
 	 */
-	virtual int				width() const = 0;
+	virtual int				width() const = 0; //22
 
 	/**
 	 * Returns single texture top level surface height in pixels.
 	 */
-	virtual int				height() const = 0;
+	virtual int				height() const = 0; //27
 
 	/**
 	 * Returns surface pixel storage format of this texture.
 	 */
-	virtual img::SurfaceFormat 	format() const = 0;
+	virtual img::SurfaceFormat 	format() const = 0; //32
 };
 
 

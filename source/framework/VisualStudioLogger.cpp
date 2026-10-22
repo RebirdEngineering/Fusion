@@ -1,5 +1,6 @@
 #include <framework/VisualStudioLogger.h>
 #include <lang/Format.h>
+
 #include <windows.h>
 
 using namespace lang;
