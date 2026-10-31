@@ -22,11 +22,11 @@ public:
 		OSX_STORE
 	};
 
-	static bool launchAppStore(const std::string& applicationID, AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener); //49
+	bool launchAppStore(const std::string& applicationID, AppStoreVariant storeVariant, bool gotoReviews, StoreListener* listener); //49
 
-	static bool isSupported(); //56
+	bool isSupported(); //56
 
-	static bool isVariantSupported(AppStoreVariant storeVariant); //63
+	bool isVariantSupported(AppStoreVariant storeVariant); //63
 
 	AppStoreVariant defaultVariant(); //70
 };

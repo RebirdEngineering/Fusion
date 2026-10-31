@@ -5,11 +5,11 @@
 BEGIN_NAMESPACE(gr) 
 
 
-SortBuffer::SortBuffer()
+SortBuffer::SortBuffer() //8
 {
 }
 
-SortBuffer::~SortBuffer()
+SortBuffer::~SortBuffer() //11
 {
 	if ( m_buf.size() > 0 )
 	{
@@ -25,15 +25,15 @@ SortBuffer::~SortBuffer()
 	}
 }
 
-void SortBuffer::reset( int intbuffersize, int floatbuffersize )
+void SortBuffer::reset( int intbuffersize, int floatbuffersize ) //26
 {
-	int floatbytes = sizeof(float)*floatbuffersize;
-	int intbytes = 2*intbuffersize;
-	m_buf.resize( floatbytes + intbytes + 4 );
-	m_floatBuffer = reinterpret_cast<float*>(&m_buf.begin());
+	int floatbytes = sizeof(float)*floatbuffersize; //28
+	int intbytes = 2*intbuffersize; //29
+	m_buf.resize( floatbytes + intbytes + 4 ); //30
+	m_floatBuffer = reinterpret_cast<float*>(&m_buf.begin()); //31 | Correct?
 	m_intBuffer = reinterpret_cast<uint16_t*>(&m_buf.begin() + floatbytes);
 	
-	uint8_t* tag = (uint8_t*) &m_buf.begin() + floatbytes + intbytes;
+	uint8_t* tag = (uint8_t*) &m_buf.begin() + floatbytes + intbytes; //34
 	tag[0] = 'o';
 	tag[1] = 'k';
 	tag[2] = '!';

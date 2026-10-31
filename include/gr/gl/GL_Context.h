@@ -21,7 +21,7 @@ namespace GL_NAMESPACE //I'm just as confused as you are, Android and iOS use th
 class GL_Texture;
 class GL_State;
 
-class GL_Context : //33
+class GL_Context : //33 | gl1 (ABS 3.1.1 OSX): 314 bytes, gl2 (ABS 3.1.1 OSX): 290 bytes
 	public Context
 {
 public:

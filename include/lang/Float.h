@@ -13,21 +13,21 @@ BEGIN_NAMESPACE(lang)
  * 
  * @ingroup lang
  */
-class Float
+class Float //12
 {
 public:
 	/** 
 	 * Maximum float value.
 	 */
-	static const float	MAX_VALUE;
+	static const float	MAX_VALUE; //18
 
 	/** 
 	 * Minimum float value. 
 	 * This is smallest (positive) value that returns valid results when inverted.
 	 */
-	static const float	MIN_VALUE;
+	static const float	MIN_VALUE; //24
 	
-	//static float parse(const char**, const char**, int*); //Not in Seasons 4.1.0
+	static float parse(const char**, const char**, int*); //33 | Not on iOS
 };
 
 

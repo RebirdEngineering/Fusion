@@ -620,7 +620,7 @@ float3 DIPrimitive::center() const
 	return (boxmax + boxmin) * .5f; //622
 }
 
-void DIPrimitive::getTriangleDistances( const NS(math,float3)& worldpos, const NS(math,float4x4)& worldtm, const NS(math,float4x4)* boneworldtm, int boneworldtmcount, uint16_t* trix, float* tridist, int tricount ) const //625
+void DIPrimitive::getTriangleDistances( const math::float3& worldpos, const math::float4x4& worldtm, const math::float4x4* boneworldtm, int boneworldtmcount, uint16_t* trix, float* tridist, int tricount ) const //625
 {
 	assert( tricount == (indexCount() > 0 ? indexCount()/3 : vertexCount()/3) && "Invalid triangle count" ); //[NOTE] Line 637
 	assert( locked() != LOCK_NONE ); //[NOTE] Line 638
@@ -962,12 +962,12 @@ void DIPrimitive::findSplit( int maxbones,
 	}
 }
 
-void DIPrimitive::setVertexPositionScaleBias( const NS(math,float4)& scalebias ) //967
+void DIPrimitive::setVertexPositionScaleBias( const math::float4& scalebias ) //967
 {
 	m_posScaleBias = scalebias;
 }
 
-void DIPrimitive::setVertexTextureCoordinateScaleBias( const NS(math,float4)& scalebias ) //972
+void DIPrimitive::setVertexTextureCoordinateScaleBias( const math::float4& scalebias ) //972
 {
 	m_texcoordScaleBias = scalebias;
 }

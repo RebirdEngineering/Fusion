@@ -5,7 +5,7 @@
 
 BEGIN_NAMESPACE(lang)
 
-class AutoreleasePool :
+class AutoreleasePool : //11
     public Object
 {
 public:

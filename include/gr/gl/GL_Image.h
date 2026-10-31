@@ -12,7 +12,7 @@ BEGIN_NAMESPACE(math)
 BEGIN_NAMESPACE(gr)
 BEGIN_NAMESPACE(GL_NAMESPACE) //I'm just as confused as you are
 
-class GL_Image : //15
+class GL_Image : //15 | 0x1C bytes on OSX (ABS 3.1.1)
 	public Image
 {
 public:
@@ -48,7 +48,7 @@ private:
 	P(Texture) m_texture; //87
 	int m_width; //88
 	int m_height; //89
-	bool m_flipped; //90
+	bool m_flipped; //90 | Not in ABS 3.1.1
 
 	void lock(LockType lock); //92
 	void unlock(); //93

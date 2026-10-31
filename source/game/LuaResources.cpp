@@ -25,7 +25,7 @@ LuaResources::LuaResources(LuaState* lua, Context* context) : //12 | They must'v
     registerLuaMethod("createSystemFont", this, &LuaResources::createSystemFont);
     registerLuaMethod("createTextGroupSet", this, &LuaResources::createTextGroupSet);
     //registerMethod("createAudioOutput", this, &LuaResources::createAudioOutput); //CHECK LuaObject.inl?
-    //registerMethod("createAudioInput", this, &LuaResources::createAudioInput); //CHECK LuaObject.inl
+    //registerMethod("createAudioInput", this, &LuaResources::createAudioInput); //CHECK LuaObject.inl?
     registerLuaMethod("createAudio", this, &LuaResources::createAudio);
     registerMethod("createCompositeAudio", this, &LuaResources::createCompositeAudio);
     registerMethod("captureSprite", this, &LuaResources::captureSprite);
@@ -41,7 +41,7 @@ LuaResources::LuaResources(LuaState* lua, Context* context) : //12 | They must'v
     registerLuaMethod("drawSprite", this, &LuaResources::drawSprite);
     registerLuaMethod("drawCompoSprite", this, &LuaResources::drawCompoSprite);
     registerLuaMethod("drawString", this, &LuaResources::drawString);
-    //registerMethod("setClipRect", this, &LuaResources::setClipRect); //CHECK LuaObject.inl
+    //registerMethod("setClipRect", this, &LuaResources::setClipRect); //CHECK LuaObject.inl?
     registerLuaMethod("getClipRect", this, &LuaResources::getClipRect);
     registerMethod("getString", this, &LuaResources::getString);
     registerLuaMethod("playAudio", this, &LuaResources::playAudio);
