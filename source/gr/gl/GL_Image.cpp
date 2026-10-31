@@ -14,7 +14,7 @@ GL_Image::GL_Image(GL_Context* context, int width, int height, int mipcount, Con
 	m_height(height),
 	m_flipped(flipped)
 {
-	m_texture = context->createTexture(width, height, mipcount, format.type(), usage); //53-60
+	m_texture = context->createTexture(width, height, mipcount, format.type(), usage); //53
 }
 
 GL_Image::~GL_Image()
@@ -118,22 +118,50 @@ void GL_Image::draw(Context* context, const float3* corners, const float2* uv, S
 
 void GL_Image::draw(Context* context, const float3* corners, const float2* uv, const float4* vertexColors, Shader* shader) //324
 {
-	/*float proj00 = m_context->viewport().width(); //329
-	float proj11 = m_context->viewport().height(); //330
-	float3 vertpos[4]; //332
-	vertpos[0] = float3(corners->x, corners->y, corners->z); //?
-	vertpos[1] = float3(corners->x, corners->y, corners->z); //?
-	vertpos[2] = float3(corners->x, corners->y, corners->z); //?
-	vertpos[3] = float3(corners->x, corners->y, corners->z); //?
+	/*float proj00 = 2.0f / m_context->viewport().width(); //329
+	float proj11 = -2.0f / m_context->viewport().height(); //330
 
-	float minx; //345
-	float miny; //346
-	float maxx; //347
-	float maxy; //348
-	int i; //349
+	float3 vertpos[4] = //332
+	{
+		corners[0],
+		corners[1],
+		corners[2],
+		corners[3]
+	};*/
 
-	Shader* shader = m_texture->format().hasAlpha() ? m_context->getSpriteAlphaShader() : m_context->getSpriteShader(); //364
-	m_context->getBatcher().render(RenderBatcher::TYPE_TEX, shader, vertpos, uv, vertexColors, this); //365*/
+	//vertpos[0].x *= proj00 + -1.0;
+	//vertpos[0].y *= proj11 + 1.0;
+	//
+	//vertpos[1].x *= proj00 + -1.0;
+	//vertpos[1].y *= proj11 + 1.0;
+	//
+	//vertpos[2].x *= proj00 + -1.0;
+	//vertpos[2].y *= proj11 + 1.0;
+	//
+	//vertpos[3].x *= proj00 + -1.0;
+	//vertpos[3].y *= proj11 + 1.0;
+
+	//vertpos[0] = corners[0]; //float3(corners->x, corners->y, corners->z); //?
+	//vertpos[1] = corners[1]; //float3(corners->x, corners->y, corners->z); //?
+	//vertpos[2] = corners[2]; //float3(corners->x, corners->y, corners->z); //?
+	//vertpos[3] = corners[3]; //float3(corners->x, corners->y, corners->z); //?
+	/*float minx = vertpos[0].x; //345
+	float miny = vertpos[0].x; //346
+	float maxx = vertpos[0].x; //347
+	float maxy = vertpos[0].x; //348
+	for (int i = 0; i < 4; i++) //349
+	{
+		vertpos[i].x *= proj00 - 1.0f;
+		vertpos[i].y *= proj11 + 1.0f;
+	}
+
+	if (maxy >= -1.0f && maxx >= -1.0f && minx < 1.0f && miny < 1.0f)
+	{
+		if (!shader)
+			shader = m_texture->format().hasAlpha() ? m_context->getSpriteAlphaShader() : m_context->getSpriteShader(); //364
+		m_context->getBatcher().render(RenderBatcher::TYPE_TEX, shader, vertpos, uv, vertexColors, this); //365 //last line
+	}*/
+
 	assert("void GL_Image::draw(gr::Context* context, const math::float3* corners, const math::float2* uv, const math::float4* vertexColors, gr::Shader* shader) is not yet decompiled.");
 }
 
@@ -179,7 +207,6 @@ void GL_Image::unlock()
 
 void GL_Image::getData(void** bits, int* pitch) const //408
 {
-	//assert(!"Not implemented!");
 	m_texture->getData(bits, pitch); //410
 }
 
