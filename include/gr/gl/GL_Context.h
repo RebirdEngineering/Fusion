@@ -7,6 +7,7 @@
 //#include "GL_Texture.h" //?
 
 #include <gr/Context.h>
+#include <io/PathName.h>
 #include <gr/impl/SortBuffer.h>
 #include <img/SurfaceFormat.h>
 
@@ -184,7 +185,7 @@ public:
 
     void        setOrientation( OrientationType orientation ); //387
 
-    void        setFovScaleBias( const math::float2& ); //394
+    void        setFovScaleBias( const math::float2& scalebias ); //394
 
     void        setCustomModelTransform( const math::float3x4& customtm ); //402
 
@@ -204,11 +205,11 @@ public:
      */
     void        setOrthographicProjection(); //422
 
-    void        setProjection( const math::float4x4& ); //428
+    void        setProjection( const math::float4x4& projtm ); //428
 
-    void        setViewTransform( const math::float4x4& ); //430
+    void        setViewTransform( const math::float4x4& viewtm ); //430
 
-    void        setTime( float ); //435
+    void        setTime( float time ); //435
 
     void        setShaderPath( const std::string& path); //440
 
@@ -259,13 +260,33 @@ public:
 
     void        flush(); //521
 
-    Shader*     getPlainShader() { return m_plainShader; }; //574
+    Shader*     getPlainShader() //574
+    {
+        if (!m_plainShader)
+            m_plainShader = createShader(NS(io, PathName)(shaderPath(), "2d-vertexcolor").toString(), 0);
+        return m_plainShader;
+    };
 
-    Shader*     getPlainAlphaShader() { return m_plainAlphaShader; } //581
+    Shader*     getPlainAlphaShader() //581
+    {
+        if (!m_plainAlphaShader)
+            m_plainAlphaShader = createShader(NS(io, PathName)(shaderPath(), "2d-vertexcolor-alpha").toString(), 0);
+        return m_plainAlphaShader;
+    }
 
-    Shader*     getSpriteShader() {return m_spriteShader;} //588
+    Shader*     getSpriteShader() //588
+    {
+        if (!m_spriteShader)
+            m_spriteShader = createShader(NS(io, PathName)(shaderPath(), "2d-sprite").toString(), 0);
+        return m_spriteShader;
+    }
 
-    Shader*     getSpriteAlphaShader() {return m_spriteAlphaShader;} //595
+    Shader*     getSpriteAlphaShader() //595
+    {
+        if (!m_spriteAlphaShader)
+            m_spriteAlphaShader = createShader(NS(io, PathName)(shaderPath(), "2d-sprite-alpha").toString(), 0);
+        return m_spriteAlphaShader;
+    }
 
     void        removeTexture(Texture* tex); //601
 
