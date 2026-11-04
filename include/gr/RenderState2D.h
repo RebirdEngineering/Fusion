@@ -22,20 +22,20 @@ public:
 		ONE_MINUS_DST_ALPHA,
 		DST_COLOR,
 		ONE_MINUS_DST_COLOR,
-		SRC_ALPHA_SATURATE,
+		SRC_ALPHA_SATURATE
 	};
 
 	RenderState2D() : //35
 		m_clip(-32000, -32000, -32000, -32000),
-		m_col0(0, 1),
-		m_col1(0, 1),
-		m_translation(0, 0),
-		m_scale(1, 1),
-		m_pivot(0, 0),
+		m_col0(1.0f, 0.0f),
+		m_col1(0.0f, 1.0f),
+		m_translation(0.0f, 0.0f),
+		m_scale(1.0f, 1.0f),
+		m_pivot(0.0f, 0.0f),
 		m_alpha(1.f),
 		m_angle(0.f),
 		m_worldtmSet(false),
-		m_worldtm(1),
+		m_worldtm(1.0f),
 		m_blendEnabled(true),
 		m_blendSrc(ONE),
 		m_blendDst(ONE_MINUS_SRC_ALPHA)
@@ -148,9 +148,9 @@ public:
 
 	void resetTransform() //102 | Called by game::CompoSprite::draw
 	{
-		m_translation = NS(math, float2)(0, 0);
+		m_translation = NS(math, float2)(0.0f, 0.0f);
 		m_angle = 0.f;
-		m_scale = NS(math, float2)(1, 1);
+		m_scale = NS(math, float2)(1.0f, 1.0f);
 	}
 
 	NS(math, Transform) getTransform() const //109
