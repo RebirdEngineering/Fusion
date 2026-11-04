@@ -6,11 +6,13 @@ USING_NAMESPACE(math)
 
 BEGIN_NAMESPACE(gr)
 
-RenderBatcher::RenderBatcher(Context* context) //10
+RenderBatcher::RenderBatcher(Context* context) : //10
+	m_context(context),
+	m_type(TYPE_TEX),
+	m_image(0),
+	m_shader(0),
+	m_flushEnabled(true)
 {
-	m_type = TYPE_TEX;
-	m_context = context;
-	m_flushEnabled = true;
 }
 
 void RenderBatcher::enableFlushing(bool enable) //19
@@ -28,7 +30,7 @@ void RenderBatcher::render(Type type, Shader* shader, const float3* vertpos, con
 	if (type == TYPE_TEX)
 		m_context->statistics.renderedImages++;
 
-	if (isBatchable(type, shader, image, m_state, colors)) //34
+	if (!isBatchable(type, shader, image, m_context->getRenderState2D(), colors)) //34
 		flush();
 
 	add(type, shader, vertpos, uv, colors, image);
@@ -117,9 +119,7 @@ void RenderBatcher::flush()
 		vf.addPosition(VertexFormat::DF_V3_32); //123
 		if (!m_uvs.empty()) vf.addTextureCoordinate(VertexFormat::DF_V2_32); //124
 		if (!m_colors.empty()) //125
-		{
 			vf.addDiffuse(m_context->platform() == Context::PLATFORM_DX11 || Context::PLATFORM_XNA ? VertexFormat::DF_V4_32 : VertexFormat::DF_V4_8);
-		}
 
 		Primitive* prim = m_context->getDynamicPrimitive(m_type == RenderBatcher::TYPE_LINE ? Primitive::PRIM_LINE : Primitive::PRIM_TRI, vf, m_verts.size(), 0); //132
 
@@ -167,13 +167,15 @@ void RenderBatcher::flush()
 
 bool RenderBatcher::isBatchable(Type type, Shader* shader, Image* image, const RenderState2D& state, const float4* colors) //187
 {
-	if (m_verts.begin() != m_verts.end())
-	{
-		if (m_image != image || m_shader != shader || m_type != type || m_state.m_clip != state.m_clip || m_state.m_alpha != state.getAlpha())
-			return true;
-		if (colors)
-			return true;
-	}
+	if (m_verts.begin() == m_verts.end())
+		return true;
+
+	if (m_image != image || m_shader != shader || m_type != type)
+		return false;
+
+	if (m_state.m_clip != state.getClip() || m_state.m_alpha != state.getAlpha())
+		return m_colors.begin() != m_colors.end();
+
 	return false;
 }
 
