@@ -26,6 +26,8 @@ Clone the repo using your Git client, please do not download the master release 
 	Angry Birds Free with Magic v1.1.3 for Meego + leftover debug information.
 - ` 16da89de8ce40a7e2a84b7a2d894cbd60a80267ed920e44a3dfc43fb4e6127d9 angrybirdsfreemagic`
 	Angry Birds Free with Magic v1.1.5 for Meego + leftover debug information.
+- ` 3a10c882be1c862f06f97a4836a939a5d3995f27ab88b0049014496ec00ed81e plugin_rcssdk.dylib`
+	Debug build of Rovio Cloud Services (RCS) plugin from the Corona SDK, which uses a newer revision of the engine that shares some libraries.
 
 ### Miscellaneous notes
 

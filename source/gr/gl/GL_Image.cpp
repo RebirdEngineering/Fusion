@@ -106,7 +106,6 @@ void GL_Image::draw(Context* context, float dstX, float dstY, float targetW, flo
 	float proj11 = .height(); //271
 	
 	Shader* shader = m_texture->format().hasAlpha() || state.m_alpha > 1.0f ? m_context->getSpriteAlphaShader() : m_context->getSpriteShader(); //315
-	
 	m_context->getBatcher().render(RenderBatcher::TYPE_TEX, shader, vertpos, uv, 0, this); //316*/
 	assert("void GL_Image::draw(gr::Context* context, float dstX, float dstY, float targetW, float targetH, const math::float2* uv) is not yet decompiled.");
 }

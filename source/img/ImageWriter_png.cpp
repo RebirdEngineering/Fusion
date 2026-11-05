@@ -38,7 +38,7 @@ static void warninghandler( struct png_struct_def*, const char* )
 void ImageWriter::writePNG( OutputStream& out, const void* data, int width, int height, SurfaceFormat srcformat )
 {
 	// write header
-	png_structp pngptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, 0, errorhandler, warninghandler ); //[LHR] ABS4.1.0 is 1.6.2, ABC 5.2.0 is 1.6.17
+	png_structp pngptr = png_create_write_struct( PNG_LIBPNG_VER_STRING, 0, errorhandler, warninghandler ); //[LHR] ABS4.1.0 is 1.6.2, ABC 5.2.0 is 1.6.17 (the function params are blank in gr*.dll on Windows.)
 	if ( !pngptr )
 		throwError( IOException( Format("png_create_write_struct failed while saving \"{0}\" ({1}x{2}, srcformat {3})", out.toString(), width, height, srcformat.toString()) ) );
 
