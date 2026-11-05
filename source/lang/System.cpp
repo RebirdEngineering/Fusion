@@ -1,4 +1,5 @@
 #include <lang/System.h>
+#include <lang/Log.h>
 #include <lang/pp.h>
 
 #ifdef PLATFORM_WIN32
@@ -24,9 +25,9 @@
 BEGIN_NAMESPACE(lang) 
 
 
-int System::currentTimeMillis()
+int64_t System::currentTimeMillis()
 {
-#ifdef PLATFORM_WIN32
+#ifdef PLATFORM_WIN32 //Also WinPhone
 
 	LARGE_INTEGER freq;
 	if ( QueryPerformanceFrequency(&freq) )
@@ -41,13 +42,12 @@ int System::currentTimeMillis()
 		}
 	}
 
-	return (int)timeGetTime();
+	LANG_LOG("System", LANG_LOG_PRIORITY_ERROR, "currentTimeMillis() failed, returning 0 as current time."); //54
+	return 0;
 
 #elif defined(PLATFORM_WINCE)
 
 	return (int)timeGetTime();
-    
-//Add iOS
     
 #elif defined(PLATFORM_IOS)
 	const int64_t kOneMillion = 1000000;
@@ -55,6 +55,11 @@ int System::currentTimeMillis()
 	if (!s_timebase_info.denom)
 		mach_timebase_info(mach_timebase_info);
 	return s_timebase_info.number * mach_absolute_time() / (kOneMillion)*s_timebase_info.denom;
+
+#elif defined(PLATFORM_ANDROID)
+	struct timespec tp;
+	clock_gettime(CLOCK_MONOTONIC, &tp);
+	return 1000LL * tp.tv_sec + tp.tv_nsec / 1000000;
 
 #elif defined(PLATFORM_PS2)
 	
@@ -81,8 +86,15 @@ int64_t System::currentTimeMicros()
 	if (!s_timebase_info.denom)
 		mach_timebase_info(mach_timebase_info);
 	return s_timebase_info.number * mach_absolute_time() / (kOneThousand)*s_timebase_info.denom;
+
+#elif defined(PLATFORM_ANDROID)
+	struct timespec tp;
+	clock_gettime(CLOCK_MONOTONIC, &tp);
+	return 1000000LL * tp.tv_sec + tp.tv_nsec / 1000;
+
 #else
 	return 0;
+
 #endif
 }
 

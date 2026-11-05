@@ -19,7 +19,7 @@ public:
 	/** 
 	 * Returns current system time in milliseconds. 
 	 */
-	static int currentTimeMillis();
+	static int64_t currentTimeMillis();
 	
 	/** 
 	 * 
