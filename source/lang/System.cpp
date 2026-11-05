@@ -27,7 +27,7 @@ BEGIN_NAMESPACE(lang)
 
 int64_t System::currentTimeMillis()
 {
-#ifdef PLATFORM_WIN32 //Also WinPhone
+#ifdef PLATFORM_WIN32 //4F4880 | Also WinPhone/Metro
 
 	LARGE_INTEGER freq;
 	if ( QueryPerformanceFrequency(&freq) )
@@ -38,7 +38,7 @@ int64_t System::currentTimeMillis()
 		{
 			__int64 msdiv = __int64(freq.QuadPart) / __int64(1000);
 			__int64 c = __int64(cur.QuadPart) / msdiv;
-			return (int)c;
+			return c;
 		}
 	}
 
@@ -80,6 +80,25 @@ int64_t System::currentTimeMillis()
 
 int64_t System::currentTimeMicros()
 {
+
+#if defined(PLATFORM_WIN32) //4F4950 | Also WinPhone/Metro, Doesn't appear in gr*.dll.
+
+	LARGE_INTEGER freq;
+	if (QueryPerformanceFrequency(&freq))
+	{
+		LARGE_INTEGER cur;
+		QueryPerformanceCounter(&cur);
+		if (freq.QuadPart >= 1000000)
+		{
+			__int64 msdiv = __int64(freq.QuadPart) / __int64(1000000);
+			__int64 c = __int64(cur.QuadPart) / msdiv;
+			return c;
+		}
+	}
+
+	LANG_LOG("System", LANG_LOG_PRIORITY_ERROR, "currentTimeMicros() failed, returning 0 as current time."); //109
+	return 0;
+
 #if defined(PLATFORM_IOS)
 	const int64_t kOneThousand = 1000;
 	static mach_timebase_info_data_t s_timebase_info;
