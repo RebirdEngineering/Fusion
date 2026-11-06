@@ -11,46 +11,47 @@ typedef HANDLE ThreadHandle; //Multiplatform handle
 
 BEGIN_NAMESPACE(lang)
 
-class Thread :
+class Thread : //31 | 0x18 bytes on Win32
     public Object
 {
 public:
-    Thread();
+    Thread(); //39
 
-    Thread(const Functor& func, bool joinOnDestruct);
+    Thread(const Functor& func, bool joinOnDestruct); //47
 
-    Thread(Thread&&);
+    Thread(Thread&& other); //53 | Unknown param.
 
-    Thread& operator=(Thread&);
+    Thread& operator=(Thread&& other); //61 | Unknown param.
 
-    ~Thread();
+    ~Thread(); //67
 
-    bool joinable() const;
+    bool joinable() const; //72
 
-    void join();
+    void join(); //78
 
-    int priority() const;
+    int priority() const; //83
 
-    void setPriority(int);
+    void setPriority(int prio); //88
 
-    void swap(Thread&);
+    void swap(Thread& other); //93 | Unknown param.
 
-    void sleep(unsigned int);
+    void sleep(unsigned int ms); //93
 
-    unsigned int hardwareConcurrency();
+    unsigned int hardwareConcurrency(); //110
 
-    void yield();
+    void yield(); //115
 
-    void busyYield();
+    void busyYield(); //123
+
 private:
-    void startThread();
+    void startThread(); //127
 
-    void closeThread();
+    void closeThread(); //130
 
-    Functor* m_func;
+    Functor* m_func; //133
 
-    ThreadHandle m_threadHandle;
-    bool m_autoJoin;
+    ThreadHandle m_threadHandle; //135
+    bool m_autoJoin; //136
 };
 
 }
