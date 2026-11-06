@@ -242,7 +242,7 @@ namespace audio
 
         static void setNotifications(LPDIRECTSOUNDBUFFER buffer, int ten, int) //Known via log
         {
-            HANDLE newHandle = CreateEventW(0, 0, 1, 0);
+            HANDLE newHandle = CreateEventW(0, FALSE, TRUE, 0);
             CloseHandle(m_handle);
             m_handle = newHandle;
             if (FAILED(newHandle))
@@ -251,7 +251,7 @@ namespace audio
             m_ten = ten;
             //TODO
             //IID_IDirectSoundNotify
-            //CreateEventW(0, 0, 1, 0);
+            //CreateEventW(0, FALSE, TRUE, 0);
             //void* p;
             HRESULT hr; // = IDirectSoundBuffer_QueryInterface(buffer, &IID_IDirectSoundNotify, p);
             LANG_LOG("Audio", LANG_LOG_PRIORITY_ERROR, "Failed to retrieve the IDirectSoundNotify interface (hr=%d)", hr); //345

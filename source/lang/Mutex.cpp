@@ -7,8 +7,7 @@
 #include <pthread.h> //UNTESTED!
 #endif
 
-namespace lang
-{
+BEGIN_NAMESPACE(lang)
 
 Mutex::Lock::Lock(Mutex& mutex) :
     m_mutex(mutex)
@@ -21,23 +20,22 @@ Mutex::Lock::~Lock()
     m_mutex.unlock();
 }
 
-class Mutex::MutexImpl : //24
-    public Object
+class Mutex::MutexImpl : public Object //24
 {
 public:
-    MutexImpl()
+    MutexImpl() //27
     {
 #ifdef _WIN32
         m_mutex = CreateMutexW(0, 0, 0);
 #else
         pthread_mutexattr_t attr; //33
-        pthread_mutexattr_init(attr);
-        pthread_mutexattr_settype(attr, 2);
-
-        pthread_mutex_init(m_mutex);
-        pthread_mutexattr_destroy();
+        pthread_mutexattr_init(attr); //34
+        pthread_mutexattr_settype(attr, 2); //35
+        pthread_mutex_init(m_mutex); //36
+        pthread_mutexattr_destroy(); //37
 #endif
     }
+
     ~MutexImpl() //41
     {
 #ifdef _WIN32
@@ -79,7 +77,7 @@ private:
 #ifdef _WIN32
     HANDLE m_mutex;
 #else
-    pthread_mutex_t m_mutex; //Multplatform (OSX, Meego)
+    pthread_mutex_t m_mutex; //94 | Multplatform (OSX, Meego)
 #endif
 };
 
@@ -107,4 +105,4 @@ void Mutex::unlock()
     m_impl->unlock(); //121
 }
 
-}
+END_NAMESPACE()

@@ -3,9 +3,10 @@
 
 #include <lang/pp.h>
 
-BEGIN_NAMESPACE(lang)
+namespace lang
+{
 
-class Signal
+class Signal //0x04 bytes.
 {
 public:
     Signal(bool set); //17

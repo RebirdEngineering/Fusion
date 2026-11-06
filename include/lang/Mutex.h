@@ -3,8 +3,7 @@
 
 #include <lang/Ptr.h>
 
-namespace lang
-{
+BEGIN_NAMESPACE(lang)
 
 class Mutex //12
 {
@@ -34,6 +33,6 @@ private:
     Mutex& operator=(const Mutex&); //39
 };
 
-}
+END_NAMESPACE()
 
 #endif
