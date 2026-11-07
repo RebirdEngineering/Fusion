@@ -59,7 +59,7 @@ public:
 	 * @exception IOException
 	 * @exception LuaException
 	 */
-	void write( io::OutputStream& out, int margin=0 );
+	void write( io::OutputStream& out, int margin=0, bool nested = false );
 
 	/**
 	 * Reads Lua table from input stream.

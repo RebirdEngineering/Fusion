@@ -34,8 +34,18 @@ public:
 
     void operator()(); //41
     
-    template <class A1> void operator()(const A1& a1);
-    template <class A1, class A2> void operator()(const A1& a1, const A2& a2);
+    template <class A1> void operator()(A1 a1);
+    template <class A1, class A2> void operator()(A1 a1, A2 a2);
+    //template <class A1, class A2, class A3> void operator()(A1 a1, A2 a2, A3 a3);
+    //template <class A1, class A2, class A3, class A4> void operator()(A1 a1, A2 a2, A3 a3, A4 a4);
+    //template <class A1, class A2, class A3, class A4, class A5> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5);
+    //template <class A1, class A2, class A3, class A4, class A5, class A6> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6);
+    //template <class A1, class A2, class A3, class A4, class A5, class A6, class A7> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7);
+    //template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8);
+    //template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9);
+    //template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10);
+    //template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11);
+    //template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12> void operator()(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12);
 private:
     friend class LuaState;
     friend class LuaTable; //Needed?

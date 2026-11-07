@@ -68,7 +68,7 @@ void JSONImporter::visit(const char* name)
 	}
 }
 
-void JSONImporter::startObject(const char* name)
+void JSONImporter::startObject(const char* name) //TODO
 {
 	/*LuaTable* current_table = new LuaTable(m_rootLuaTable->luaState());
 

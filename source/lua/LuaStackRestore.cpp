@@ -5,12 +5,12 @@
 BEGIN_NAMESPACE(lua) 
 
 LuaStackRestore::LuaStackRestore( LuaState* luastate ) : //7
-	m_impl( luastate->impl() ), //7
-	m_top( lua_gettop(m_impl) ) //8
+	m_impl( luastate->impl() ), //8
+	m_top( lua_gettop(m_impl) )
 {
 }
 
-LuaStackRestore::LuaStackRestore( lua_State* impl ) : //13
+LuaStackRestore::LuaStackRestore( lua_State* impl ) : //13-17
 	m_impl( impl ),
 	m_top( lua_gettop(m_impl) )
 {

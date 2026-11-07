@@ -14,7 +14,7 @@ using namespace pf;
 namespace game
 {
 
-LuaResources::LuaResources(LuaState* lua, Context* context) : //12 | They must've included very little then... | TODO
+LuaResources::LuaResources(LuaState* lua, Context* context) : //12 | They must've included very little then...
     LuaObject(lua),
     m_resources(context)
 {
@@ -24,8 +24,8 @@ LuaResources::LuaResources(LuaState* lua, Context* context) : //12 | They must'v
     registerLuaMethod("createBitmapFont", this, &LuaResources::createBitmapFont);
     registerLuaMethod("createSystemFont", this, &LuaResources::createSystemFont);
     registerLuaMethod("createTextGroupSet", this, &LuaResources::createTextGroupSet);
-    //registerMethod("createAudioOutput", this, &LuaResources::createAudioOutput); //CHECK LuaObject.inl?
-    //registerMethod("createAudioInput", this, &LuaResources::createAudioInput); //CHECK LuaObject.inl?
+    registerMethod("createAudioOutput", this, &LuaResources::createAudioOutput);
+    registerMethod("createAudioInput", this, &LuaResources::createAudioInput);
     registerLuaMethod("createAudio", this, &LuaResources::createAudio);
     registerMethod("createCompositeAudio", this, &LuaResources::createCompositeAudio);
     registerMethod("captureSprite", this, &LuaResources::captureSprite);
@@ -41,7 +41,7 @@ LuaResources::LuaResources(LuaState* lua, Context* context) : //12 | They must'v
     registerLuaMethod("drawSprite", this, &LuaResources::drawSprite);
     registerLuaMethod("drawCompoSprite", this, &LuaResources::drawCompoSprite);
     registerLuaMethod("drawString", this, &LuaResources::drawString);
-    //registerMethod("setClipRect", this, &LuaResources::setClipRect); //CHECK LuaObject.inl?
+    registerMethod("setClipRect", this, &LuaResources::setClipRect);
     registerLuaMethod("getClipRect", this, &LuaResources::getClipRect);
     registerMethod("getString", this, &LuaResources::getString);
     registerLuaMethod("playAudio", this, &LuaResources::playAudio);
@@ -65,9 +65,9 @@ LuaResources::LuaResources(LuaState* lua, Context* context) : //12 | They must'v
     registerMethod("stopAudioOutput", this, &LuaResources::stopAudioOutput);
     registerMethod("startAudioInput", this, &LuaResources::startAudioInput);
     registerMethod("stopAudioInput", this, &LuaResources::stopAudioInput);
-    //registerMethod("setMasterVolume", this, &LuaResources::setMasterVolume);
-    //registerMethod("setTrackVolume", this, &LuaResources::setTrackVolume);
-    //registerMethod("getTrackVolume", this, &LuaResources::getTrackVolume);
+    registerMethod("setMasterVolume", this, &LuaResources::setMasterVolume);
+    registerMethod("setTrackVolume", this, &LuaResources::setTrackVolume);
+    registerMethod("getTrackVolume", this, &LuaResources::getTrackVolume);
     registerMethod("openURL", this, &LuaResources::openURL);
     lua->globals().setTable("res", this);
 }

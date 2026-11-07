@@ -10,11 +10,11 @@ USING_NAMESPACE(lang)
 BEGIN_NAMESPACE(lua) 
 
 
-LuaObject::LuaObject( LuaState* luastate ) :
+LuaObject::LuaObject( LuaState* luastate ) : //11
 	LuaTable( luastate )
 {
-	LuaStackRestore lsr( luastate );
-	luastate->pushTable( this );
+	LuaStackRestore lsr( luastate ); //14
+	luastate->pushTable( this ); //15
 
 	luastate->pushLightUserData( this );
 	luastate->rawSetI( -2, 0 );
@@ -24,7 +24,7 @@ LuaObject::LuaObject( LuaState* luastate ) :
 	luastate->setTable( -3 );
 
 	luastate->pushString( "this" );
-	luastate->pushTable( this );
+	luastate->pushTable( this ); //25
 	luastate->setTable( -3 );
 }
 
@@ -32,31 +32,29 @@ LuaObject::~LuaObject()
 {
 }
 
-void LuaObject::registerClosure( const char* name,
-	const LuaFunctor* lf, LuaState::CFunction dispatcher )
+void LuaObject::registerClosure( const char* name, //44
+	const LuaFunctor* lf, LuaState::CFunction dispatcher ) //45 | Assert was likely removed.
 {
-	assert( lf->obj == this ); // each object must register it's own methods to Lua [NOTE] Direct match on line 39
+	LuaState* luastate = luaState(); //47
+	LuaStackRestore lsr( luastate ); //48
 
-	LuaState* luastate = luaState();
-	LuaStackRestore lsr( luastate );
-
-	luastate->pushTable( this );
+	luastate->pushTable( this ); //50
 	luastate->pushString( name );
 
 	// store data as light user data values
-	void* const* data = reinterpret_cast<void* const*>(lf); 
-	const int datasize = int(sizeof(LuaFunctor)/sizeof(void*));
-	for ( int i = 0 ; i < datasize ; ++i )
+	void* const* data = reinterpret_cast<void* const*>(lf); //54
+	const int datasize = int(sizeof(LuaFunctor)/sizeof(void*)); //55
+	for ( int i = 0 ; i < datasize ; ++i ) //56
 		luastate->pushLightUserData( data[i] );
 
 	luastate->pushCClosure( dispatcher, datasize );
 	luastate->setTable( -3 );
 }
 
-void LuaObject::call( const char* name )
+void LuaObject::call( const char* name ) //63
 {
-	LuaState* luastate = luaState();
-	LuaStackRestore lsr( luastate );
+	LuaState* luastate = luaState(); //65
+	LuaStackRestore lsr( luastate ); //66
 	pushMember( name );
 	luastate->call( 0, 0 );
 }

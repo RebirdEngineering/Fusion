@@ -96,6 +96,24 @@ public:
 	 */
 	template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9> void call( const char* name, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9 );
 
+	/**
+	 * Calls method defined in Lua script with 10 arguments. (Note this is new)
+	 * @param name Name of the Lua method to be called.
+	 */
+	template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10> void call(const char* name, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10);
+
+	/**
+	 * Calls method defined in Lua script with 11 arguments. (Note this is new)
+	 * @param name Name of the Lua method to be called.
+	 */
+	template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11> void call(const char* name, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11);
+
+	/**
+	 * Calls method defined in Lua script with 12 arguments. (Note this is new)
+	 * @param name Name of the Lua method to be called.
+	 */
+	template <class A1, class A2, class A3, class A4, class A5, class A6, class A7, class A8, class A9, class A10, class A11, class A12> void call(const char* name, A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9, A10 a10, A11 a11, A12 a12);
+
 	/** 
 	 * Registers normal C++ method which can be used from Lua scripts. 
 	 * @param T Class which has methods of type F.

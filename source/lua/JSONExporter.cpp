@@ -139,7 +139,7 @@ std::string JSONExporter::doubleToString(double value)
 	return buffer;
 }
 
-std::string JSONExporter::backslashEscape(const char* s)
+std::string JSONExporter::backslashEscape(const char* s) //TODO
 {
 	std::string result;
 	/*if (s)

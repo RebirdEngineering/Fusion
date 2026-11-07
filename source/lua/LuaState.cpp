@@ -3,7 +3,6 @@
 #include <lua/LuaFunction.h>
 #include <lua/LuaException.h>
 #include <lua/LuaStackRestore.h>
-#include <io/InputStream.h>
 #include <external/lua/src/lua.h>
 #include <external/lua/src/lauxlib.h>
 #include <external/lua/src/lualib.h>
@@ -15,19 +14,17 @@ using namespace lang;
 
 namespace lua
 { 
-	static const luaL_reg libsToOpen[] = { //28
-		{"table" , luaopen_table},
-		{"string" , luaopen_string},
-		{"math" , luaopen_math},
-		{"table" , luaopen_table},
-		{"os" , luaopen_os},
+	const luaL_reg libsToOpen[] = { //28
+		{"", luaopen_base},
+		{"table", luaopen_table},
+		{"string", luaopen_string},
+		{"math", luaopen_math},
+		{"os", luaopen_os},
 		{0, 0}
 	};
 
-LuaState::LuaState()	
+LuaState::LuaState()
 {
-	const luaL_reg* lib = libsToOpen;
-
 	assert( LUA_TNIL == TYPE_NIL );
 	assert( LUA_TBOOLEAN == TYPE_BOOLEAN );
 	assert( LUA_TLIGHTUSERDATA == TYPE_LIGHTUSERDATA );
@@ -38,35 +35,39 @@ LuaState::LuaState()
 	assert( LUA_TUSERDATA == TYPE_USERDATA );
 	assert( LUA_TTHREAD == TYPE_THREAD );
 
-	m_impl = lua_open();
+	m_ref = -1;
+
+	
+
+	m_impl = lua_open(); //61
 	if ( !m_impl )
-		throwError( LuaException( Format("Failed to initialized Lua interpreter") ) );
+		throwError( LuaException( Format("Failed to initialized Lua interpreter") ) ); //63
 
-	lua_atpanic( m_impl, handleError );
-	luaopen_base( m_impl );
+	lua_atpanic( m_impl, handleError ); //65
 
-    //luaopen_debug( m_impl ); //I'd put this under the debug build check instead but nah, comment it like Rovio intended
+	//luaopen_debug( m_impl ); //I'd put this under the debug build check instead but nah, comment it like Rovio intended | 41?
+	const luaL_reg* lib = libsToOpen; //68
 
 	while (lib)
 	{
-		lua_pushcclosure(m_impl, luaopen_base, 0);
-		lua_pushstring(m_impl, libsToOpen->name);
-		lua_call(m_impl, 1, 0);
+		lua_pushcclosure(m_impl, luaopen_base, 0); //71
+		lua_pushstring(m_impl, libsToOpen->name); //72
+		lua_call(m_impl, 1, 0); //73
 	}
 
 	// set error() handler
-	lua_pushstring( m_impl, "error" );
-	lua_pushlightuserdata( m_impl, this );
-	lua_pushcclosure( m_impl, handleError, 1 );
-	lua_settable( m_impl, LUA_GLOBALSINDEX );
+	lua_pushstring( m_impl, "error" ); //77
+	lua_pushlightuserdata( m_impl, this ); //78
+	lua_pushcclosure( m_impl, handleError, 1 ); //79
+	lua_settable( m_impl, LUA_GLOBALSINDEX ); //80
 
 	// set this ptr
-	lua_pushlightuserdata( m_impl, this ); //Happens twice?
-	lua_pushlightuserdata( m_impl, this );
-	lua_settable(m_impl, LUA_REGISTRYINDEX);
+	lua_pushlightuserdata( m_impl, this->m_impl ); //83 | Happens twice?
+	lua_pushlightuserdata( m_impl, this ); //84
+	lua_settable(m_impl, LUA_REGISTRYINDEX); //85
 
 	// get globals
-	m_globals = toTable(LuaState::ENV_GLOBALS);
+	m_globals = toTable(LuaState::ENV_GLOBALS); //88
 }
 
 LuaState::LuaState(lua_State* impl) :
@@ -74,11 +75,9 @@ LuaState::LuaState(lua_State* impl) :
 	m_ref(LUA_REGISTRYINDEX)
 {
 	m_impl = lua_newthread(impl);
-	lua_pushlightuserdata(m_impl, this); //Happens twice?
+	lua_pushlightuserdata(m_impl, this->m_impl); //Happens twice?
 	lua_pushlightuserdata(m_impl, this);
 	m_globals = toTable(LUA_REGISTRYINDEX);
-	lua_settable(m_impl, LUA_REGISTRYINDEX);
-	//m_impl = impl;
 }
 
 LuaState::~LuaState()
@@ -101,12 +100,12 @@ void LuaState::setTop( int index )
 	lua_settop( m_impl, index );
 }
 
-void LuaState::pop( int n )
+void LuaState::pop( int n ) //128
 {
 	lua_pop( m_impl, n );
 }
 
-void LuaState::push( int index )
+void LuaState::push( int index ) //133
 {
 	lua_pushvalue( m_impl, index );
 }
@@ -126,7 +125,7 @@ void LuaState::replace( int index )
 	lua_replace( m_impl, index );
 }
 
-LuaState::Type LuaState::type( int index ) 
+LuaState::Type LuaState::type( int index )  //153
 {
 	return (Type)lua_type( m_impl, index );
 }
@@ -136,22 +135,22 @@ bool LuaState::isNil( int index )
 	return 0 != lua_isnil( m_impl, index );
 }
 
-bool LuaState::isBoolean( int index ) 
+bool LuaState::isBoolean( int index ) //163
 {
 	return 0 != lua_isboolean( m_impl, index );
 }
 
-bool LuaState::isNumber( int index ) 
+bool LuaState::isNumber( int index ) //168
 {
 	return 0 != lua_isnumber( m_impl, index );
 }
 
-bool LuaState::isString( int index ) 
+bool LuaState::isString( int index ) //173
 {
 	return 0 != lua_isstring( m_impl, index );
 }
 
-bool LuaState::isTable( int index ) 
+bool LuaState::isTable( int index ) //178
 {
 	return 0 != lua_istable( m_impl, index );
 }
@@ -171,7 +170,7 @@ bool LuaState::isUserData( int index )
 	return 0 != lua_isuserdata( m_impl, index );
 }
 
-bool LuaState::isLightUserData( int index ) 
+bool LuaState::isLightUserData( int index ) //198
 {
 	return 0 != lua_islightuserdata( m_impl, index );
 }
@@ -191,19 +190,19 @@ bool LuaState::rawEqual( int index1, int index2 )
 	return 0 != lua_rawequal( m_impl, index1, index2 );
 }
 
-bool LuaState::toBoolean( int index ) 
+bool LuaState::toBoolean( int index ) //218
 {
 	checkType( index, TYPE_BOOLEAN );
 	return 0 != lua_toboolean( m_impl, index );
 }
 
-float LuaState::toNumber( int index ) 
+float LuaState::toNumber( int index ) //224
 {
 	checkType( index, TYPE_NUMBER );
 	return lua_tonumber( m_impl, index );
 }
 
-const char* LuaState::toString( int index ) 
+const char* LuaState::toString( int index ) //230
 {
 	checkType( index, TYPE_STRING );
 	return lua_tostring( m_impl, index );
@@ -216,7 +215,7 @@ LuaState::CFunction LuaState::toCFunction( int index )
 	return lua_tocfunction( m_impl, index );
 }
 
-void* LuaState::toLightUserData( int index ) 
+void* LuaState::toLightUserData( int index ) //243
 {
 	checkType( index, TYPE_LIGHTUSERDATA );
 	return lua_touserdata( m_impl, index );
@@ -233,56 +232,61 @@ LuaTable& LuaState::globals()
 	return m_globals;
 }
 
-LuaTable LuaState::toTable( int index )
+LuaTable LuaState::toTable( int index ) //260
 {
 	checkType( index, TYPE_TABLE );
 
 	lua_pushvalue( m_impl, index );
 
-	LuaTable tab;
+	LuaTable tab; //266
 	tab.m_luastate = this;
 	tab.m_ref = lua_ref( m_impl, true );
 	return tab;
 }
 
-LuaFunction LuaState::toFunction(int index)
+LuaFunction LuaState::toFunction(int index) //272
 {
 	checkType(index, TYPE_TABLE);
 
 	lua_pushvalue(m_impl, index);
 
-	LuaFunction func(this, index);
+	LuaFunction func;
 	func.m_luastate = this;
 	func.m_ref = lua_ref(m_impl, true);
 	return func;
 }
 
-void LuaState::pushBoolean( bool v ) 
+void LuaState::toValue(int index, LuaFunction& v) //284
+{
+	v = toFunction(index); //286
+}
+
+void LuaState::pushBoolean( bool v ) //289
 {
 	lua_pushboolean( m_impl, v?1:0 );
 }
 
-void LuaState::pushNumber( float v ) 
+void LuaState::pushNumber( float v ) //294
 {
 	lua_pushnumber( m_impl, v );
 }
 
-void LuaState::pushString( const char* v ) 
+void LuaState::pushString( const char* v ) //299
 {
 	lua_pushstring( m_impl, v );
 }
 
-void LuaState::pushString( const std::string& v ) 
+void LuaState::pushString( const std::string& v ) //304
 {
-	pushString( m_impl, v );
+	pushString( m_impl, v ); //306
 }
 
-void LuaState::pushString( lua_State* impl, const std::string& v )
+void LuaState::pushString( lua_State* impl, const std::string& v ) //309
 {
-	lua_pushlstring( impl, v.c_str(), v.capacity()); //?
+	lua_pushlstring( impl, v.c_str(), v.capacity()); //311
 }
 
-void LuaState::pushString(lua_State* impl, const char* v)
+void LuaState::pushString(lua_State* impl, const char* v) //314
 {
 	lua_pushstring(impl, v); //?
 }
@@ -297,12 +301,12 @@ void LuaState::pushCFunction(CFunction v)
 	lua_pushcfunction(m_impl, v);
 }
 
-void LuaState::pushLightUserData(void* v)
+void LuaState::pushLightUserData(void* v) //329
 {
 	lua_pushlightuserdata(m_impl, v);
 }
 
-void LuaState::pushCClosure(CFunction v, int n)
+void LuaState::pushCClosure(CFunction v, int n) //334
 {
 	lua_pushcclosure(m_impl, v, n);
 }
@@ -312,7 +316,7 @@ int LuaState::upValueIndex( int n )
 	return lua_upvalueindex( n );
 }
 
-void LuaState::pushTable(lua_State* impl, const LuaTable* v)
+void LuaState::pushTable(lua_State* impl, const LuaTable* v) //344
 {
 	if (v && v->m_ref >= 0)
 		lua_getref(impl, v->m_ref);
@@ -320,7 +324,7 @@ void LuaState::pushTable(lua_State* impl, const LuaTable* v)
 		lua_pushnil(impl);
 }
 
-void LuaState::pushFunction(lua_State* impl, const LuaFunction* v)
+void LuaState::pushFunction(lua_State* impl, const LuaFunction* v) //352
 {
 	if (v && v->m_ref >= 0)
 		lua_getref(impl, v->m_ref);
@@ -344,13 +348,13 @@ void LuaState::getTable( int index )
 	lua_gettable( m_impl, index );
 }
 
-void LuaState::rawGet(int index)
+void LuaState::rawGet(int index) //376
 {
 	checkType(index, TYPE_TABLE);
 	lua_rawget(m_impl, index);
 }
 
-void LuaState::setTable(int index)
+void LuaState::setTable(int index) //382
 {
 	checkType(index, TYPE_TABLE);
 	lua_settable(m_impl, index);
@@ -362,13 +366,13 @@ void LuaState::rawSet(int index)
 	lua_rawset(m_impl, index);
 }
 
-bool LuaState::next(int index)
+bool LuaState::next(int index) //394
 {
 	checkType(index, TYPE_TABLE);
 	return 0 != lua_next(m_impl, index);
 }
 
-void LuaState::rawGetI(int index, int n)
+void LuaState::rawGetI(int index, int n) //406
 {
 	checkType(index, TYPE_TABLE);
 	lua_rawgeti(m_impl, index, n);
@@ -380,7 +384,7 @@ void LuaState::rawSetI(int index, int n)
 	lua_rawseti(m_impl, index, n);
 }
 
-void LuaState::setFEnv(int index)
+void LuaState::setFEnv(int index) //412
 {
 	checkType(index, TYPE_FUNCTION);
 	checkType(-1, TYPE_TABLE);
@@ -393,7 +397,7 @@ void LuaState::getFEnv(int index)
 	lua_getfenv(m_impl, index);
 }
 
-void LuaState::call(int nargs, int nresults)
+void LuaState::call(int nargs, int nresults) //425
 {
 	lua_call(m_impl, nargs, nresults);
 }
@@ -411,26 +415,25 @@ int LuaState::yield(int nresults)
 	return lua_yield(m_impl, nresults);
 }
 
-void LuaState::compile(const char* buffer, int size, const std::string& name, LuaTable* env)
+void LuaState::compile(const char* buffer, int size, const std::string& name, LuaTable* env) //458
 {
-	LuaStackRestore lsr(m_impl);
+	LuaStackRestore lsr(m_impl); //460
 
-	LoadBuffer ls;
+	LoadBuffer ls; //462
 	ls.buffer = buffer;
 	ls.size = size;
 
-	int err = lua_load(m_impl, loadBuffer, &ls, name.c_str());
+	int err = lua_load(m_impl, loadBuffer, &ls, name.c_str()); //466
 	handleLoadResult(err, name, env);
 }
 
-void LuaState::compile(InputStream& in, int size, const std::string& name, LuaTable* env)
+void LuaState::compile(InputStream& in, const std::string& name, LuaTable* env) //491
 {
-	LuaStackRestore lsr(m_impl);
+	LuaStackRestore lsr(m_impl); //493
 
-	LoadFile ls(in);
-	ls.size = size;
-
-	int err = lua_load(m_impl, loadFile, &ls, name.c_str());
+	LoadFile ls(in); //495
+	
+	int err = lua_load(m_impl, loadFile, &ls, name.c_str()); //497
 	handleLoadResult(err, name, env);
 }
 
@@ -446,28 +449,28 @@ void LuaState::getByteCode(const char* buffer, int size, OutputStream& out)
 	//lua_dump(m_impl, , &lsr) //?
 }
 
-void LuaState::handleLoadResult(int err, const std::string& /*name*/, LuaTable* env)
+void LuaState::handleLoadResult(int err, const std::string& /*name*/, LuaTable* env) //501
 {
 	if (0 == err)
 	{
 		if (env)
 		{
-			pushTable(env);
-			setFEnv(-2);
+			pushTable(env); //507
+			setFEnv(-2); //508
 		}
 
-		call(0, 0);
+		call(0, 0); //511
 	}
 	else
 	{
-		std::string errsz = toString(-1);
-		throwError(LuaException(Format("Error while compiling Lua: {0}", errsz)));
+		std::string errsz = toString(-1); //515
+		throwError(LuaException(Format("Error while compiling Lua: {0}", errsz))); //516
 	}
 }
 
-const char* LuaState::loadBuffer(lua_State* /*impl*/, void* data, size_t* size)
+const char* LuaState::loadBuffer(lua_State* /*impl*/, void* data, size_t* size) //520
 {
-	LoadBuffer* ls = reinterpret_cast<LoadBuffer*>(data);
+	LoadBuffer* ls = reinterpret_cast<LoadBuffer*>(data); //522
 	if (ls->size == 0)
 		return 0;
 	*size = ls->size;
@@ -475,24 +478,24 @@ const char* LuaState::loadBuffer(lua_State* /*impl*/, void* data, size_t* size)
 	return ls->buffer;
 }
 
-const char* LuaState::loadFile(lua_State* /*impl*/, void* data, size_t* size)
+const char* LuaState::loadFile(lua_State* /*impl*/, void* data, size_t* size) //530
 {
-	LoadFile* ls = reinterpret_cast<LoadFile*>(data);
+	LoadFile* ls = reinterpret_cast<LoadFile*>(data); //532
 	if (ls->size == 0)
 		return 0;
-	int bytesread = ls->in.read(ls->buf, sizeof(ls->buf));
+	int bytesread = ls->in.read(ls->buf, sizeof(ls->buf)); //535
 	*size = bytesread;
 	ls->size -= bytesread;
 	return ls->buf;
 }
 
-void LuaState::checkType(int index, Type type)
+void LuaState::checkType(int index, Type type) //541
 {
-	Type actualtype = (Type)lua_type(m_impl, index);
+	Type actualtype = (Type)lua_type(m_impl, index); //543
 	if (actualtype != type)
 	{
-		const std::string& stacktrace = getStackTrace(m_impl);
-		throwError(LuaException(Format("Excepted type {0} at stack position {1} but found {2}{3}", toString(type), index, toString(actualtype), stacktrace)));
+		const std::string& stacktrace = getStackTrace(m_impl); //546
+		throwError(LuaException(Format("Excepted type {0} at stack position {1} but found {2}{3}", toString(type), index, toString(actualtype), stacktrace))); //547
 	}
 }
 
@@ -535,7 +538,7 @@ LuaState::Status LuaState::status() const
 	return (Status)lua_status(m_impl);
 }
 
-const char* LuaState::toString(Type type)
+const char* LuaState::toString(Type type) //593
 {
 	switch (type)
 	{
@@ -552,12 +555,12 @@ const char* LuaState::toString(Type type)
 	}
 }
 
-std::string LuaState::getStackTrace(lua_State* impl) //[NOTE] Changed from appendStackTrace
+std::string LuaState::getStackTrace(lua_State* impl) //610 | [NOTE] Changed from appendStackTrace
 {
-	std::string stacktrace;
+	std::string stacktrace; //612
 
-	bool callstack = false;
-	for (int level = 0; level < 10; ++level)
+	bool callstack = false; //614
+	for (int level = 0; level < 10; ++level) //615
 	{
 		lua_Debug st;
 		memset(&st, 0, sizeof(st));
@@ -570,7 +573,7 @@ std::string LuaState::getStackTrace(lua_State* impl) //[NOTE] Changed from appen
 
 		if (!callstack)
 		{
-			stacktrace.append("\nCall stack:\n");
+			stacktrace.append("\nCall stack:\n"); //632
 			callstack = true;
 		}
 
@@ -585,19 +588,19 @@ std::string LuaState::getStackTrace(lua_State* impl) //[NOTE] Changed from appen
 	return stacktrace;
 }
 
-int LuaState::handleError(lua_State* impl)
+int LuaState::handleError(lua_State* impl) //643
 {
 	assert(lua_gettop(impl) > 0); //[NOTE] Assert on line 608
 	assert(lua_isstring(impl, -1)); //[NOTE] Assert on line 609
 
-	const char* err = lua_tostring(impl, -1); //Correct? lua_tostring(impl, -1); "{0}{1}"
-	std::string stacktrace = getStackTrace(impl); //[NOTE] Changed to getStackTrace
+	const char* err = lua_tostring(impl, -1); //648 | Correct? lua_tostring(impl, -1); "{0}{1}"
+	std::string stacktrace = getStackTrace(impl); //649 | [NOTE] Changed to getStackTrace
 
-	throwError(LuaException(Format("{0}{1}", err, stacktrace))); //Correct?
+	throwError(LuaException(Format("{0}{1}", err, stacktrace))); //651
 	return 0;
 }
 
-void LuaState::getDispatchData(lua_State* impl, LuaState** luastate, LuaFunctor* lf) //?
+void LuaState::getDispatchData(lua_State* impl, LuaState** luastate, LuaFunctor* lf) //666 | ?
 {
 	lua_pushvalue(impl, LUA_GLOBALSINDEX);
 	lua_rawgeti(impl, -1, 0);
@@ -605,20 +608,12 @@ void LuaState::getDispatchData(lua_State* impl, LuaState** luastate, LuaFunctor*
 	*luastate = static_cast<LuaState*>(lua_touserdata(impl, -1));
 	lua_pop(impl, 2);
 
-	void** data = reinterpret_cast<void**>(lf);
-	const int datasize = int(sizeof(LuaFunctor) / sizeof(void*));
-	for (int i = 0; i < datasize; ++i)
+	void** data = reinterpret_cast<void**>(lf); //673
+	const int datasize = int(sizeof(LuaFunctor) / sizeof(void*)); //674
+	for (int i = 0; i < datasize; ++i) //675
 		data[i] = lua_touserdata(impl, lua_upvalueindex(i + 1));
 
 	assert(lf->obj); //[NOTE] Assert on line 632
-}
-
-LuaState::LoadFile::LoadFile(InputStream& source) :
-	in(source),
-	buf(),
-	size(source.available())
-{
-	
 }
 
 int	LuaState::handleRuntimeError(lua_State* impl)

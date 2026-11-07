@@ -5,6 +5,7 @@
 #include <lua/LuaTable.h>
 #include <lua/LuaFunction.h>
 #include <lang/Object.h>
+#include <io/InputStream.h>
 
 
 struct lua_State;
@@ -35,13 +36,13 @@ class LuaFunctor;
  * @ingroup lua
  */
 class LuaState :
-	public lang::Object
+	public lang::Object //31
 {
 public:
-	typedef int (*CFunction)( lua_State* );
+	typedef int (*CFunction)( lua_State* ); //35
 	
 	/** Type of Lua value. */
-	enum Type
+	enum Type //38
 	{
 		/** Nil. */
 		TYPE_NIL,
@@ -70,7 +71,7 @@ public:
 		ENV_GLOBALS = -10002, //Now -10002
 	};
 
-	enum Status
+	enum Status //60
 	{
 		OK,
 		YIELD,
@@ -84,18 +85,15 @@ public:
 	 * Creates Lua state by calling lua_open. 
 	 * @exception LuaException
 	 */
-	LuaState();
-
-	//Does not exist on iOS at all.
-	LuaState(lua_State* impl);
+	LuaState(); //81
 
 	/** Destroys Lua state by calling lua_close. */
-	~LuaState();
+	~LuaState(); //84
 
 	/**
 	 * Returns table of Lua state globals.
 	 */
-	LuaTable& globals();
+	LuaTable& globals(); //89
 
 	/** 
 	 * Sets top of stack. Accepts any acceptable index,
@@ -104,197 +102,205 @@ public:
 	 * elements are filled with nil. If index is 0, then
 	 * all stack elements are removed. 
 	 */
-	void setTop( int index ); //(Note inlined on iOS)
+	void setTop( int index ); //98 | (Note inlined on iOS)
 
 	/**
 	 * Pops n values from the stack.
 	 * Usually do not use this method (unless while iterating a table),
 	 * but LuaStackRestore instead.
 	 */
-	void pop( int n=1 );
+	void pop( int n=1 ); //105
 
 	/**
 	 * Pushes onto the stack a copy of the element at the given index.
 	 */
-	void push( int index );
+	void push( int index ); //110
 
 	/**
 	 * Removes the element at the given position, shifting down the 
 	 * elements above that position to fill the gap
 	 */
-	void remove( int index );
+	void remove( int index ); //116
 
 	/**
 	 * Moves the top element into the given position, shifting up 
 	 * the elements above that position to open space.
 	 */
-	void insert( int index );
+	void insert( int index ); //122
 
 	/**
 	 * Moves the top element into the given position, without 
 	 * shifting any element therefore replacing the value 
 	 * at the given position.
 	 */
-	void replace( int index );
+	void replace( int index ); //129
 
 	/** Returns type of value at specified stack index. */
-	Type type( int index );
+	Type type( int index ); //132
 
 	/** Returns true if value at specified stack index is nil. */
-	bool isNil( int index );
+	bool isNil( int index ); //135
 
 	/** Returns true if value at specified stack index is boolean. */
-	bool isBoolean( int index );
+	bool isBoolean( int index ); //138
 
 	/** Returns true if value at specified stack index is number. */
-	bool isNumber( int index );
+	bool isNumber( int index ); //141
 
 	/** Returns true if value at specified stack index is string. */
-	bool isString( int index );
+	bool isString( int index ); //144
 
 	/** Returns true if value at specified stack index is table. */
-	bool isTable( int index );
+	bool isTable( int index ); //147
 
 	/** Returns true if value at specified stack index is function. */
-	bool isFunction( int index );
+	bool isFunction( int index ); //150
 
 	/** Returns true if value at specified stack index is C-function. */
-	bool isCFunction( int index );
+	bool isCFunction( int index ); //153
 
 	/** Returns true if value at specified stack index is user data. */
-	bool isUserData( int index );
+	bool isUserData( int index ); //156
 
 	/** Returns true if value at specified stack index is light user data. */
-	bool isLightUserData( int index );
+	bool isLightUserData( int index ); //159
 
 	/** Compares values at two stack positions. */
-	bool equal( int index1, int index2 );
+	bool equal( int index1, int index2 ); //162
 
 	/** Compares values at two stack positions. */
-	bool lessThan( int index1, int index2 );
+	bool lessThan( int index1, int index2 ); //165
 
 	/** Compares values at two stack positions without using metamethods. */
-	bool rawEqual( int index1, int index2 );
+	bool rawEqual( int index1, int index2 ); //168
 
 	/**
 	 * Returns boolean at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	bool toBoolean( int index );
+	bool toBoolean( int index ); //174
 
 	/**
 	 * Returns number at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	float toNumber( int index );
+	float toNumber( int index ); //180
 
 	/**
 	 * Returns zero-terminated string at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	const char* toString( int index );
+	const char* toString( int index ); //186
 
 	/**
 	 * Returns C-function at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	CFunction toCFunction( int index );
+	CFunction toCFunction( int index ); //192
 
 	/**
 	 * Returns light user data at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	void* toLightUserData( int index );
+	void* toLightUserData( int index ); //198
 
 	/**
 	 * Returns user data at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	void* toUserData( int index );
+	void* toUserData( int index ); //204
 
 	/**
 	 * Returns handle to table at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	LuaTable toTable( int index );
+	LuaTable toTable( int index ); //210
 	
 	/**
 	 * 
 	 * @exception LuaException If types do not match.
 	 */
-	LuaFunction toFunction( int index );
+	LuaFunction toFunction( int index ); //216
 
 	/**
 	 * Returns value at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	void toValue( int index, bool& v )					{v=toBoolean(index);}
+	template <class T> void toValue(int index, T v); //223 | TODO
 
 	/**
 	 * Returns value at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	void toValue(int index, std::string& v) { v = toString(index); }
+	void toValue( int index, bool& v )					{v=toBoolean(index);} //229
 
 	/**
 	 * Returns value at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	void toValue(int index, const char*& v) { v = toString(index); }
+	void toValue(int index, std::string& v) { v = toString(index); } //235
 
 	/**
 	 * Returns value at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	void toValue(int index, LuaTable& v) { v = toTable(index); }
+	void toValue(int index, const char*& v) { v = toString(index); } //241
 
 	/**
 	 * Returns value at specified stack position.
 	 * @exception LuaException If types do not match.
 	 */
-	void toValue(int index, LuaFunction& v) { v = toFunction(index); }
+	void toValue(int index, LuaTable& v) { v = toTable(index); } //247
+
+	/**
+	 * Returns value at specified stack position.
+	 * @exception LuaException If types do not match.
+	 */
+	void toValue(int index, LuaFunction& v); //253
 
 	/** Pushes boolean onto the Lua stack. */
-	void pushBoolean( bool v );
+	void pushBoolean( bool v ); //256
 	
 	/** Pushes number onto the Lua stack. */
-	void pushNumber( float v );
+	void pushNumber( float v ); //259
 	
 	/** Pushes zero-terminated string onto the Lua stack. */
-	void pushString( const char* v );
+	void pushString( const char* v ); //262
 
 	/** Pushes string onto the Lua stack. */
-	void pushString( const std::string& v );
+	void pushString( const std::string& v ); //265
 	
 	/** Pushes nil onto the Lua stack. */
-	void pushNil();
+	void pushNil(); //268
 	
 	/** Pushes C-function onto the Lua stack. */
-	void pushCFunction( CFunction v );
+	void pushCFunction( CFunction v ); //271
 
 	/** Pushes light user data onto the Lua stack. */
-	void pushLightUserData( void* v );
+	void pushLightUserData( void* v ); //274
 
 	/** Pushes value onto the Lua stack. */
-	void pushValue( bool v )					{pushBoolean(v);}
+	void pushValue( bool v )					{pushBoolean(v);} //277
+
+	template <class T> void pushValue(T v) { pushValue(v); } //282
 	
 	/** Pushes value onto the Lua stack. */
-	void pushValue( const std::string& v )		{pushString(v);}
-	
-	/**  */
-	void pushValue( const char* v );
-
-	/** Pushes value onto the Lua stack. */
-	void pushValue( const LuaTable* v )			{pushTable(v);}
-
-	/** Pushes value onto the Lua stack. */
-	void pushValue( const LuaTable& v )			{pushTable(v);}
+	void pushValue( const std::string& v )		{pushString(v);} //285
 	
 	/**  */
-	void pushValue( const LuaFunction& v )		{pushFunction(v);}
+	void pushValue( const char* v ); //288
+
+	/** Pushes value onto the Lua stack. */
+	void pushValue( const LuaTable* v )			{pushTable(v);} //291
+
+	/** Pushes value onto the Lua stack. */
+	void pushValue( const LuaTable& v )			{pushTable(v);} //294
+	
+	/**  */
+	void pushValue( const LuaFunction& v )		{pushFunction(v);} //297
 
 	/** Pushes C function closure onto the Lua stack. */
-	void pushCClosure( CFunction v, int n );
+	void pushCClosure( CFunction v, int n ); //300
 
 	/** 
 	 * Pushes method closure onto the Lua stack. 
@@ -307,31 +313,31 @@ public:
 	template <class T> void pushMethodClosure( T* obj, int (T::*func)(LuaState*) );
 
 	/** Returns index of n-th up-value, starting from 1. */
-	int upValueIndex( int n );
+	int upValueIndex( int n ); //313
 
 	/** Pushes table onto the Lua stack. */
-	void pushTable( const LuaTable* v )			{pushTable(m_impl,v);}
+	void pushTable( const LuaTable* v )			{pushTable(m_impl,v);} //316
 
 	/** Pushes table onto the Lua stack. */
-	void pushTable( const LuaTable& v )			{pushTable(m_impl,&v);}
+	void pushTable( const LuaTable& v )			{pushTable(m_impl,&v);} //319
 	
 	/**  */
-	void pushFunction( const LuaFunction* v )	{pushFunction(m_impl,v);}
+	void pushFunction( const LuaFunction* v )	{pushFunction(m_impl,v);} //322
 	
 	/**  */
-	void pushFunction( const LuaFunction& v )		{pushFunction(m_impl,&v);}
+	void pushFunction( const LuaFunction& v )		{pushFunction(m_impl,&v);} //325
 
 	/** 
 	 * 
 	 * @exception LuaException
 	 */
-	LuaState* newThread();
+	LuaState* newThread(); //331
 	 
 	/** 
 	 * Creates a new, empty table and pushes it onto the stack. 
 	 * @exception LuaException
 	 */
-	void newTable();
+	void newTable(); //337
 
 	/**
 	 * Pops a key from the stack and returns (on the stack) 
@@ -339,7 +345,7 @@ public:
 	 * The table is left where it was in the stack.
 	 * @exception LuaException
 	 */
-	void getTable( int index );
+	void getTable( int index ); //345
 
 	/**
 	 * Pops a key from the stack and returns (on the stack) 
@@ -348,7 +354,7 @@ public:
 	 * Ignores metamethods.
 	 * @exception LuaException
 	 */
-	void rawGet( int index );
+	void rawGet( int index ); //354
 
 	/** 
 	 * Pops from the stack both the key and the value.
@@ -356,7 +362,7 @@ public:
 	 * The table is left where it was in the stack.
 	 * @exception LuaException
 	 */
-	void setTable( int index );
+	void setTable( int index ); //362
 
 	/** 
 	 * Pops from the stack both the key and the value.
@@ -365,7 +371,7 @@ public:
 	 * Ignores metamethods.
 	 * @exception LuaException
 	 */
-	void rawSet( int index );
+	void rawSet( int index ); //371
 
 	/**
 	 * The function pops a key from the stack, and pushes a key-value pair 
@@ -374,34 +380,34 @@ public:
 	 * Use a nil key to signal the start of a traversal.
 	 * @exception LuaException
 	 */
-	bool next( int index );
+	bool next( int index ); //380
 
 	/**
 	 * Pushes the value of the n-th element of the table at stack position index.
 	 * @exception LuaException
 	 */
-	void rawGetI( int index, int n );
+	void rawGetI( int index, int n ); //386
 
 	/**
 	 * Sets the value of the n-th element of the table at stack position index 
 	 * to the value at the top of the stack, removing this value from the stack.
 	 * @exception LuaException
 	 */
-	void rawSetI( int index, int n );
+	void rawSetI( int index, int n ); //393
 
 	/**
 	 * Pops a table from the stack and sets it as the new environment 
 	 * for the function at index index in the stack.
 	 * @exception LuaException
 	 */
-	void setFEnv( int index );
+	void setFEnv( int index ); //400
 
 	/**
 	 * Pushes on the stack the environment table of the function 
 	 * at index index in the stack.
 	 * @exception LuaException
 	 */
-	void getFEnv( int index );
+	void getFEnv( int index ); //407
 
 	/**
 	 * Calls Lua function. Functions defined in Lua and C functions registered in 
@@ -413,7 +419,7 @@ public:
 	 * @param nresults Number of results returned are adjusted to this number.
 	 * @exception LuaException
 	 */
-	void call( int nargs, int nresults );
+	void call( int nargs, int nresults ); //419
 	
 	/**
 	 * 
@@ -422,7 +428,7 @@ public:
 	 * @param nargs
 	 * @exception LuaException
 	 */
-	int resume( int nargs); //Not on iOS.
+	int resume( int nargs); //429 | Not on iOS.
 	
 	/**
 	 * 
@@ -430,7 +436,7 @@ public:
 	 * @param nresults
 	 * @exception LuaException
 	 */
-	int yield( int nresults ); //Not on iOS.
+	int yield( int nresults ); //437 | Not on iOS.
 
 	/**
 	 * Compiles Lua chunk from memory buffer.
@@ -440,7 +446,7 @@ public:
 	 * @param env Function environment if any.
 	 * @exception LuaException
 	 */
-	void compile( const char* buffer, int size, const std::string& name, LuaTable* env );
+	void compile( const char* buffer, int size, const std::string& name, LuaTable* env ); //447
 	
 	/**
 	 * 
@@ -449,7 +455,7 @@ public:
 	 * @param 
 	 * @exception LuaException
 	 */
-	void getByteCode( const char* buffer, int size, io::OutputStream& ); //Not on iOS.
+	void getByteCode( const char* buffer, int size, io::OutputStream& ); //456 | Not on iOS.
 
 	/**
 	 * Compiles Lua chunk from file.
@@ -459,13 +465,13 @@ public:
 	 * @param env Function environment if any.
 	 * @exception LuaException
 	 */
-	void compile( io::InputStream& in, int size, const std::string& name, LuaTable* env );
+	void compile( io::InputStream& in, const std::string& name, LuaTable* env ); //465
 
 	/** 
 	 * Checks type at specified stack index.
 	 * @exception LuaException If types don't match.
 	 */
-	void checkType( int index, Type type );
+	void checkType( int index, Type type ); //471
 
 	/** 
 	 * Called after dynamic cast fails to specified type when dispatching calls.
@@ -473,38 +479,36 @@ public:
 	 * @param index Lua stack index where the incorrect type was found.
 	 * @exception LuaException Always.
 	 */
-	void incorrectType( int index );
+	void incorrectType( int index ); //479
 
 	/** Returns low level Lua state object. */
-	lua_State* impl()		{return m_impl;}
+	lua_State* impl()		{return m_impl;} //482
 
 	/**
 	 * Returns top of the stack.
 	 */
-	int top() const;
+	int top() const; //487
 	
 	
-	Status status() const;
+	Status status() const; //492
 
 	/** Returns type name. */
-	static const char* toString( Type type );
+	static const char* toString( Type type ); //395
 
 	/* Concatenates stack trace to limited buffer. Used by implementation. [NOTE] changed from appendStackTrace*/
-	static std::string getStackTrace( lua_State* impl );
+	static std::string getStackTrace( lua_State* impl ); //498
 
 	/* Pushes string to Lua state stack. Used by implementation. */
-	static void pushString( lua_State* impl, const std::string& v );
+	static void pushString( lua_State* impl, const std::string& v ); //501
 	
 	/* Pushes string to Lua state stack. Used by implementation. */
-	static void pushString( lua_State* impl, const char* v );
+	static void pushString( lua_State* impl, const char* v ); //504
 
 	/* Pushes table to Lua state stack. Used by implementation. */
-	static void pushTable( lua_State* impl, const LuaTable* v );
+	static void pushTable( lua_State* impl, const LuaTable* v ); //507
 	
 	/*  */
-	static void pushFunction( lua_State* impl, const LuaFunction& v );
-
-	static void pushFunction( lua_State* impl, const LuaFunction* v );
+	static void pushFunction( lua_State* impl, const LuaFunction* v ); //510
 
 	/* 
 	 * Returns C++ this pointer from table in stack at specified position.
@@ -513,12 +517,12 @@ public:
 	 * Used by implementation.
 	 * @exception LuaException
 	 */
-	static LuaTable* getThisPtr( lua_State* impl, int index );
+	static LuaTable* getThisPtr( lua_State* impl, int index ); //519
 
 	/*
 	 * Used by the implementation of Lua call dispatch system.
 	 */
-	static void getDispatchData( lua_State* impl, LuaState** luastate, LuaFunctor* lf );
+	static void getDispatchData( lua_State* impl, LuaState** luastate, LuaFunctor* lf ); //524
 
 private:
 	struct LoadBuffer //527
@@ -529,11 +533,16 @@ private:
 
 	struct LoadFile //533
 	{
-		LoadFile(io::InputStream&); //535
+		LoadFile(io::InputStream& source) : //535
+			in(source), size(source.available())
+		{
+		}
 
 		io::InputStream& in; //540
 		int size; //541
 		char buf[2048]; //542
+
+	private:
 		LoadFile& operator=(const LoadFile&); //545
 	};
 
@@ -541,14 +550,15 @@ private:
 	LuaTable			m_globals; //549
 	int					m_ref; //550
 
+	LuaState(lua_State* impl); //552
 	void				handleLoadResult( int err, const std::string& name, LuaTable* env ); //553
-	static const char*	loadBuffer( lua_State* impl, void* data, size_t* size );
-	static const char*	loadFile( lua_State* impl, void* data, size_t* size );
-	static int			handleError( lua_State* impl );
-	static int			handleRuntimeError( lua_State* impl );
+	static const char*	loadBuffer( lua_State* impl, void* data, size_t* size ); //554
+	static const char*	loadFile( lua_State* impl, void* data, size_t* size ); //555
+	static int			handleError( lua_State* impl ); //556
+	static int			handleRuntimeError( lua_State* impl ); //557
 
-	LuaState( const LuaState& );
-	LuaState& operator=( const LuaState& );
+	LuaState( const LuaState& ); //559
+	LuaState& operator=( const LuaState& ); //560
 };
 
 

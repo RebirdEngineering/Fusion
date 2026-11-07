@@ -1,20 +1,14 @@
 #ifndef _LUA_LUASTACKRESTORE_H
 #define _LUA_LUASTACKRESTORE_H
 
-
 #include <lang/pp.h>
-
 
 struct lua_State;
 
-
 namespace lua
 {
- 
-
 
 class LuaState;
-
 
 /** 
  * Helper class for storing and restoring Lua stack stack top position.
@@ -22,24 +16,24 @@ class LuaState;
  * 
  * @ingroup lua
  */
-class LuaStackRestore
+class LuaStackRestore //17
 {
 public:
 	/** Saves Lua stack top position. */
-	LuaStackRestore( LuaState* luastate );
+	LuaStackRestore( LuaState* luastate ); //21
 
 	/** Saves Lua stack top position. */
-	LuaStackRestore( lua_State* impl );
+	LuaStackRestore( lua_State* impl ); //24
 
 	/** Restores Lua stack top position. */
-	~LuaStackRestore();
+	~LuaStackRestore(); //27
 
 private:
-	lua_State*	m_impl;
-	int			m_top;
+	lua_State*	m_impl; //30
+	int			m_top; //31
 
-	LuaStackRestore( const LuaStackRestore& );
-	LuaStackRestore& operator=( const LuaStackRestore& );
+	LuaStackRestore( const LuaStackRestore& ); //33
+	LuaStackRestore& operator=( const LuaStackRestore& ); //34
 };
 
 

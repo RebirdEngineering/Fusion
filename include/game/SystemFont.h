@@ -53,7 +53,7 @@ public:
 	const char* toString(Style); //141
 private:
 	class Impl;
-	P(Impl) m_impl; //159 | Impl sizes: [Win32: 88 bytes, iOS: 56 bytes, WP8: 12 bytes {Dummy?}, Android: 100 bytes, OSX: 56 bytes]
+	P(Impl) m_impl; //159 | Impl sizes: [Win32 [GDI]: 88 bytes, iOS: 56 bytes, WP8: 12 bytes {Dummy?}, Android: 100 bytes, OSX: 56 bytes]
 };
 
 }
