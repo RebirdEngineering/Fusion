@@ -57,7 +57,13 @@ public:
     Texture* createTexture( const std::string& filename ); //87
 
     /**
-     * 
+     * Creates context dependent texture.
+     * @param width Width of the texture in pixels.
+     * @param height Height of the texture in pixels.
+     * @param mipcount
+     * @param fmt Pixel format of the texture.
+     * @param usageflags Texture usage flags. See UsageFlags.
+     * @exception GraphicsException
      */
     Texture* createTexture( int width, int height, int mipcount, const img::SurfaceFormat& fmt, int usageflags ); //98
 

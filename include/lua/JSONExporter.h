@@ -32,7 +32,8 @@ public:
 
     struct State //39
     {
-        State(bool, int); //41
+        State(bool firstItem, int currentIndex) : m_firstItem(firstItem), m_currentIndex(currentIndex) //41
+        {}
 
         bool m_firstItem; //44
         int m_currentIndex; //45

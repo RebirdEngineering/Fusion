@@ -22,7 +22,7 @@ LuaTable::LuaTable() : //So the Fusion LuaTable just carbon copies most stuff
 {
 }
 
-LuaTable::LuaTable( LuaState* luastate ) : //29
+LuaTable::LuaTable( LuaState* luastate ) : //29-38
 	m_luastate( luastate ),
 	m_ref( -1 )
 {
@@ -33,15 +33,15 @@ LuaTable::LuaTable( LuaState* luastate ) : //29
 	}
 }
 
-LuaTable::LuaTable( const LuaTable& other ) : //40
+LuaTable::LuaTable( const LuaTable& other ) : //40-50
 	m_luastate( other.m_luastate ),
 	m_ref( -1 )
 {
 	if ( other.m_luastate && other.m_ref >= 0 )
 	{
 		lua_State* impl = m_luastate->impl(); //46
-		lua_getref( impl, other.m_ref );
-		m_ref = lua_ref( impl, true );
+		lua_getref( impl, other.m_ref ); //47
+		m_ref = lua_ref( impl, true ); //48
 	}
 }
 
@@ -49,6 +49,8 @@ LuaTable::LuaTable( LuaTable&& other) :
 	m_luastate(other.m_luastate),
 	m_ref(other.m_ref)
 {
+	m_luastate = 0;
+	m_ref = -1;
 }
 
 LuaTable::~LuaTable()
@@ -57,7 +59,7 @@ LuaTable::~LuaTable()
 		lua_unref( m_luastate->impl(), m_ref ); //64
 }
 
-LuaTable& LuaTable::operator=( const LuaTable& other ) //67
+LuaTable& LuaTable::operator=( const LuaTable& other ) //67-89
 {
 	int oldref = m_ref; //69
 	lua_State* oldlua = m_luastate ? m_luastate->impl() : 0; //70
@@ -76,7 +78,7 @@ LuaTable& LuaTable::operator=( const LuaTable& other ) //67
 	}
 
 	if ( oldlua && oldref >= 0 )
-		lua_unref( oldlua, oldref );
+		lua_unref( oldlua, oldref ); //86
 
 	return *this;
 }
@@ -87,7 +89,7 @@ LuaTable& LuaTable::operator=( LuaTable&& other ) //91
 	return *this;
 }
 
-void LuaTable::remove( int index ) //98
+void LuaTable::remove( int index ) //98-107
 {
 	assert( m_ref >= 0 );
 
@@ -98,7 +100,7 @@ void LuaTable::remove( int index ) //98
 	lua_rawseti( impl, -2, index );
 }
 
-void LuaTable::remove( const std::string& name ) //109
+void LuaTable::remove( const std::string& name ) //109-119
 {
 	assert( m_ref >= 0 );
 
@@ -110,7 +112,7 @@ void LuaTable::remove( const std::string& name ) //109
 	lua_rawset( impl, -3 );
 }
 
-void LuaTable::remove(const char* name) //121
+void LuaTable::remove(const char* name) //121-131
 {
 	assert(m_ref >= 0);
 
@@ -122,7 +124,7 @@ void LuaTable::remove(const char* name) //121
 	lua_rawset(impl, -3);
 }
 
-void LuaTable::setString( int index, const std::string& v ) //133
+void LuaTable::setString( int index, const std::string& v ) //133-142
 {
 	assert( m_ref >= 0 );
 
@@ -133,7 +135,7 @@ void LuaTable::setString( int index, const std::string& v ) //133
 	lua_rawseti( impl, -2, index );
 }
 
-void LuaTable::setString(int index, const char* v) //144
+void LuaTable::setString(int index, const char* v) //144-153
 {
 	assert(m_ref >= 0);
 
@@ -144,7 +146,7 @@ void LuaTable::setString(int index, const char* v) //144
 	lua_rawseti(impl, -2, index);
 }
 
-void LuaTable::setNumber( int index, float v ) //155
+void LuaTable::setNumber( int index, float v ) //155-164
 {
 	assert( m_ref >= 0 );
 
@@ -155,18 +157,29 @@ void LuaTable::setNumber( int index, float v ) //155
 	lua_rawseti( impl, -2, index );
 }
 
-void LuaTable::setTable( int index, const LuaTable& v )  //166
+void LuaTable::setTable( int index, const LuaTable& v ) //166-175
 {
 	assert( m_ref >= 0 );
 
 	lua_State* impl = m_luastate->impl(); //170
 	LuaStackRestore lsr( impl ); //171
-	lua_getref( impl, m_ref );
-	LuaState::pushTable( impl, &v );
-	lua_rawseti( impl, -2, index );
+	lua_getref( impl, m_ref ); //172
+	LuaState::pushTable( impl, &v ); //173
+	lua_rawseti( impl, -2, index ); //174
 }
 
-void LuaTable::setBoolean( int index, bool v ) //188
+void LuaTable::setTable(int index, const LuaTable* v) //Unknown line but 177-186 seems accurate
+{
+	assert(m_ref >= 0);
+
+	lua_State* impl = m_luastate->impl();
+	LuaStackRestore lsr(impl);
+	lua_getref(impl, m_ref);
+	LuaState::pushTable(impl, v);
+	lua_rawseti(impl, -2, index);
+}
+
+void LuaTable::setBoolean( int index, bool v ) //188-197
 {
 	assert( m_ref >= 0 );
 
@@ -177,7 +190,7 @@ void LuaTable::setBoolean( int index, bool v ) //188
 	lua_rawseti( impl, -2, index );
 }
 
-void LuaTable::setString( const std::string& name, const std::string& v ) //199
+void LuaTable::setString( const std::string& name, const std::string& v ) //199-209
 {
 	assert( m_ref >= 0 );
 
@@ -189,7 +202,7 @@ void LuaTable::setString( const std::string& name, const std::string& v ) //199
 	lua_rawset( impl, -3 );
 }
 
-void LuaTable::setString( const char* name, const std::string& v ) //211
+void LuaTable::setString( const char* name, const std::string& v ) //211-221
 {
 	assert( m_ref >= 0 );
 
@@ -201,7 +214,7 @@ void LuaTable::setString( const char* name, const std::string& v ) //211
 	lua_rawset( impl, -3 );
 }
 
-void LuaTable::setString(const std::string& name, const char* v) //223
+void LuaTable::setString(const std::string& name, const char* v) //223-233
 {
 	assert(m_ref >= 0);
 
@@ -213,7 +226,7 @@ void LuaTable::setString(const std::string& name, const char* v) //223
 	lua_rawset(impl, -3);
 }
 
-void LuaTable::setString(const char* name, const char* v) //235
+void LuaTable::setString(const char* name, const char* v) //235-245
 {
 	assert(m_ref >= 0);
 
@@ -225,7 +238,7 @@ void LuaTable::setString(const char* name, const char* v) //235
 	lua_rawset(impl, -3);
 }
 
-void LuaTable::setNumber( const std::string& name, float v ) //247
+void LuaTable::setNumber( const std::string& name, float v ) //247-257
 {
 	assert( m_ref >= 0 );
 
@@ -237,7 +250,7 @@ void LuaTable::setNumber( const std::string& name, float v ) //247
 	lua_rawset( impl, -3 );
 }
 
-void LuaTable::setNumber(const char* name, float v) //259
+void LuaTable::setNumber(const char* name, float v) //259-269
 {
 	assert(m_ref >= 0);
 
@@ -249,7 +262,7 @@ void LuaTable::setNumber(const char* name, float v) //259
 	lua_rawset(impl, -3);
 }
 
-void LuaTable::setTable( const std::string& name, const LuaTable& v ) //271
+void LuaTable::setTable( const std::string& name, const LuaTable& v ) //271-282
 {
 	assert( m_ref >= 0 );
 	assert( v.m_ref >= 0 );
@@ -262,19 +275,31 @@ void LuaTable::setTable( const std::string& name, const LuaTable& v ) //271
 	lua_rawset( impl, -3 );
 }
 
-void LuaTable::setTable(const char* name, const LuaTable& v) //284
+void LuaTable::setTable(const char* name, const LuaTable& v) //284-295
 {
 	assert(m_ref >= 0);
 
 	lua_State* impl = m_luastate->impl(); //289
 	LuaStackRestore lsr(impl); //290
+	lua_getref(impl, m_ref); //291
+	LuaState::pushString(impl, name); //292
+	LuaState::pushTable(impl, &v); //293
+	lua_rawset(impl, -3); //294
+}
+
+void LuaTable::setTable(const std::string& name, const LuaTable* v)
+{
+	assert(m_ref >= 0);
+
+	lua_State* impl = m_luastate->impl();
+	LuaStackRestore lsr(impl);
 	lua_getref(impl, m_ref);
 	LuaState::pushString(impl, name);
-	LuaState::pushTable(impl, &v);
+	LuaState::pushTable(impl, v);
 	lua_rawset(impl, -3);
 }
 
-void LuaTable::setTable( const char* name, const LuaTable* v ) //309
+void LuaTable::setTable( const char* name, const LuaTable* v ) //309-319
 {
 	assert( m_ref >= 0 );
 
@@ -308,7 +333,55 @@ void LuaTable::setFunction(int index, const LuaFunction* v)
 	lua_rawseti(impl, -2, index);
 }
 
-void LuaTable::setBoolean( const std::string& name, bool v ) //344
+void LuaTable::setFunction(const std::string& name, const LuaFunction& v)
+{
+	assert(m_ref >= 0);
+
+	lua_State* impl = m_luastate->impl();
+	LuaStackRestore lsr(impl);
+	lua_getref(impl, m_ref);
+	LuaState::pushString(impl, name);
+	LuaState::pushFunction(impl, &v);
+	lua_rawset(impl, -2);
+}
+
+void LuaTable::setFunction(const std::string& name, const LuaFunction* v)
+{
+	assert(m_ref >= 0);
+
+	lua_State* impl = m_luastate->impl();
+	LuaStackRestore lsr(impl);
+	lua_getref(impl, m_ref);
+	LuaState::pushString(impl, name);
+	LuaState::pushFunction(impl, v);
+	lua_rawset(impl, -2);
+}
+
+void LuaTable::setFunction(const char* name, const LuaFunction& v)
+{
+	assert(m_ref >= 0);
+
+	lua_State* impl = m_luastate->impl();
+	LuaStackRestore lsr(impl);
+	lua_getref(impl, m_ref);
+	LuaState::pushString(impl, name);
+	LuaState::pushFunction(impl, &v);
+	lua_rawset(impl, -2);
+}
+
+void LuaTable::setFunction(const char* name, const LuaFunction* v)
+{
+	assert(m_ref >= 0);
+
+	lua_State* impl = m_luastate->impl();
+	LuaStackRestore lsr(impl);
+	lua_getref(impl, m_ref);
+	LuaState::pushString(impl, name);
+	LuaState::pushFunction(impl, v);
+	lua_rawset(impl, -2);
+}
+
+void LuaTable::setBoolean( const std::string& name, bool v ) //344-354
 {
 	assert( m_ref >= 0 );
 
@@ -320,7 +393,7 @@ void LuaTable::setBoolean( const std::string& name, bool v ) //344
 	lua_rawset( impl, -3 );
 }
 
-void LuaTable::setBoolean(const char* name, bool v) //356
+void LuaTable::setBoolean(const char* name, bool v) //356-366
 {
 	assert(m_ref >= 0);
 
@@ -332,7 +405,7 @@ void LuaTable::setBoolean(const char* name, bool v) //356
 	lua_rawset(impl, -3);
 }
 
-std::string LuaTable::getString(const std::string& name) const //According to the DWARF it's not in CPP yet ELF shows this symbol, why?
+std::string LuaTable::getString(const std::string& name) const
 {
 	assert(m_ref >= 0);
 
@@ -345,7 +418,7 @@ std::string LuaTable::getString(const std::string& name) const //According to th
 	return lua_tostring(impl, -1);
 }
 
-std::string LuaTable::getString(const char* name) const //382
+std::string LuaTable::getString(const char* name) const //382-394
 {
 	assert(m_ref >= 0);
 
@@ -355,23 +428,24 @@ std::string LuaTable::getString(const char* name) const //382
 	LuaState::pushString(impl, name); //389
 	lua_rawget(impl, -2); //390
 	const char* string = lua_tostring(impl, -1); //391
+
 	return string;
 }
 
-float LuaTable::getNumber(const std::string& name) const //396
+float LuaTable::getNumber(const std::string& name) const //396-407
 {
 	assert(m_ref >= 0);
 
 	lua_State* impl = m_luastate->impl(); //400
 	LuaStackRestore lsr(impl); //401
-	lua_getref(impl, m_ref);
-	LuaState::pushString(impl, name);
-	lua_rawget(impl, -2);
+	lua_getref(impl, m_ref); //402
+	LuaState::pushString(impl, name); //403
+	lua_rawget(impl, -2); //404
 
-	return lua_tonumber(impl, -1);
+	return lua_tonumber(impl, -1); //406
 }
 
-float LuaTable::getNumber(const char* name) const //409
+float LuaTable::getNumber(const char* name) const //409-420
 {
 	assert(m_ref >= 0);
 
@@ -465,6 +539,8 @@ LuaFunction LuaTable::getFunction(const std::string& name) const
 
 LuaFunction LuaTable::getFunction(int index) const
 {
+	assert(m_ref >= 0);
+
 	lua_State* impl = m_luastate->impl();
 	LuaStackRestore lsr(impl);
 	lua_getref(impl, m_ref);
@@ -531,7 +607,7 @@ LuaTable LuaTable::getTable(int index) const //543-563
 	return tab;
 }
 
-bool LuaTable::getBoolean(const std::string& name) const //565
+bool LuaTable::getBoolean(const std::string& name) const //565-576
 {
 	assert(m_ref >= 0);
 
@@ -544,7 +620,7 @@ bool LuaTable::getBoolean(const std::string& name) const //565
 	return 0 != lua_toboolean(impl, -1);
 }
 
-bool LuaTable::getBoolean(const char* name) const //578
+bool LuaTable::getBoolean(const char* name) const //578-589
 {
 	assert(m_ref >= 0);
 
@@ -557,7 +633,7 @@ bool LuaTable::getBoolean(const char* name) const //578
 	return 0 != lua_toboolean(impl, -1);
 }
 
-bool LuaTable::getBoolean(int index) const //591
+bool LuaTable::getBoolean(int index) const //591-601
 {
 	assert(m_ref >= 0);
 
@@ -569,7 +645,7 @@ bool LuaTable::getBoolean(int index) const //591
 	return 0 != lua_toboolean(impl, -1);
 }
 
-bool LuaTable::isNil(const char* name) const //603
+bool LuaTable::isNil(const char* name) const //603-614
 {
 	assert(m_ref >= 0);
 
@@ -582,7 +658,7 @@ bool LuaTable::isNil(const char* name) const //603
 	return res;
 }
 
-bool LuaTable::isNil(const std::string& name) const //616
+bool LuaTable::isNil(const std::string& name) const //616-627
 {
 	assert(m_ref >= 0);
 
@@ -595,7 +671,7 @@ bool LuaTable::isNil(const std::string& name) const //616
 	return res;
 }
 
-bool LuaTable::isNil(int index) const //629
+bool LuaTable::isNil(int index) const //629-639
 {
 	assert(m_ref >= 0);
 
@@ -607,7 +683,7 @@ bool LuaTable::isNil(int index) const //629
 	return res;
 }
 
-bool LuaTable::isString(const char* name) const //641
+bool LuaTable::isString(const char* name) const //641-652
 {
 	assert(m_ref >= 0);
 
@@ -620,7 +696,7 @@ bool LuaTable::isString(const char* name) const //641
 	return res;
 }
 
-bool LuaTable::isString(int index) const //667
+bool LuaTable::isString(int index) const //667-677
 {
 	assert(m_ref >= 0);
 
@@ -632,7 +708,7 @@ bool LuaTable::isString(int index) const //667
 	return res;
 }
 
-bool LuaTable::isNumber(const char* name) const //679
+bool LuaTable::isNumber(const char* name) const //679-690
 {
 	assert(m_ref >= 0);
 
@@ -645,7 +721,7 @@ bool LuaTable::isNumber(const char* name) const //679
 	return res;
 }
 
-bool LuaTable::isNumber(const std::string& name) const //692
+bool LuaTable::isNumber(const std::string& name) const //692-703
 {
 	assert(m_ref >= 0);
 
@@ -658,7 +734,7 @@ bool LuaTable::isNumber(const std::string& name) const //692
 	return res;
 }
 
-bool LuaTable::isNumber(int index) const //705
+bool LuaTable::isNumber(int index) const //705-715
 {
 	assert(m_ref >= 0);
 
@@ -670,7 +746,7 @@ bool LuaTable::isNumber(int index) const //705
 	return res;
 }
 
-bool LuaTable::isTable(const char* name) const //742
+bool LuaTable::isTable(const char* name) const //742-753
 {
 	assert(m_ref >= 0);
 
@@ -683,7 +759,7 @@ bool LuaTable::isTable(const char* name) const //742
 	return res;
 }
 
-bool LuaTable::isTable(const std::string& name) const //755
+bool LuaTable::isTable(const std::string& name) const //755-766
 {
 	assert(m_ref >= 0);
 
@@ -696,7 +772,7 @@ bool LuaTable::isTable(const std::string& name) const //755
 	return res;
 }
 
-bool LuaTable::isTable(int index) const //768
+bool LuaTable::isTable(int index) const //768-778
 {
 	assert(m_ref >= 0);
 
@@ -708,7 +784,7 @@ bool LuaTable::isTable(int index) const //768
 	return res;
 }
 
-bool LuaTable::isBoolean(const char* name) const //780
+bool LuaTable::isBoolean(const char* name) const //780-791
 {
 	assert(m_ref >= 0);
 
@@ -721,20 +797,20 @@ bool LuaTable::isBoolean(const char* name) const //780
 	return res;
 }
 
-bool LuaTable::isBoolean(const std::string& name) const //793
+bool LuaTable::isBoolean(const std::string& name) const //793-804
 {
 	assert(m_ref >= 0);
 
 	lua_State* impl = m_luastate->impl(); //797
 	LuaStackRestore lsr(impl); //798
-	lua_getref(impl, m_ref);
-	LuaState::pushString(impl, name);
-	lua_rawget(impl, -2);
-	bool res = 0 != lua_isboolean(impl, -1); //801
+	lua_getref(impl, m_ref); //799
+	LuaState::pushString(impl, name); //800
+	lua_rawget(impl, -2); //801
+	bool res = 0 != lua_isboolean(impl, -1); //802
 	return res;
 }
 
-bool LuaTable::isBoolean(int index) const //806
+bool LuaTable::isBoolean(int index) const //806-816
 {
 	assert(m_ref >= 0);
 
@@ -767,7 +843,7 @@ void LuaTable::pushMember(const std::string& name) const
 	lua_remove(impl, -2);
 }
 
-void LuaTable::pushMember(const char* name) const //839
+void LuaTable::pushMember(const char* name) const //839-848
 {
 	assert(m_ref >= 0);
 
@@ -778,29 +854,29 @@ void LuaTable::pushMember(const char* name) const //839
 	lua_remove(impl, -2);
 }
 
-void LuaTable::writeChar(OutputStream& out, int ch) //850
+void LuaTable::writeChar(OutputStream& out, int ch) //850-855
 {
 	assert(ch >= 0 && ch < 256);
 	char b = (char)ch; //853
 	out.write(&b, sizeof(b));
 }
 
-void LuaTable::writeMargin(OutputStream& out, int margin) //857
+void LuaTable::writeMargin(OutputStream& out, int margin) //857-861
 {
 	for (int i = 0; i < margin; ++i) //859
 		writeChar(out, ' '); //860
 }
 
-void LuaTable::writeString(OutputStream& out, const char* str) //863
+void LuaTable::writeString(OutputStream& out, const char* str) //863-868
 {
 	const int len = strlen(str); //865
 	for (int i = 0; i < len; ++i) //866
 		writeChar(out, str[i]); //867
 }
 
-bool isDigit(char chr) //870 | TODO
+bool isDigit(char chr) //870-873 | Correct?
 {
-	return false; //?
+	return chr >= '0' && chr <= '9'; //return static_cast<unsigned char>(chr - '0') < 10; //?
 }
 
 void LuaTable::writeStringLiteral(OutputStream& out, const char* str) //875-955 | TODO
@@ -882,24 +958,32 @@ class LuaKeywordChecker //1003
 public:
 	LuaKeywordChecker() //1006
 	{
-		const char* const keywords[] = { "and", "break", "do", "else", "elseif", "end", "false", "for", "function", "if", "in", "local", "nil", "not", "or", "repeat", "return", "then", "true", "nil" }; //1008
+		static const char* const keywords[] = { "and", "break", "do", "else", "elseif", "end", "false", "for", "function", "if", "in", "local", "nil", "not", "or", "repeat", "return", "then", "true", "nil" }; //1008
 
 		for (int i = 0 < sizeof(keywords) / sizeof keywords[0]; i++; ) //1011
 		{
-			//isValidKeyName(keywords[i]);
+			m_keywords[keywords[i]] = true;
 		}
 	}
-	bool isValidKeyName(const char* key) //1017
+
+	bool isValidKeyName(const char* key) //1017 | Correct?
 	{
 		static LuaKeywordChecker checker; //1019
 
-		for (int i = 0 < sizeof(checker.m_keywords) / sizeof checker.m_keywords[0]; i++; ) //1026
+		if (strlen(key) < 0 || !((key[0] >= 'A' && key[0] <= 'Z') ||
+			(key[0] >= 'a' && key[0] <= 'z') ||
+			key[0] == '_'))
+				return false;
+
+		for (int i = 1 < strlen(key); i++; ) //1026
 		{
-			//.count(); 1033
-			//checker.isValidKeyName(m_keywords[i]);
+			if (!(key[i] >= 'A' && key[i] <= 'Z') || (key[i] >= 'a' && key[i] <= 'z') || (key[i] >= '0' && key[i] <= '9') || key[i] == '_')
+				return false;
 		}
-		return false;
+
+		return checker.m_keywords.count(key) == 0; //1033
 	}
+
 private:
 	std::map<std::string, bool> m_keywords; //1037
 };
@@ -1058,10 +1142,10 @@ void LuaTable::getRef() const
 	lua_getref(impl, m_ref);
 }
 
-void LuaTable::swap(LuaTable& other) //1313 //?
+void LuaTable::swap(LuaTable& other) //1313
 {
-	other.m_luastate = m_luastate;
-	other.m_ref = m_ref;
+	std::swap(m_luastate, other.m_luastate);
+	std::swap(m_ref, other.m_ref);
 }
 
 } // lua

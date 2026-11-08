@@ -3,78 +3,97 @@
 namespace lua
 {
 
-JSONExporter::JSONExporter() : m_currentState(false, kInvalidIndex)
+JSONExporter::JSONExporter() :
+	m_json(""), m_currentState(false, kInvalidIndex) //11
 {
 }
 
-void JSONExporter::visit(const char* name, const char* value) //15
+void JSONExporter::visit(const char* name, const char* value) //15-25 | Correct?
 {
 	std::string stringValue = "\""; //17 //? Is this used?
-	addName(backslashEscape(value)); //21
-	addValue(backslashEscape(value));
-	m_currentState.m_firstItem = false;
-}
+	stringValue.append(backslashEscape(value)); //18
 
-void JSONExporter::visit(const char* name, double value)
-{
-	std::string stringValue = doubleToString(value);
-	addName(backslashEscape(name));
+	addName(backslashEscape(name)); //21
 	addValue(stringValue);
-	m_currentState.m_firstItem = false;
+
+	m_currentState.m_firstItem = false; //24
 }
 
-void JSONExporter::visit(const char* name, bool value)
+void JSONExporter::visit(const char* name, double value) //27-35
 {
-	const char* stringValue = value ? "true" : "false";
-	addName(backslashEscape(name));
+	std::string stringValue = doubleToString(value); //29
+
+	addName(backslashEscape(name)); //31
 	addValue(stringValue);
+
 	m_currentState.m_firstItem = false;
 }
 
-void JSONExporter::visit(const char*) //No code?
+void JSONExporter::visit(const char* name, bool value) //37-45
 {
-}
+	const char* stringValue = value ? "true" : "false"; //39
 
-void JSONExporter::visit(int index, const char* value)
-{
-	std::string stringValue = "\""; //17
-	addValue(backslashEscape(value));
-	addArrayItem(index, stringValue);
+	addName(backslashEscape(name)); //41
+	addValue(stringValue);
+
 	m_currentState.m_firstItem = false;
 }
 
-void JSONExporter::visit(int index, double value)
-{
-	std::string stringValue = doubleToString(value); //17
-	addArrayItem(index, stringValue);
-	m_currentState.m_firstItem = false;
-}
-
-void JSONExporter::visit(int index, bool value)
-{
-	std::string stringValue = value ? "true" : "false";
-	addArrayItem(index, stringValue);
-}
-
-void JSONExporter::visit(int) //No code?
+void JSONExporter::visit(const char* name) //No code?
 {
 }
 
-void JSONExporter::openTable(const char* name)
+void JSONExporter::visit(int index, const char* value) //52-61
+{
+	std::string stringValue = "\""; //54
+	stringValue.append(backslashEscape(value));
+	
+	addArrayItem(index, stringValue); //58
+
+	m_currentState.m_firstItem = false; //60
+}
+
+void JSONExporter::visit(int index, double value) //63-70
+{
+	std::string stringValue = doubleToString(value); //65
+
+	addArrayItem(index, stringValue); //67
+
+	m_currentState.m_firstItem = false; //69
+}
+
+void JSONExporter::visit(int index, bool value) //72
+{
+	std::string stringValue = value ? "true" : "false"; //74
+
+	addArrayItem(index, stringValue); //76
+
+	m_currentState.m_firstItem = false; //78
+}
+
+void JSONExporter::visit(int index) //81 | No code?
+{
+}
+
+void JSONExporter::openTable(const char* name) //86
 {
 	if (name)
 	{
-		addName(backslashEscape(name));
-		m_currentState.m_firstItem = false;
-		m_currentState.m_currentIndex = kInvalidIndex;
+		addName(backslashEscape(name)); //91
 	}
+
 	else
 	{
-		m_currentState.m_firstItem ? m_json.append("[") : m_json.append(","); //Yeah sure
-		m_currentState.m_firstItem = false;
-		m_currentState.m_currentIndex = 0;
+		if (m_currentState.m_firstItem) //m_currentState.m_firstItem ? m_json.append("[") : m_json.append(","); //Yeah sure
+			m_json.append("["); //97
+		else
+			m_json.append(","); //101 | Yeah sure
 	}
-	m_states.push(m_currentState);
+
+	if (name)
+		m_currentState.m_currentIndex = kInvalidIndex; //106
+
+	m_states.push(m_currentState); //108
 	m_currentState.m_firstItem = true;
 	m_currentState.m_currentIndex = kInvalidIndex;
 }
@@ -84,17 +103,22 @@ void JSONExporter::closeTable()
 	if (m_currentState.m_currentIndex == kInvalidIndex)
 	{
 		if (m_currentState.m_firstItem)
-			m_json.append("{}");
-		m_json.append("}");
+		{
+			m_json.append("{}"); //119
+		}
+		else
+		{
+			m_json.append("}"); //123
+		}
 	}
+
 	else
 	{
-		m_json.append("}");
+		m_json.append("]"); //128
 	}
-	//?
-	//if (m_states.top())
-		//m_states.top().m_firstItem = false;
-	m_states.pop();
+	
+	m_currentState = m_states.top(); //131
+	m_states.pop(); //132
 }
 
 void JSONExporter::start() //Nothing? Prob no
@@ -103,17 +127,30 @@ void JSONExporter::start() //Nothing? Prob no
 
 void JSONExporter::end() //Correct?
 {
-	if (m_json.empty())
+	if (m_json.empty()) //142
 	{
-		m_json = "{}";
+		m_json = "{}"; //145
 	}
+
 	else
 	{
-		m_json.append(m_currentState.m_currentIndex == kInvalidIndex ? "}" : "]");
+		if (m_currentState.m_currentIndex == kInvalidIndex) //m_json.append(m_currentState.m_currentIndex == kInvalidIndex ? "}" : "]");
+		{
+			m_json.append("}"); //151
+		}
+		else
+		{
+			m_json.append("]"); //155
+		}
 	}
 }
 
-void JSONExporter::addName(const std::string& name)
+std::string JSONExporter::getJSON()
+{
+	return m_json; //164
+}
+
+void JSONExporter::addName(const std::string& name) //167
 {
 	m_json.append(m_currentState.m_firstItem ? "{" : ",");
 	m_json.append("\"");
@@ -126,53 +163,62 @@ void JSONExporter::addValue(const std::string& value)
 	m_json.append(value);
 }
 
-void JSONExporter::addArrayItem(int index, const std::string& value)
+void JSONExporter::addArrayItem(int index, const std::string& value) //188
 {
-	m_currentState.m_firstItem ? m_json.append("[") : m_json.append(",");
-	m_json.append(value);
+	if (m_currentState.m_firstItem)
+	{
+		m_currentState.m_currentIndex = 0;
+		m_json.append("[");
+	}
+
+	else
+	{
+		m_currentState.m_currentIndex++;
+		m_json.append(",");
+	}
+
+	m_json.append(value); //205
 }
 
-std::string JSONExporter::doubleToString(double value)
+std::string JSONExporter::doubleToString(double value) //208
 {
-	char buffer[64];
+	char buffer[64]; //210
 	sprintf(buffer, "%.16g", value);
 	return buffer;
 }
 
-std::string JSONExporter::backslashEscape(const char* s) //TODO
+std::string JSONExporter::backslashEscape(const char* s) //216 | TODO
 {
-	std::string result;
+	std::string result; //218
+
 	/*if (s)
 	{
-		unsigned char token = *s + 1;
+		unsigned char token = *s; //222
 		while (token)
 		{
 			switch (token)
 			{
-			case '\f': result.append("\f");
-			case '\r': result.append("\r");
-			case '\\': result.append("\\");
-			case '"': result.append("\"");
-			}
-			switch (token)
-			{
-			case '\b': result.append("\b");
-			case '\t': result.append("\t");
-			case '\n': result.append("\n");
-			default: result.append(1, token);
-			}
-			token + 1;
+			case '\b': result += "\\b";
+			case '\t': result += "\\t";
+			case '\n': result += "\\n";
+			case '\f': result += "\\f";
+			case '"': result += "\"";
+			case '\r': result += "\\r";
+			case '\\': result += "\\\\";
+			
+			//default: result + token;
+
+			//token + 1;
 		}
-		char buffer[4];
 
-		sprintf(buffer, "u%04x", token);
+		char buffer[6]; //253
+		sprintf(buffer, "u%04x", token); //254
+		result.append(buffer); //255
 	}*/
-	return result;
-}
 
-std::string JSONExporter::getJSON()
-{
-	return m_json;
+	assert("std::string JSONExporter::backslashEscape(const char* s) is not yet decompiled.");
+
+	return result;
 }
 
 } // lua

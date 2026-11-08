@@ -53,7 +53,13 @@ public:
     Texture* createTexture(const std::string& filename);
 
     /**
-     *
+     * Creates context dependent texture.
+     * @param width Width of the texture in pixels.
+     * @param height Height of the texture in pixels.
+     * @param mipcount
+     * @param fmt Pixel format of the texture.
+     * @param usageflags Texture usage flags. See UsageFlags.
+     * @exception GraphicsException
      */
     Texture* createTexture(int width, int height, int mipcount, const img::SurfaceFormat& fmt, int usageflags);
 
@@ -298,16 +304,16 @@ private:
 
     int m_currentPass; //0x14
 
-    framework::VisualStudioLogger* m_vsLogger; //0xB8
+    framework::VisualStudioLogger* visualstudiologgerB8; //0xB8
 
     RenderState2D m_renderState2D; //0xDC
     math::float4x4 m_projtm; //0x178
     math::float4x4 m_viewtm; //0x1B8
     math::float4x4 m_modelviewtm; //0x1F8
     math::float3x4 m_customModelTM; //0x238
-
+    Rect m_viewport; //0x2A8
     
-
+    RenderState2D m_renderState2D; //0x2DDC
     std::string m_shaderPath; //0x2E0
     P(Shader) m_plainShader; //0x2FC
     P(Shader) m_plainAlphaShader; //0x300
@@ -316,7 +322,9 @@ private:
     DXGI_FORMAT dxgi_format32C; //0x32C
 
     ID3D11RenderTargetView* pid3d11rendertargetview338;
-    ID3D11DepthStencilView* pid3d11depthstencilview33c;
+    ID3D11DepthStencilView* pid3d11depthstencilview33C;
+
+    std::map<std::string, P(DX11_Shader)> m_uniqueShaders; //0x340
 
 	/*
   _DWORD dword40;
@@ -331,7 +339,7 @@ private:
   _DWORD dwordD0;
   _DWORD dwordD4;
   _BYTE gapD8[4];
-  gr::RenderState2D gr__renderstate2dDC;
+  gr::RenderState2D gr__renderstate2dDC; //0x2DDC
   float float178;
   _BYTE gap17C[60];
   float float1B8;
@@ -347,7 +355,7 @@ private:
   _WORD word2C4;
   _DWORD dword2C8;
   _DWORD dword2CC;
-  _DWORD dword2D0;
+  _DWORD dword2D0; //function call
   float float2D4;
   float float2D8;
   float float2DC;
