@@ -2,7 +2,7 @@
 
 BEGIN_NAMESPACE(lang)
 
-class AutoreleasePool::Impl :
+class AutoreleasePool::Impl : //Win32
 	public Object
 {
 public:

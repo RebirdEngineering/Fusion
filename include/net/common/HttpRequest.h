@@ -1,12 +1,6 @@
 #ifndef _NET_COMMON_HTTPREQUEST_H
 #define _NET_COMMON_HTTPREQUEST_H
 
-#include <net/HttpRequest.h>
-
-BEGIN_NAMESPACE(net)
-
-//ObjC?
-
 HttpRequest::HttpRequest()
 {
 	m_impl = new Impl();
@@ -23,7 +17,7 @@ HttpResponse HttpRequest::get(const std::string& url)
 
 HttpResponse HttpRequest::post(const std::string& url, const std::string& data)
 {
-	return m_impl->post(url);
+	return m_impl->post(url, data);
 }
 
 /*HttpResponse HttpRequest::post(const std::string&, size_t, const SendFunction)
@@ -50,7 +44,5 @@ void HttpRequest::setReceiveFunction(const ReceiveFunction& function)
 {
 	return m_impl->setReceiveFunction(function);
 }
-
-} // net
 
 #endif // _NET_COMMON_HTTPREQUEST_H

@@ -9,10 +9,7 @@ class AutoreleasePool : //11
     public Object
 {
 public:
-    AutoreleasePool() //20
-    {
-        m_impl = new Impl();
-    }
+    AutoreleasePool(); //20
 
     ~AutoreleasePool(); //25
 private:
@@ -23,6 +20,6 @@ private:
     AutoreleasePool& operator=(const AutoreleasePool&); //31
 };
 
-}
+END_NAMESPACE()
 
 #endif
