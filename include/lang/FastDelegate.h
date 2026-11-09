@@ -139,7 +139,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-namespace lang { //[NOTE] Proto of Croods uses this externally, in current Fusion it's just moved to this namespace LMAO
+namespace lang { //[NOTE] Proto of Croods uses this externally, in current Fusion it's just moved to this namespace LMAO | Def around 1.4
 	namespace detail {	// we'll hide the implementation details in a nested namespace.
 
 		//		implicit_cast< >
@@ -666,7 +666,7 @@ namespace lang { //[NOTE] Proto of Croods uses this externally, in current Fusio
 	namespace detail {
 
 		template < class GenericMemFunc, class StaticFuncPtr, class UnvoidStaticFuncPtr>
-		class ClosurePtr : public DelegateMemento {
+		class ClosurePtr : public DelegateMemento { //667
 		public:
 			// These functions are for setting the delegate to a member function.
 
@@ -703,8 +703,8 @@ namespace lang { //[NOTE] Proto of Croods uses this externally, in current Fusio
 			}
 #endif
 			// These functions are required for invoking the stored function
-			inline GenericClass* GetClosureThis() const { return m_pthis; }
-			inline GenericMemFunc GetClosureMemPtr() const { return reinterpret_cast<GenericMemFunc>(m_pFunction); }
+			inline GenericClass* GetClosureThis() const { return m_pthis; } //704
+			inline GenericMemFunc GetClosureMemPtr() const { return reinterpret_cast<GenericMemFunc>(m_pFunction); } //705
 
 			// There are a few ways of dealing with static function pointers.
 			// There's a standard-compliant, but tricky method.
@@ -927,9 +927,9 @@ namespace lang { //[NOTE] Proto of Croods uses this externally, in current Fusio
 		}
 		// Implicit conversion to "bool" using the safe_bool idiom
 	private:
-		typedef struct SafeBoolStruct {
-			int a_data_pointer_to_this_is_0_on_buggy_compilers;
-			StaticFunctionPtr m_nonzero;
+		typedef struct SafeBoolStruct { //997
+			int a_data_pointer_to_this_is_0_on_buggy_compilers; //998
+			StaticFunctionPtr m_nonzero; //999
 		} UselessTypedef;
 		typedef StaticFunctionPtr SafeBoolStruct::* unspecified_bool_type;
 	public:
@@ -962,14 +962,14 @@ namespace lang { //[NOTE] Proto of Croods uses this externally, in current Fusio
 
 	//N=1
 	template<class Param1, class RetType = detail::DefaultVoid>
-	class FastDelegate1 {
+	class FastDelegate1 { //942
 	private:
 		typedef typename detail::DefaultVoidToVoid<RetType>::type DesiredRetType;
 		typedef DesiredRetType(*StaticFunctionPtr)(Param1 p1);
 		typedef RetType(*UnvoidStaticFunctionPtr)(Param1 p1);
 		typedef RetType(detail::GenericClass::* GenericMemFn)(Param1 p1);
 		typedef detail::ClosurePtr<GenericMemFn, StaticFunctionPtr, UnvoidStaticFunctionPtr> ClosureType;
-		ClosureType m_Closure;
+		ClosureType m_Closure; //949
 	public:
 		// Typedefs to aid generic programming
 		typedef FastDelegate1 type;
@@ -1066,14 +1066,14 @@ namespace lang { //[NOTE] Proto of Croods uses this externally, in current Fusio
 
 	//N=2
 	template<class Param1, class Param2, class RetType = detail::DefaultVoid>
-	class FastDelegate2 {
+	class FastDelegate2 { //0x0C bytes on iOS.
 	private:
 		typedef typename detail::DefaultVoidToVoid<RetType>::type DesiredRetType;
 		typedef DesiredRetType(*StaticFunctionPtr)(Param1 p1, Param2 p2);
 		typedef RetType(*UnvoidStaticFunctionPtr)(Param1 p1, Param2 p2);
 		typedef RetType(detail::GenericClass::* GenericMemFn)(Param1 p1, Param2 p2);
-		typedef detail::ClosurePtr<GenericMemFn, StaticFunctionPtr, UnvoidStaticFunctionPtr> ClosureType;
-		ClosureType m_Closure;
+		typedef detail::ClosurePtr<GenericMemFn, StaticFunctionPtr, UnvoidStaticFunctionPtr> ClosureType; //1033
+		ClosureType m_Closure; //1034
 	public:
 		// Typedefs to aid generic programming
 		typedef FastDelegate2 type;

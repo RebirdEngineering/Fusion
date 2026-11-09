@@ -355,7 +355,7 @@ AudioClip* Resources::createAudio(P(InputStream) in, const std::string& id, bool
     return audioclip;
 }
 
-AudioClip* Resources::createAudio(const std::string& filename, const std::string& id, bool stream) //364-369
+AudioClip* Resources::createAudio(const std::string& filename, const std::string& id, bool stream) //364-369 | In the RCS client, this simply returns 1.
 {
     std::string fullPath = PathName(filename).toString(); //366
     P(InputStream) in = new BundleInputStream(fullPath); //367
@@ -419,7 +419,7 @@ void Resources::releaseTextGroupSet(const std::string& filename) //531-539
         m_textGroupSets.erase(name); //537
 }
 
-void Resources::releaseAudio(const std::string& id) //551
+void Resources::releaseAudio(const std::string& id) //551 | In the RCS client, this is dummied.
 {
     std::map<std::string, P(AudioClip)>::iterator it = m_audioClips.find(id); //553
     if (it != m_audioClips.end())
@@ -544,7 +544,7 @@ void Resources::drawString(const std::string& textgroup, const std::string& text
     m_currentFont->drawString(m_context, getString(textgroup, textId), x, y, anchor);
 }
 
-int Resources::playAudio(const std::string& id, float volume, bool looping, int track) const //743 | This EXISTS in RCS but has no code.
+int Resources::playAudio(const std::string& id, float volume, bool looping, int track) const //743 | In the RCS client, this simply returns 1.
 {
     if (!m_audioOutput) //745
         throwError(Exception(Format("Trying to play audio clip but no audio output has been created"))); //746

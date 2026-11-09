@@ -36,7 +36,7 @@ public:
 	/*
 	* 
 	*/
-	std::string	path(); //42
+	static std::string	path(); //42
 
 	/**  */
 	bool good() const; //47

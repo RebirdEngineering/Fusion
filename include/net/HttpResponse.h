@@ -7,11 +7,15 @@ namespace net
 {
 struct HttpResponse
 {
-	int status;
-	std::string message;
-	std::string effectiveUrl;
-	std::vector<std::string> headers;
-	std::vector<std::string> cookies;
+	int status; //15
+
+	std::string message; //18
+
+	std::string effectiveUrl; //21
+
+	std::vector<std::string> headers; //24
+
+	std::vector<std::string> cookies; //27
 };
 
 

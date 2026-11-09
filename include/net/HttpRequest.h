@@ -8,46 +8,49 @@
 namespace net
 {
 
-class HttpRequest :
+class HttpRequest : //40
 	public lang::Object
 {
-	typedef lang::FastDelegate4<double, double, double, double, bool> ProgressFunction;
-	typedef lang::FastDelegate2<const char*, unsigned long, unsigned long> ReceiveFunction;
-	typedef lang::FastDelegate2<char*, unsigned long, unsigned long> SendFunction;
 public:
-	HttpRequest();
+	typedef lang::FastDelegate4<double, double, double, double, bool> ProgressFunction; //52
 
-	~HttpRequest();
+	typedef lang::FastDelegate2<const char*, unsigned long, unsigned long> ReceiveFunction; //61
 
-	HttpResponse get(const std::string& url);
+	typedef lang::FastDelegate2<char*, unsigned long, unsigned long> SendFunction; //70
 
-	HttpResponse post(const std::string& url, const std::string& data);
+	HttpRequest(); //76
 
-	HttpResponse post(const std::string&, size_t, const SendFunction);
+	~HttpRequest(); //81
 
-	HttpResponse del(const std::string& url);
+	HttpResponse get(const std::string& url); //86
 
-	void setConnectionTimeout(int seconds);
+	HttpResponse post(const std::string& url, const std::string& data); //91
 
-	void setHeader(const std::string& header);
+	HttpResponse post(const std::string& url, size_t size, const SendFunction sendFunction); //96 | Unknown parameters.
 
-	void resetHeaders(const std::string&);
+	HttpResponse del(const std::string& url); //101
 
-	void addCookie();
+	void setConnectionTimeout(int seconds); //106
 
-	void resetCookies();
+	void setHeader(const std::string& header); //113
 
-	void setProgressFunction(const ProgressFunction& progressFunction); //Recovered from net/ios/HttpRequestHandler.h
+	void resetHeaders(); //118
 
-	void setReceiveFunction(const ReceiveFunction& function);
+	void addCookie(const std::string& cookie); //124 | Unknown parameter.
 
-	void setWriteHeaderFunction(const ReceiveFunction& writeHeaderFunction); //Recovered from net/ios/HttpRequestHandler.h
+	void resetCookies(); //129
+
+	void setProgressFunction(const ProgressFunction& progressFunction); //135 | Recovered from net/ios/HttpRequestHandler.h
+
+	void setReceiveFunction(const ReceiveFunction& function); //142
+
+	void setWriteHeaderFunction(const ReceiveFunction& writeHeaderFunction); //149 | Recovered from net/ios/HttpRequestHandler.h
 private:
 	class Impl;
-	P(Impl) m_impl;
+	P(Impl) m_impl; //153 | Win32: 0x40 bytes | iOS: 0x64 bytes
 
-	HttpRequest(const HttpRequest&);
-	HttpRequest& operator=(const HttpRequest&);
+	HttpRequest(const HttpRequest&); //155
+	HttpRequest& operator=(const HttpRequest&); //156
 };
 
 
