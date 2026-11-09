@@ -5,7 +5,7 @@ add_subdirectory(flurry)
 add_subdirectory(framework)
 add_subdirectory(game)
 add_subdirectory(gr)
-#add_subdirectory(hgr) #Why is this still here, I think Nibblers and ABC520 removed it, HGR is used in other projects...
+#add_subdirectory(hgr) #HGR is no longer a library, but it's headers are used in other projects like framework (Win32) and GameLua...
 add_subdirectory(img)
 add_subdirectory(io)
 add_subdirectory(lang)
