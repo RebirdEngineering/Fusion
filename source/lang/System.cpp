@@ -49,7 +49,7 @@ int64_t System::currentTimeMillis()
 
 	return (int)timeGetTime();
     
-#elif defined(PLATFORM_IOS)
+#elif defined(PLATFORM_IOS) //or Apple
 	const int64_t kOneMillion = 1000000;
 	static mach_timebase_info_data_t s_timebase_info;
 	if (!s_timebase_info.denom)
@@ -81,7 +81,7 @@ int64_t System::currentTimeMillis()
 int64_t System::currentTimeMicros()
 {
 
-#if defined(PLATFORM_WIN32) //4F4950 | Also WinPhone/Metro, Doesn't appear in gr*.dll.
+#ifdef PLATFORM_WIN32 //4F4950 | Also WinPhone/Metro, Doesn't appear in gr*.dll.
 
 	LARGE_INTEGER freq;
 	if (QueryPerformanceFrequency(&freq))
@@ -99,7 +99,7 @@ int64_t System::currentTimeMicros()
 	LANG_LOG("System", LANG_LOG_PRIORITY_ERROR, "currentTimeMicros() failed, returning 0 as current time."); //109
 	return 0;
 
-#if defined(PLATFORM_IOS)
+#elif defined(PLATFORM_IOS) //Or apple
 	const int64_t kOneThousand = 1000;
 	static mach_timebase_info_data_t s_timebase_info;
 	if (!s_timebase_info.denom)

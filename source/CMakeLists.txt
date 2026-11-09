@@ -12,6 +12,6 @@ add_subdirectory(lang)
 add_subdirectory(lua)
 add_subdirectory(math)
 add_subdirectory(net)
-#add_subdirectory(payment) Apple only.
+#add_subdirectory(payment) #Apple only.
 add_subdirectory(pf)
 add_subdirectory(util)

@@ -17,13 +17,16 @@ namespace flurry
 		void startSession(const std::string& apiKey); //27
 		void endSession(); //28
 		void logEvent(const std::string& eventName, const KeyValuePairs& paramValue); //29
-	private:
-		void logToConsole(const std::string& eventName, const KeyValuePairs& params) //34 | TODO
-		{
-			//std::string paramStr; //36
 
-			//for (KeyValuePairs::const_iterator it = params.begin(); it != params.end(); it++) //38
-				//paramStr + "'" + '=' + "'"; //+ 45
+	private:
+		void logToConsole(const std::string& eventName, const KeyValuePairs& params) //34-48 | TODO
+		{
+			/*std::string paramStr = ""; //36
+
+			for (KeyValuePairs::const_iterator it = params.begin(); it != params.end(); it++) //38
+			{
+				//paramStr + "'" + it->second + '=' + it->first + "'"; //+ 45
+			}*/
 		}
 	};
 }

@@ -1,9 +1,6 @@
 #include <net/HttpStatusCode.h>
 
-namespace net
-{
-
-const char* toString(HttpStatusCode code) //5
+const char* net::toString(HttpStatusCode code) //5-102
 {
 	switch (code)
 	{
@@ -49,6 +46,4 @@ const char* toString(HttpStatusCode code) //5
 	case HTTP_HTTP_VERSION_NOT_SUPPORTED: return "505 HTTP Version Not Supported";
 	default: return "Unidentified HttpStatusCode";
 	}
-}
-
 }

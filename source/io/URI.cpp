@@ -94,10 +94,6 @@ void URI::parseAuthority(const std::string& authority) //180-212
 	}*/	
 }
 
-/*static void URI::~URI(const std::string& str)
-{
-}*/
-
 URI URI::resolve(const URI& uri) const //239 | Correct?
 {
 	if (isAbsolute() || uri.m_opaque) //241
