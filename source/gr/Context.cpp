@@ -1,7 +1,7 @@
 #include <gr/Context.h>
 #include <io/BundleInputStream.h>
 
-USING_NAMESPACE(io)
+using namespace io;
 
 namespace gr
 {
