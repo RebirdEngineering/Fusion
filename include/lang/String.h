@@ -7,15 +7,15 @@
 
 namespace lang
 {
-typedef std::basic_string<unsigned short> u16string; //Do we use std::wstring or std::u16string or stick to the demangled symbol (std::basic_string<unsigned short>)?
+typedef std::wstring u16string; //If we want this to work on Win32 we have to use std::wstring. Symbols mismatch but it's prob a platform thing std::u16string or stick to the demangled symbol (std::basic_string<unsigned short>)?
 
-//Both: std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> >
-//Symbol: std::basic_string<unsigned short,std::char_traits<unsigned short>,std::allocator<unsigned short> 
+//Both: std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> > aka std::wstring
+//iOS Symbol: std::basic_string<unsigned short,std::char_traits<unsigned short>,std::allocator<unsigned short> 
 
-typedef std::basic_string<unsigned int> u32string; //Same for std::u32string (std::basic_string<unsigned int>)?
+typedef std::u32string u32string; //Same for std::u32string (std::basic_string<unsigned int>)?
 
-//u32string: std::basic_string<char32_t,std::char_traits<char32_t>,std::allocator<char32_t> >
-//Symbol: std::basic_string<unsigned int,std::char_traits<unsigned int>,std::allocator<unsigned int> >
+//u32string: std::basic_string<char32_t,std::char_traits<char32_t>,std::allocator<char32_t> > aka std::u32string
+//iOS Symbol: std::basic_string<unsigned int,std::char_traits<unsigned int>,std::allocator<unsigned int> >
 
 /** 
  * Immutable Unicode character string. Used encoding is UTF-8.

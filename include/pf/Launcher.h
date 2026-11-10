@@ -37,7 +37,7 @@ public:
 
 	bool canOpenEmail(); //77
 
-	void setDelegate(LauncherDelegate*); //83, unknown param.
+	void setDelegate(LauncherDelegate* delegate); //83, unknown param.
 private:
 	class LauncherImpl;
 	P(LauncherImpl) m_impl; //88 | Impl sizes: [Win32+WP8: 16 bytes, iOS: 32 bytes, Android: 16 bytes]
