@@ -2,13 +2,26 @@
 
 BEGIN_NAMESPACE(lang)
 
-class AutoreleasePool::Impl : //Win32
+class AutoreleasePool::Impl : //Win32, Android
 	public Object
 {
 public:
-	Impl();
+	Impl()
+	{
+	}
 
-	~Impl();
+	~Impl()
+	{
+	}
 };
+
+AutoreleasePool::AutoreleasePool()
+{
+	m_impl = new Impl();
+}
+
+AutoreleasePool::~AutoreleasePool()
+{
+}
 
 END_NAMESPACE()
