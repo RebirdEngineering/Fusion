@@ -1,12 +1,10 @@
 #ifndef _LANG_FORMAT_H
 #define _LANG_FORMAT_H
 
-
 #include <lang/Formattable.h>
 
-
-BEGIN_NAMESPACE(lang) 
-
+namespace lang
+{
 
 /**
  * Format is a class for constructing messages that keep parameters 
@@ -30,68 +28,68 @@ BEGIN_NAMESPACE(lang)
  * 
  * @ingroup lang
  */
-class Format
+class Format //31
 {
 public:
 	/** Creates an empty message. */
-	Format();
+	Format(); //35
 
 	/** Creates a message with no arguments. */
-	Format( const std::string& str );
+	Format( const std::string& str ); //38
 
 	/** Creates a message with 1 argument. */
-	Format( const std::string& pattern, const Formattable& arg0 );
+	Format( const std::string& pattern, const Formattable& arg0 ); //41
 
 	/** Creates a message with 2 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1 ); //44
 
 	/** Creates a message with 3 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2 ); //47
 
 	/** Creates a message with 4 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3 ); //50
 
 	/** Creates a message with 5 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4 ); //53
 
 	/** Creates a message with 6 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5 ); //56
 
 	/** Creates a message with 7 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6 ); //59
 
 	/** Creates a message with 8 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6, const Formattable& arg7 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6, const Formattable& arg7 ); //62
 
 	/** Creates a message with 9 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6, const Formattable& arg7, const Formattable& arg8 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6, const Formattable& arg7, const Formattable& arg8 ); //65
 
 	/** Creates a message with 10 arguments. */
-	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6, const Formattable& arg7, const Formattable& arg8, const Formattable& arg9 );
+	Format( const std::string& pattern, const Formattable& arg0, const Formattable& arg1, const Formattable& arg2, const Formattable& arg3, const Formattable& arg4, const Formattable& arg5, const Formattable& arg6, const Formattable& arg7, const Formattable& arg8, const Formattable& arg9 ); //68
 
 	/** Creates a message with n arguments. */
-	Format( const std::string& pattern, int argc, Formattable* argv );
+	Format( const std::string& pattern, int argc, Formattable* argv ); //71
 
 	/** 
 	 * Sets format string but keeps the format parameters. 
 	 * Can be used to translate text.
 	 */
-	void				setPattern( const std::string& str );
+	void				setPattern( const std::string& str ); //77
 
 	/** Returns format pattern. */
-	const std::string&		pattern() const;
+	const std::string&		pattern() const; //80
 
 	/** Returns number of arguments. */
-	int					arguments() const;
+	int					arguments() const; //83
 
 	/** Returns ith argument. */
-	const Formattable&	getArgument( int i ) const;
+	const Formattable&	getArgument( int i ) const; //86
 
 	/**
 	 * Returns message formatted using English/US locale. 
 	 * @exception FormatException
 	 */
-	std::string				format() const;
+	std::string				format() const; //92
 
 	/** 
 	 * Formats the message to the buffer using English/US locale and UTF-8 encoding.
@@ -100,12 +98,12 @@ public:
 	 * @exception FormatException
 	 * @return Number of characters needed to store the whole message.
 	 */
-	int					format( char* buffer, int size ) const;
+	int					format( char* buffer, int size ) const; //101
 
 private:
-	std::string				m_pattern;
-	int					m_args;
-	Formattable			m_argv[10];
+	std::string				m_pattern; //104
+	int					m_args; //105
+	Formattable			m_argv[10]; //106
 };
 
 

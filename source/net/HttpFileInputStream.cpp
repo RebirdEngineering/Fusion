@@ -12,7 +12,7 @@ HttpFileInputStream::HttpFileInputStream(const std::string& url) : //8
 {
 	HttpRequest request; //11
 	HttpResponse response = request.get(url); //12
-	if (response.status != HTTP_CONTINUE)
+	if (response.status != HTTP_OK)
 		throwError(HttpRequestException(Format("Creating HttpFileInputStream failed with status: {0} URL: {1}", response.status, url))); //14
 	m_message.reset(response.message.data(), response.message.size()); //15
 }
