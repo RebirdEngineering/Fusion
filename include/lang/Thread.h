@@ -5,9 +5,12 @@
 #include <lang/Functor.h>
 #include <external/webp/utils/thread.h>
 
+#ifdef PLATFORM_WIN32
 typedef HANDLE ThreadHandle; //Multiplatform handle
-//typedef __darwin_pthread_t pthread_t;
-//typedef _opaque_pthread_t* __darwin_pthread_t;
+#else
+//typedef __darwin_pthread_t ThreadHandle;
+//typedef _opaque_pthread_t* ThreadHandle;
+#endif
 
 BEGIN_NAMESPACE(lang)
 

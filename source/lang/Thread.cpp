@@ -1,13 +1,10 @@
 #include <lang/Thread.h>
-#include <lang/Exception.h>
+#include <lang/AutoreleasePool.h>
+#include <lang/ThreadInterruptedException.h>
 #include <lang/Log.h>
-#include <ctime>
-#include <time.h>
 
 #ifdef _WIN32
 #include <process.h>
-//#include <processthreadsapi.h>
-#include <windows.h>
 #else //UNTESTED
 //#include <pthread.h>
 //#include <stdio.h>
@@ -28,11 +25,6 @@ Thread::Thread(const Functor& func, bool joinOnDestruct) //37
     m_autoJoin = joinOnDestruct;
     startThread();
     assert(!joinable()); //43 (RCSSDK)
-}
-
-bool Thread::joinable() const
-{
-    return m_threadHandle != 0;
 }
 
 Thread::Thread(Thread&& other) : //Correct?
@@ -56,14 +48,7 @@ Thread& Thread::operator=(Thread&& other)
     return *this;
 }
 
-void Thread::swap(Thread& other) //Correct?
-{
-    std::swap(m_func, other.m_func);
-    std::swap(m_threadHandle, other.m_threadHandle);
-    std::swap(m_autoJoin, other.m_autoJoin);
-}
-
-Thread::~Thread() //Win32: 4F43D0
+Thread::~Thread() //?-72 | Win32: 4F43D0
 {
     if (joinable()) //68
     {
@@ -71,29 +56,22 @@ Thread::~Thread() //Win32: 4F43D0
     }
 }
 
-void Thread::join()
+bool Thread::joinable() const
 {
-    if (joinable())
-    {
-#ifdef _WIN32
-        CloseHandle(m_threadHandle);
-#else
-        pthread_join(m_threadHandle);
-#endif
-    }
+    return m_threadHandle != 0;
 }
 
-void Thread::closeThread()
+void Thread::join()
 {
     if (!joinable())
         return;
+
 #ifdef _WIN32
-    CloseHandle(m_threadHandle);
-    m_threadHandle = 0; //Why?
+        WaitForSingleObject(m_threadHandle, -1);
 #else
-    pthread_detach(m_threadHandle);
+        pthread_join(m_threadHandle, 0);
 #endif
-    m_threadHandle = 0;
+        m_threadHandle = 0;
 }
 
 int Thread::priority() const //Win32: 4F4380
@@ -128,6 +106,13 @@ void Thread::setPriority(int prio) //116 | Win32: 4F43A0
 #endif
 }
 
+void Thread::swap(Thread& other) //Correct?
+{
+    std::swap(m_func, other.m_func);
+    std::swap(m_threadHandle, other.m_threadHandle);
+    std::swap(m_autoJoin, other.m_autoJoin);
+}
+
 void Thread::sleep(unsigned int ms) //140
 {
 #ifdef _WIN32
@@ -138,6 +123,14 @@ void Thread::sleep(unsigned int ms) //140
     ts.tv_nsec = 1000000 * (ms % 1000);
     nanosleep(ts, 0);*/
 #endif
+}
+
+unsigned int getHardwareConcurrency() //158 | TODO
+{
+    unsigned int result = 1; //162
+    //mach_msg_type_number_t infoCount = 12; //177
+    //host_basic_info_data_t hostInfo = host_info(; //178
+    return result;
 }
 
 void Thread::yield() //Never seen on MSFT?
@@ -151,29 +144,7 @@ void Thread::busyYield()
         yield();
 }
 
-unsigned int getHardwareConcurrency() //158 | TODO
-{
-    unsigned int result = 1; //162
-    //mach_msg_type_number_t infoCount = 12; //177
-    //host_basic_info_data_t hostInfo = host_info(; //178
-    return result;
-}
-
 static const unsigned int s_hardwareConcurrency = getHardwareConcurrency(); //200
-
-void Thread::startThread()
-{
-#ifdef _WIN32
-    m_threadHandle = (ThreadHandle)_beginthreadex(0, 0, 0, m_func, 0, 0);
-    if (m_threadHandle)
-        return;
-#else
-    if (!pthread_create(&m_threadHandle, 0, threadFunc, m_func)) //301
-        return;
-#endif
-    delete m_func;
-    throwError(Exception(Format("Creating thread failed"))); //304
-}
 
 unsigned int Thread::hardwareConcurrency()
 {
@@ -182,17 +153,58 @@ unsigned int Thread::hardwareConcurrency()
 
 void executeThread(void* data) //228 | TODO
 {
-    /*Functor* func = ; //230
+    /*Functor* func; //230
+    
+    try
+    {
     AutoreleasePool pool; //234
     //m_func(func); //235
-    //ThreadInterruptedException //237
-    const exception& e = ;*/ //240
+    
+    catch(const ThreadInterruptedException&) //237
+    {
+        
+    }
+    
+    catch (const std::exception& e)  //240
+    {
+        LANG_LOG("", "Unhandled exception, terminating. Exception message: %s", e.what()) //242
+    }
+
+    //catch()
+    //LANG_LOG(Unhandled exception, terminating) //248*/
 }
 
-void* threadFunc(void* data) //271
+void* threadFunc(void* data) //4F45B0 | 271
 {
     executeThread(data); //273
     return 0;
+}
+
+void Thread::startThread()
+{
+#ifdef _WIN32
+    m_threadHandle = (ThreadHandle)_beginthreadex(0, 0, (_beginthreadex_proc_type)threadFunc, m_func, 0, 0);
+    if (m_threadHandle)
+        return;
+#else
+    if (!pthread_create(&m_threadHandle, 0, threadFunc, m_func)) //301
+        return;
+#endif
+    throwError(Exception(Format("Creating thread failed"))); //304
+}
+
+void Thread::closeThread()
+{
+    if (!joinable())
+        return;
+
+#ifdef _WIN32
+    CloseHandle(m_threadHandle);
+    m_threadHandle = 0; //Redundant?
+#else
+    pthread_detach(m_threadHandle);
+#endif
+    m_threadHandle = 0;
 }
 
 }
