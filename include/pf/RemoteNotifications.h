@@ -14,7 +14,7 @@ public:
 	virtual void onRemoteNotificationTokenReceived(const std::string&); //26
 };
 
-class RemoteNotifications : public lang::Object //34 | Ok so this kind of file is named RemoteNotifications_* and not RemoteNotificationsImpl_*? We've only seen it in Trilogii? | RemoteNotificationsImpl_* (iOS), RemoteNotifications_DUMMY (Trilogii, likely Win), RemoteNotifications_* (iOS)
+class RemoteNotifications : public lang::Object //34 | Ok so this kind of file is named RemoteNotifications_* and not RemoteNotificationsImpl_*? We've only seen it in Trilogii? | RemoteNotificationsImpl_* (iOS), RemoteNotifications_DUMMY (Trilogii, Win), RemoteNotifications_* (iOS)
 {
 public:
 	RemoteNotifications(); //38

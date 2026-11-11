@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class TextInput::TextInputImpl : public Object //HEAVILY BASED OFF iOS IMPL
+	class TextInput::TextInputImpl : public Object //0x2C bytes | HEAVILY BASED OFF iOS IMPL
 	{
 	public:
 
@@ -30,8 +30,10 @@ namespace pf
 			return false;
 		}
 
-		void activate(const std::string& string, TextInputObserver* observer)
+		void activate(const std::string& string, TextInputObserver* observer) //4C5D30
 		{
+			ActiveTextInput = this;
+
 			m_input = string;
 			m_observer = observer;
 		}
@@ -47,12 +49,12 @@ namespace pf
 			return m_input;
 		}
 
-		bool isVirtualKeyboardVisible() //Unknown.
+		bool isVirtualKeyboardVisible()
 		{
 			return false;
 		}
 
-		void hideVirtualKeyboard() //Unknown.
+		void hideVirtualKeyboard()
 		{
 		}
 	

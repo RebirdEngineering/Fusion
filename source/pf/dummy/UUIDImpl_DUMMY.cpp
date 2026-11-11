@@ -7,6 +7,14 @@ namespace pf
 	class UUID::Impl : public Object //Only known in ABTrilogii
 	{
 	public:
+		Impl()
+		{
+		}
+
+		~Impl()
+		{
+		}
+
 		bool isSupported()
 		{
 			return false;

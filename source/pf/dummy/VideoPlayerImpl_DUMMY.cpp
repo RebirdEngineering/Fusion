@@ -4,7 +4,7 @@
 
 namespace pf
 {
-	class VideoPlayer::VideoPlayerImpl : public VideoPlayerImplBase //ABFM 113-115, OSX ABC 3.0.1
+	class VideoPlayer::VideoPlayerImpl : public VideoPlayerImplBase //ABFM 113-115, Win32, OSX ABC 3.0.1
 	{
 	public:
 		VideoPlayerImpl(bool separateActivityOnAndroid) :

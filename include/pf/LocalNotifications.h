@@ -11,7 +11,7 @@ class LocalNotificationsListener //8 | This reeks of identical code
 public:
 	virtual ~LocalNotificationsListener(); //11
 
-	virtual void notificationReceived(const std::string&) = 0; //13
+	virtual void notificationReceived(const std::string& eventName) = 0; //13, Recover param from GameLua
 };
 
 class LocalNotifications : public lang::Object //20 | 44 byte Impl on Win32
@@ -35,6 +35,7 @@ public:
 	void addListener(LocalNotificationsListener* l); //68
 
 	void removeListener(LocalNotificationsListener* l); //73
+
 protected:
 	class LocalNotificationsImpl;
 	LocalNotificationsImpl* m_impl; //79 | Impl sizes: [OSX: 12 bytes {DUMMY}, Android: 12 bytes, Win32: 44 bytes, WP8: 12 bytes]
