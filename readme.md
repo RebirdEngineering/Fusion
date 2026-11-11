@@ -20,14 +20,18 @@ Clone the repo using your Git client, please do not download the master release 
 
 ### The executables used for comparison/reference (BLAKE3)
 
-- `ea7f3ad2e21b743d1d87eb1c18e7f4f6302b7be76159b935b8a98cd9da1b21d3 (executable) + 1bc6a6c63908a8ea71f72e7bf53a535828b3791917d7a74a2994970f9af63cbd (.dSYM) AngryBirdsSeasonsFull`
+- `ea7f3ad2e21b743d1d87eb1c18e7f4f6302b7be76159b935b8a98cd9da1b21d3 (Stripped executable) + 1bc6a6c63908a8ea71f72e7bf53a535828b3791917d7a74a2994970f9af63cbd (.dSYM) AngryBirdsSeasonsFull`
 	Angry Birds Seasons v4.1.0 for iPhone.
+- `1891927c88cfe28b54c550048211e0343f6df2198f94bfb6244e8446a1651fc9 libAngryBirdsSeasonsFull.so`
+	Angry Birds Seasons v4.1.0 from Google Play (32-bit).
 - ` 950beefdcdcb45101543cf707de8919740af3d98fe7d5f9edc68c7d68e7e6d24 angrybirdsfreemagic`
 	Angry Birds Free with Magic v1.1.3 for Meego + leftover debug information.
 - ` 16da89de8ce40a7e2a84b7a2d894cbd60a80267ed920e44a3dfc43fb4e6127d9 angrybirdsfreemagic`
 	Angry Birds Free with Magic v1.1.5 for Meego + leftover debug information.
-- ` 3a10c882be1c862f06f97a4836a939a5d3995f27ab88b0049014496ec00ed81e plugin_rcssdk.dylib (OSX 64-bit) + 500f1b38bd7923d99accc9e9f1d5306124ab5751e2284e3f3d5b21c858d7e8c2 (Windows)`
-	Debug build of Rovio Cloud Services (RCS) plugin from the Corona SDK, which uses a newer revision of the engine that shares some libraries.
+- ` 2069b508b734627d0a361c1160a8b0da4bcd5f938d45de44096086d843a29010 AngryBirdsSeasons.exe`
+	Angry Birds Seasons v4.1.0 for Windows, and its renderering DLLs.
+- ` 3a10c882be1c862f06f97a4836a939a5d3995f27ab88b0049014496ec00ed81e plugin_rcssdk.dylib + 500f1b38bd7923d99accc9e9f1d5306124ab5751e2284e3f3d5b21c858d7e8c2 plugin_rcssdk.dll`
+	Debug build of Rovio Cloud Services (RCS) plugin from the Corona SDK, for Windows and Mac OS X, which uses a newer revision of the engine that shares some libraries.
 
 ### Miscellaneous notes
 

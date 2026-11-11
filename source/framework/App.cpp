@@ -284,7 +284,7 @@ static const char* const s_keysz[] = //44
 };
 
 
-App::Configuration::Configuration()
+App::Configuration::Configuration() //?-292
 {
 	name = "";
 	width = 0;
@@ -476,8 +476,8 @@ bool App::setControlsPresent(bool)
 	return true;
 }
 
-#ifndef PLATFORM_IOS //Inexistent on iOS but exists on Android and PC.
-App::Configuration parseConfigFromLuaTable(App::Configuration& config, LuaTable& table) //Would this be here or the game's App.cpp?
+#ifndef PLATFORM_IOS //Inexistent on iOS but exists on Android OSX and PC.
+void parseConfigFromLuaTable(App::Configuration& config, LuaTable& table) //446F10 | Correct?
 {
 	if (table.isString("name")) config.name = table.getString("name");
 	if (table.isNumber("width")) config.width = table.getNumber("width");
@@ -517,22 +517,21 @@ App::Configuration parseConfigFromLuaTable(App::Configuration& config, LuaTable&
 	if (table.isTable("renderer"))
 	{
 		LuaTable renderers = table.getTable("renderer");
-        for (int i = 1; i < renderers.isString(i); i++)
+        for (int i = 0; i < renderers.isString(i); i++)
         {
             std::string rendererString = renderers.getString(i);
             std::string platformString = Context::getString((Context::PlatformType)i);
-            if (rendererString == platformString)
+            if (renderers.getString(i) == Context::getString((Context::PlatformType)i))
             {
-                if (i++ == Context::PLATFORM_COUNT)
+                if (i == Context::PLATFORM_COUNT)
                     break; //Too many.
+
                 config.renderer.push_back((Context::PlatformType)i);
             }
         }
 	}
 
 	if (table.isBoolean("singleton")) config.singleton = table.getBoolean("singleton");
-
-	return config;
 }
 #endif
 

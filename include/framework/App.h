@@ -4,7 +4,12 @@
 
 #include <lang/Event.h>
 #include <framework/OSInterface.h>
+//#include <lua/LuaTable.h>
 
+namespace lua
+{
+	class LuaTable;
+}
 
 namespace io
 { 
@@ -520,7 +525,7 @@ public:
     /**
 	 * 
 	 */
-	virtual bool				activateAudio( bool active ); //562 Recover param name via GameApp
+	virtual bool				activateAudio( bool active ); //562 | Recover param name via GameApp
     
     /**
 	 * 
@@ -646,6 +651,8 @@ void configure( App::Configuration& config, OSInterface& os);
  * Implemented by the application.
  */
 framework::App* init(OSInterface* os, gr::Context* context);
+
+void parseConfigFromLuaTable(App::Configuration& config, lua::LuaTable& table); //Does not exist on iOS.
 
 
 } // framework
