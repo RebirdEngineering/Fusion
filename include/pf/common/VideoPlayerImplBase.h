@@ -77,7 +77,7 @@ public:
 
 	virtual void announceVideoPreparing(const std::string& playedVideo) //82 | TODO
 	{
-		//LANG_LOG("VideoPlayer", LANG_LOG_PRIORITY_DEBUG, "VideoPlayerImplBase::announceVideoPreparing() playedVideo: %s", playedVideo.c_str()); //86 (RCSSDK debug)
+		//LANG_LOG("VideoPlayer", LANG_LOG_PRIORITY_DEBUG, "VideoPlayerImplBase::announceVideoPreparing() playedVideo: %s", playedVideo.c_str()); //84 (RCSSDK debug)
 		//std::set<VideoPlayerListener*>::iterator observerIt; //86
 		//for (observerIt = m_listeners.begin(); observerIt != m_listeners.end(); observerIt++) //87
 			//m_listeners[observerIt]
