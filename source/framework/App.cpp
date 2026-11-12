@@ -519,8 +519,6 @@ void parseConfigFromLuaTable(App::Configuration& config, LuaTable& table) //446F
 		LuaTable renderers = table.getTable("renderer");
         for (int i = 0; i < renderers.isString(i); i++)
         {
-            std::string rendererString = renderers.getString(i);
-            std::string platformString = Context::getString((Context::PlatformType)i);
             if (renderers.getString(i) == Context::getString((Context::PlatformType)i))
             {
                 if (i == Context::PLATFORM_COUNT)

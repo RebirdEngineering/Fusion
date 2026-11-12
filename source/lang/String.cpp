@@ -165,7 +165,7 @@ std::string string::toUTF8string(const u32string& str)
 	return result;
 }
 
-u16string string::toUTF16string(const std::string& str)
+u16string string::toUTF16string(const std::string& str) //4F5410
 {
 	u16string result;
 

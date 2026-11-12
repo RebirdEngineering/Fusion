@@ -1,22 +1,24 @@
 #include <io/PathName.h>
-#include <gr/Context.h>
-
-//#include <gr/dx11/DX11_Context.h>
-
+#include <gr/Context.h> //We don't include renderer contexts since WinMain loads it from gr*.dll
+#include <gr/GraphicsException.h>
 #include <lang/System.h>
 #include <lang/Exception.h>
 #include <framework/App.h>
+#include <pf/TextInput.h>
+#include <framework/VisualStudioLogger.h>
+
 #include <stdio.h>
 #include <direct.h>
 #include <windows.h>
-#include <crtdbg.h>
-//#include <config.h>
+#include <shlobj.h>
+#include <io.h>
+#include <xinput.h>
 
-#include <framework/VisualStudioLogger.h>
-
-
+using namespace io;
 using namespace gr;
 using namespace lang;
+using namespace lua;
+using namespace pf;
 using namespace framework;
 
 
@@ -25,7 +27,7 @@ class OSWin32 : //Not in framework namespace?
 {
 public:
 	void							loadShaders(const std::string& path, bool recursesubdirs);
-	std::string					getDefaultDataPath();
+	std::string						getDefaultDataPath();
 	void							setResolution(int width, int height);
 	void							setOrientation(gr::Context::OrientationType orientation); //5350F0
 	void							allowSleep(bool allow);
@@ -38,17 +40,12 @@ public:
 	bool							isMouseCaptured() const;
 	bool							setMousePosition(int x, int y);
 	void							setCursor(const std::string& cursor);
-	const std::vector<std::string>& getCommandLineArguments() const;
-	int 									getArgc() const;
-	char** getArgv();
-	void									setCommandLineArguments(const std::vector<std::string>& args);
-	void									setCommandLineArguments(int, char**);
 
 private:
 	std::string m_defaultDataPath; //Taken from iOS
 };
 
-static const int s_keyToVk[] =
+static const int s_keyToVk[] = //575608
 {
 	0,
 	'A',
@@ -183,12 +180,107 @@ static const int s_keyToVk[] =
 	0
 };
 
-static P(Context)					s_context			= 0;
-//static P(DefaultResourceManager)	s_defResMgr			= 0;
-static bool							s_active			= false;
-static HWND							s_hwnd;
-static bool							s_captureMouse;
-static App::Configuration			s_config;
+static std::string s_dataPath; //595448
+//? 59AD24 //?
+static HWND							s_hwnd; //5B1930
+static TRACKMOUSEEVENT s_5B1934; //5B1934
+static HCURSOR s_5B1944; //5B1944
+static RECT s_5B1948; //5B1948 Rect
+static bool s_59AB9D; //59AB9D
+static bool							s_captureMouse; //5B1958
+static WINDOWPLACEMENT s_5B195C; //5B195C
+static HDC s_5B1988; //5B1988 HDC
+static wchar_t s_5B1990[256]; //5B1990
+
+
+static bool							s_active			= false; //5B1B90
+static bool							s_5B1B91			= false; //5B1B91
+static bool							s_5B1B92			= false; //5B1B92
+static bool							s_fullscreen			= false; //5B1B93
+static bool							s_5B1B94			= false; //5B1B94
+static std::map<std::string, HCURSOR> s_5B1CD8; //mouse related? Is this is a vector or map? 5B1CD8
+//static bool s_5B1CDC;
+//; Controller related? //5B1CE8
+//; std::map? //5B1CEC
+//; std::string? //5B1CF8
+//; std::string? //5B1CFC
+//; ? //5B1D00
+//; ? //5B1D04
+static P(Context)					s_context = 0; //5B1D08
+//? 5B1D10
+//static std::vector<XINPUT_STATE> s_5B1D0C; //5B1D0C
+//? 5B1D1C //Controller related?
+//? 5B1D20 //Controller related?
+//? 5B1D2C //Controller related?
+//? 5B1D30 //Controller related?
+//? 5B1D34 //Controller related?
+//? 5B1D3C //Controller related?
+//? 5B1D40 //Controller related?
+//? 5B1D44 //Controller related?
+//? 5B1D48 //Controller related?
+//? 5B1D50 //Controller related?
+//? 5B1D54 //Controller related?
+//? 5B1D58 //Controller related?
+//? 5B1D5C //Controller related?
+//? 5B1D64 //Controller related?
+//? 5B1D68 //Controller related?
+//? 5B1D6C //Controller related?
+//? 5B1D70 //Controller related?
+//? 5B1D78 //Controller related?
+//? 5B1D7C //Controller related?
+//? 5B1D80 //Controller related?
+//? 5B1D84 //Controller related?
+//? 5B1D8C //Controller related?
+//? 5B1D90 //Controller related?
+
+
+//std::vector?; //5B1C08
+//ArgList?; //5B1C14 (surrogate pair p1)
+static bool s_5B1C16; //5B1C16
+
+static App::Configuration			s_config; //5B1C18 (Starts with string)
+//5B1C34 s_config.width
+//5B1C38 s_config.height
+//5B1C48 ?
+//5B1C4C ?
+//? //5B1C50
+//? //5B1C58
+//?; //5B1C6C
+//?; //5B1C70
+//?; //5B1C80
+//?; //5B1C8C
+//?; //5B1C9C
+//; //? renderers?
+//; //?
+//; s_config.singleton//5B1CD4
+
+//Based off https://github.com/weolar/miniblink49/blob/master/content/browser/TouchStruct.h
+typedef BOOL(__stdcall* PFN_RegisterTouchWindow)(HWND hwnd, ULONG ulFlags);
+typedef BOOL(__stdcall* PFN_GetTouchInputInfo)(HTOUCHINPUT hTouchInput, UINT cInputs, PTOUCHINPUT pInputs, int cbSize);
+typedef BOOL(__stdcall* PFN_CloseTouchInputHandle)(HTOUCHINPUT hTouchInput);
+static PFN_RegisterTouchWindow s_registerTouchWindow; //5B1B98
+static PFN_GetTouchInputInfo s_getTouchInputInfo; //5B1B9C
+static PFN_CloseTouchInputHandle s_closeTouchInputHandle; //5B1BA0
+
+//static controller related; //005B1BA4
+
+//?; //5B1BA8
+//?; //5B1BB4
+//?; //5B1BB8
+//?; //5B1BBC
+//?; //5B1BC0
+//?; //5B1BC4
+//?; //5B1BC8
+//?; //5B1BD8
+//?; //5B1BD4
+//?; //5B1BD8
+//?; //5B1BDC
+//?; //5B1BE0
+//?; //5B1BE4
+//?; //5B1BE8
+//?; //5B1BF4
+//?; //5B1BF8
+//?; //5B1C04
 
 /** Translates Win32 Virtual Key codes to KeyType. */
 static App::KeyType translateVKCode( int vk ) //53BA30
@@ -213,7 +305,7 @@ static App::KeyType translateVKCode( int vk ) //53BA30
 }
 
 /** Sets key state and signals application by calling keyDown/keyUp if state changed */
-static void setKeyState( App* a, App::KeyType key, bool keydown )
+static void setKeyState( App* a, App::KeyType key, bool keydown ) //538CD0
 {
 	if ( a != 0 )
 	{
@@ -238,33 +330,70 @@ static void setKeyState( App* a, App::KeyType key, bool keydown )
 	}
 }*/
 
-static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
+static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) //538E50
 {
 	App* a = 0;
 	if ( App::initialized() )
 		a = App::get();
 
-	switch ( msg )
+	switch ( msg ) //[LHR] I prefer it in order
 	{
-	case WM_ERASEBKGND:
-		return TRUE;
-	case WM_SETCURSOR: //Changed?
-		
-		break;
-		
-	case WM_GETMINMAXINFO: //TODO
-		
-		break;
-		
-	case WM_WINDOWPOSCHANGING: //TODO
-		break;
-		
-	case WM_DISPLAYCHANGE: //TODO
-		break;
 
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
+
+	case WM_ERASEBKGND:
+		return 1;
+
+	case WM_SETCURSOR:
+		if (s_active)
+		{
+			SetCursor(s_captureMouse ? s_5B1944 : 0);
+			return 1;
+		}
+		break;
+
+	case WM_GETMINMAXINFO: //TODO
+		/*RECT r;
+		r.right = s_config.minWidth;
+		r.bottom = s_config.minHeight;
+
+		HWND hwnd;
+
+		AdjustWindowRectEx(&r, GetWindowLongW(hwnd, GWL_STYLE), FALSE, GetWindowLongW(hwnd, GWL_EXSTYLE));*/
+		break;
+		
+	case WM_WINDOWPOSCHANGING: //TODO
+		/*if (s_active)
+		{
+			SetCursor(s_captureMouse ? s_5B1944 : 0);
+			return TRUE;
+		}
+
+		DefWindowProcW(hwnd, msg, wp, lp);*/
+		break;
+		
+	case WM_DISPLAYCHANGE: //TODO
+		/*if (!(s_fullscreen || s_active || s_context || s_5B1B91))
+			return 0;
+
+		MONITORINFO mi;
+		mi.cbSize = sizeof(MONITORINFO);
+		
+		HMONITOR m = MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY);
+		if (!GetMonitorInfoW(m, &mi))
+			return 0;
+
+		int monX = mi.rcMonitor.left;
+		int monY = mi.rcMonitor.top;
+		int monCX = mi.rcMonitor.right - monX;
+		int monCY = mi.rcMonitor.bottom - monY;
+
+		SetWindowPos(hwnd, HWND_TOP, monX, monY, monCX, monCX, SWP_NOOWNERZORDER | SWP_NOCOPYBITS| SWP_NOACTIVATE | SWP_NOZORDER);
+		s_5B1948 = mi.rcMonitor;
+		ClipCursor(&s_5B1948);*/
+		return FALSE;
 
 	case WM_LBUTTONDOWN:
 		setKeyState( a, App::KEY_LBUTTON, true );
@@ -294,6 +423,38 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
 		//setWheelState( a );
 		break;
 
+	case WM_DROPFILES:
+	{
+		int files = DragQueryFileW((HDROP)wp, -1, 0, 0);
+		wchar_t szF[MAX_PATH];
+
+		for (int i = 0; i < files; i++)
+		{
+			DragQueryFileW((HDROP)wp, i, szF, sizeof(szF) / 2);
+
+		}
+
+		break;
+	}
+
+	case WM_TOUCH: //TODO
+	{
+		/*HTOUCHINPUT ti;
+		TOUCHINPUT touchInputs;
+		GetTouchInputInfo(ti, wp, &touchInputs, sizeof(touchInputs));
+
+		//if (touchInputs)
+		{
+			POINT p;
+			//p.x = touchInputs.;
+			//ScreenToClient(hwnd, );
+			//s_context->transformPointToScreen();
+		}
+
+		CloseTouchInputHandle(ti);*/
+		break;
+	}
+
 	case WM_MOUSEMOVE:
 		if ( a != 0 )
 		{
@@ -322,7 +483,7 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
 		//if (?)
 		//{
 			//? = true
-			//TrackMouseEvent
+
 		//}
 		break;
 
@@ -335,32 +496,107 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
 
 	case WM_CHAR: //todo
 	{
-		//if (?)
-		//{
-		LANG_LOG("Framework", LANG_LOG_PRIORITY_ERROR, "Invalid UTF-16 surrogate pair (%04X, %04X) received with WM_CHAR."); //457
-		LANG_LOG("Framework", LANG_LOG_PRIORITY_ERROR, "Received low surrogate (%04X) without existing high surrogate."); //462
+		/*if (wp == 0xFFFF)
+			return TRUE;
+
+		int conv = wp + 9216;
+		if (s_5B1C16)
+		{
+			if (conv > 1023)
+			{
+				LANG_LOG("Framework", LANG_LOG_PRIORITY_ERROR, "Invalid UTF-16 surrogate pair (%04X, %04X) received with WM_CHAR." ?, wp); //457
+				//TODO
+			}
+			else
+			{
+			}
 		//}
-		break;
+		else if (conv > 1023)
+		{
+			//sub_4C5E20();
+
+			else
+			{
+				LANG_LOG("Framework", LANG_LOG_PRIORITY_ERROR, "Received low surrogate (%04X) without existing high surrogate."); //462
+				return FALSE;
+			}
+		}
+		*/
+		return 0;
 	}
 		
 	case WM_SYSKEYDOWN: //TODO
 	{
+		/*if (wp == VK_RETURN) //ALT-ENTER
+		{
+			toggleFullscreen(s_hwnd, s_fullscreen);
+			return false;
+		}
+
+		if (wp == VK_F4)
+		{
+			PostQuitMessage(0);
+			return false;
+		}
+		
+
+		if (wp == VK_MENU)
+		{
+			Def
+		}
+
+		if (wp == WM_GETTEXT)
+		{
+			return FALSE;
+		}
+		if (wp != WM_QUIT)
+		{
+			if (wp == WM_MEASUREITEM_CLIENTDATA | WM_DESTROY)
+			{
+				DefWindowProcW(hwnd, msg, wp, lp);
+			}
+		}
+
+		App::KeyType key = translateVKCode(VK_MENU);
+
+		//setKeyState(a, App::KEY_LBUTTON, true);*/
+		
 		break;
 	}
 	
-	case WM_SYSKEYUP: //TODO
+	case WM_SYSKEYUP: //Correct?
 	{
+		if (wp == VK_CONTROL)
+		{
+			App::KeyType key = translateVKCode(VK_CONTROL);
+			setKeyState(a, key, false);
+		}
+
+		else if (wp == VK_MENU)
+		{
+			App::KeyType key = translateVKCode(VK_MENU);
+			setKeyState(a, key, false);
+		}
+
+		//538110()?
+
 		break;
 	}
 	
 	case WM_KEYLAST: //TODO
 	{
-		break;
+		if (wp == 0xFFFF)
+			return TRUE;
+
+		//TextInput tp(wp);
+		//tp.();
+
+		return 0;
 	}
 	
 	case WM_SYSCOMMAND:
 	{
-		if (wp == 61696)
+		if (wp == SC_KEYMENU)
 			return 0;
 	}
 
@@ -368,8 +604,8 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
 	case WM_ACTIVATEAPP:{
 		s_active = ( LOWORD(wp) != WA_INACTIVE );
 
-		char name[256];
-		GetWindowTextA( hwnd, name, sizeof(name) );
+		wchar_t name[256];
+		GetWindowTextW( hwnd, name, sizeof(name) );
 		//Debug::printf( "framework: Window \"%s\" %s\n", name, (s_active?"activated":"deactivated") );
 
 		//ShowWindow(hwnd, SW_RESTORE);
@@ -384,23 +620,12 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
 		break;}
 	}
 
-	return DefWindowProc( hwnd, msg, wp, lp );
+	return DefWindowProcW( hwnd, msg, wp, lp );
 }
 
 static HWND createMainWindow(int iconresid, const wchar_t* classname, const wchar_t* name,
 	int w, int h, bool fullscreen, HINSTANCE instance ) //Params were altered
-{
-	//DWORD style = WS_VISIBLE|WS_OVERLAPPEDWINDOW;
-	//if ( fullscreen )
-	//{
-	//	style = WS_VISIBLE|WS_POPUP;
-	//	exstyle = WS_EX_TOPMOST;
-	//	MONITORINFO mi;
-	//	mi.cbSize = sizeof(MONITORINFO)
-	//	HMONITOR m = MonitorFromPoint(0, MONITOR_DEFAULTTOPRIMARY);
-	//	bool mok = GetMonitorInfoW(m, mi);
-	//}
-	
+{	
 	HICON icon = 0;
 	if ( iconresid > 0 )
 		icon = LoadIconW( instance, MAKEINTRESOURCE(iconresid) );
@@ -413,7 +638,7 @@ static HWND createMainWindow(int iconresid, const wchar_t* classname, const wcha
 	wndclassexw.cbWndExtra		= 0;
 	wndclassexw.hInstance		= (HINSTANCE)instance;
 	wndclassexw.hIcon			= icon;
-	wndclassexw.hCursor			= s_captureMouse ? 0 : LoadCursor(NULL, IDC_ARROW);
+	wndclassexw.hCursor			= s_5B1CD8["DEFAULT"];
 	wndclassexw.hbrBackground	= 0;
 	wndclassexw.lpszMenuName		= 0;
 	wndclassexw.lpszClassName	= classname;
@@ -459,7 +684,7 @@ static HWND createMainWindow(int iconresid, const wchar_t* classname, const wcha
 		GetMonitorInfoW(m, &mi);
 		newX = mi.rcMonitor.left;
 		newY = mi.rcMonitor.top;
-		//monitorRect = mi.rcMonitor;
+		s_5B1948 = mi.rcMonitor;
 		newRight = mi.rcMonitor.right - mi.rcMonitor.left;
 		newBottom = mi.rcMonitor.bottom - mi.rcMonitor.top;
 		style = WS_VISIBLE | WS_POPUP;
@@ -476,7 +701,7 @@ static HWND createMainWindow(int iconresid, const wchar_t* classname, const wcha
 	return hwnd;
 }
 
-static bool flushMessages()
+static bool flushMessages() //Is this still a standalone function?
 {
 	MSG msg;
 	if ( PeekMessage(&msg,0,0,0,PM_NOREMOVE) )
@@ -496,6 +721,142 @@ static bool flushMessages()
 
 static int run( HINSTANCE instance ) //53A740
 {
+	/*TIMECAPS tc;
+	timeGetDevCaps(&tc, 8);
+	timeBeginPeriod(tc.wPeriodMax);
+
+	OSWin32 os;
+
+	if (__argc > 1)
+	{
+		std::string path = __argv[1];
+		if (path.find_last_of("\\") != -1)
+			chdir(path.c_str());
+	}
+
+	wchar_t cwd[1024];
+	GetCurrentDirectoryW(sizeof(cwd), cwd);
+	//Debug::printf( "Current working directory is %s\n", cwd );
+	
+	std::vector<std::string> args;
+
+	for (int i = 0; i < __argc; i++)
+		args.push_back(__argv[i]);
+
+	s_config.width = 800;
+	s_config.height = 600;
+	s_config.bits = 256;
+
+	configure(s_config, os); //AB 412460->446F10 aka parseConfigFromLuaTable
+
+	if (s_config.singleton)
+	{
+		if (args[0] == "\\")
+			args[0] = "/";
+
+		CreateMutexW(0, TRUE, string::toUTF16string(args[0]).c_str());
+
+		if (GetLastError() == ERROR_ALREADY_EXISTS)
+		{
+			HWND window = FindWindowW(string::toUTF16string(args[0]).c_str(), 0);
+			if (window)
+				SetForegroundWindow(window);
+
+			args.clear();
+
+			return 0;
+		}
+	}
+	
+	//s_cursors.push_back("EMPTY");
+	//s_cursors.push_back("DEFAULT");
+
+	LoadCursorW(0, IDC_ARROW);
+
+	if (s_config.showCursor)
+	{
+		//s_cursors.push_back = "DEFAULT";
+	}
+
+	//string::toUTF16string(cwd);
+
+	//if (? && ? )
+	{
+		wchar_t pathBuf[MAX_PATH];
+		//if (SHGetFolderPathAndSubDirW(0, CSIDL_FLAG_CREATE | CSIDL_APPDATA, 0, 0, string::toUTF16string(), pathBuf))
+		{
+			//? = ?
+		}
+	}
+
+	//PathName(?)
+
+	//string::toUTF16string()
+
+	s_captureMouse = s_config.captureMouse;
+
+	int winw = s_config.width;
+	int winh = s_config.height;
+
+	// create main window
+	s_hwnd = createMainWindow( s_config.iconResourceID, string::toUTF16string(s_config.name).c_str(), L"Loading...", winw, winh, s_config.fullscreen, instance);
+
+	if ( !s_hwnd )
+	{
+		MessageBoxW( 0, L"Failed to create main window", L"Error", MB_OK );
+		return 1;
+	}
+
+	s_5B1988 = GetDC(s_hwnd);
+	//s_context = sub_536700(s_config.dllPath);
+
+	if (!s_5B1988)
+		s_context->resetCachedState();
+
+	App* app = init(&os, s_context); //call to 40B430
+	app->init();
+
+	RECT rc;
+
+	GetClientRect(s_hwnd, &rc);
+
+	POINT c;
+	c.x = rc.right/2;
+	c.y = rc.bottom/2;
+	ClientToScreen( s_hwnd, &c );
+	SetCursorPos( c.x, c.y );
+
+	//if (!?)
+	{
+		GetCursorPos(&c);
+		ScreenToClient(s_hwnd, &c);
+
+		if (s_context->platform() < Context::PLATFORM_GL2 && s_context->platform() > Context::PLATFORM_GLES1)
+		{
+			//s_context->
+		}
+	}
+
+	s_5B1934.cbSize = sizeof(TRACKMOUSEEVENT);
+	s_5B1934.hwndTrack = s_hwnd;
+	s_5B1934.dwFlags = TME_LEAVE;
+	TrackMouseEvent(&s_5B1934);
+
+	HMODULE userHNDL = GetModuleHandleW(L"user32.dll");
+	s_registerTouchWindow = (PFN_RegisterTouchWindow)GetProcAddress(userHNDL, "RegisterTouchWindow");
+	s_getTouchInputInfo = (PFN_GetTouchInputInfo)GetProcAddress(userHNDL, "GetTouchInputInfo");
+	s_closeTouchInputHandle = (PFN_CloseTouchInputHandle)GetProcAddress(userHNDL, "CloseTouchInputHandle");
+
+	app->activate(s_active);
+	//?
+	app->activateAudio(s_active);
+	//?
+
+	int oldtime = System::currentTimeMicros();
+	while (flushMessages())
+	{
+	}
+
 //	try
 //	{
 //		OSWin32 os;
@@ -524,10 +885,6 @@ static int run( HINSTANCE instance ) //53A740
 //#endif
 //		configure( s_config, os );
 //
-//		if ( s_config.debugMemoryAllocs )
-//		{
-//			_CrtSetDbgFlag( _CRTDBG_CHECK_ALWAYS_DF | _CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) );
-//		}
 //
 //		s_captureMouse = s_config.captureMouse;
 //		
@@ -626,6 +983,11 @@ static int run( HINSTANCE instance ) //53A740
 //		s_hwnd = 0;
 //	}
 //
+
+	deinit();
+
+	timeEndPeriod(tc.wPeriodMin);*/
+
     return 0;
 }
 
@@ -636,19 +998,244 @@ int WINAPI WinMain( HINSTANCE instance, HINSTANCE, LPSTR /*commandline*/, int /*
 	return retval;
 }
 
-std::string OSWin32::getDefaultDataPath()
+void sub_535030(wchar_t* buf, wchar_t* format, ...) //copies to buf
+{
+	va_list l;
+	va_start(l, format);
+	vswprintf(buf, 256, format, l);
+}
+
+static void deinit() //537780
+{
+	if (!s_5B1B92)
+		return;
+
+	ClipCursor(0);
+	s_5B1B92 = true;
+	//s_1?
+	//s_2?x
+	//s_3x = 0 //?
+
+	s_config = App::Configuration(); //446900 (create config)->5360B0(assign config)
+
+	if (App::initialized())
+		App::deleteApp();
+
+	if (s_context)
+		s_context->resetCachedState();
+
+	if (s_hwnd)
+	{
+		if (s_5B1988)
+			ReleaseDC(s_hwnd, s_5B1988);
+
+		if (s_hwnd)
+			DestroyWindow(s_hwnd);
+	}
+
+	s_hwnd = 0;
+	s_5B1988 = 0;
+
+}
+
+void sub_535FA0(int w, int h) //Adjusts the window display
+{
+	static wchar_t buf[256];
+
+	sub_535030(buf, L"%s (%dx%d)", string::toUTF16string(s_config.name), w, h);
+
+	SetWindowTextW(s_hwnd, buf);
+}
+
+/*Context* sub_536700(const std::string& dllPath) //TODO gets DLLs
+{
+	if (dllPath != s_config.dllPath)
+		throwError(GraphicsException(Format("No renderer defined!")));
+
+	throwError(GraphicsException(Format("{0} renderer not supported!", dllPath)));
+
+	return sub_5363E0(dllPath);
+}
+
+Context* sub_5363E0(const std::string& renderer) //TODO returns renderer context
+{
+	RECT r;
+	GetClientRect(s_hwnd, &r);
+
+	int w = r.right - r.left;
+	int h = r.bottom - r.top;
+
+	int errorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
+
+	//if ()
+	{
+	}
+
+	std::string dllFile = sub_536310();
+
+	HMODULE dllModule = LoadLibraryW(string::toUTF16string(dllFile).c_str());
+
+	SetErrorMode(errorMode);
+
+	if (!dllModule)
+		throwError(GraphicsException(Format("Renderer for platform {0} ({1}) not found!", s_context->platformString(), renderer)));
+
+	typedef Context*(WINAPI* CreateContextFunction)(int w, int h, Context::OrientationType orientation, HWND hwnd, HDC hdc);
+	CreateContextFunction createContextFunc = (CreateContextFunction)GetProcAddress(dllModule, "createContext");
+
+	if (!createContextFunc)
+		throwError(GraphicsException(Format("Renderer {0} was missing entrypoint \"createContext\"", renderer)));
+
+	Context* context = createContextFunc(w, h, s_config.orientation, s_hwnd, s_5B1988);
+
+	if (!context)
+	{
+		ReleaseDC(s_hwnd, s_5B1988);
+		s_5B1988 = GetDC(s_hwnd);
+		throwError(Exception());
+	}
+
+	return context;
+}*/
+
+std::string sub_536310() //Returns the gr*.dll name.
+{
+	return Format("gr", s_context->platformString(), ".dll").format();
+}
+
+void sub_538D30(LPARAM lp, HWND hwnd, App* app) //Correct?
+{
+	if (!app)
+		return;
+
+	if (s_59AB9D)
+	{
+		TrackMouseEvent(&s_5B1934);
+		s_59AB9D = false;
+	}
+
+	int cx = 0;
+	int cy = 0;
+
+	if (s_captureMouse)
+	{
+		RECT rc;
+		GetClientRect(hwnd, &rc);
+		cx = rc.right / 2;
+		cy = rc.bottom / 2;
+	}
+
+	POINT p;
+	p.x = short(lp & 0xFFFF);
+	p.y = short((lp >> 16) & 0xFFFF);
+
+	if (s_context->platform() < Context::PLATFORM_GL2 && s_context->platform() > Context::PLATFORM_GLES1)
+		s_context->transformPointToScreen(cx, cy);
+
+	app->mouseMove(p.x - cx, p.y - cy);
+}
+
+void sub_53A5B0(float dt)
+{
+	if (!App::initialized())
+		return;
+	
+	App* app = App::get();
+	//sub_53A550(); //Init xinput controllers
+	if (s_captureMouse)
+	{
+		if (s_active && s_context->ready() && !app->quitRequested())
+		{
+			SetCapture(s_hwnd);
+
+			RECT rc;
+			GetClientRect(s_hwnd, &rc);
+			POINT c;
+			c.x = rc.right / 2;
+			c.y = rc.bottom / 2;
+			ClientToScreen(s_hwnd, &c);
+			SetCursorPos(c.x, c.y);
+		}
+
+		else
+			ReleaseCapture();
+	}
+
+	if (s_context->ready())
+	{
+		dt = max(0.0f, 0.1f);
+
+		s_context->setTime(s_context->time() + dt);
+		app->update(dt, s_context, App::UPDATE_ALL);
+
+		if (app->quitRequested())
+		{
+			ReleaseCapture();
+			PostQuitMessage(app->getReturnCode());
+		}
+	}
+}
+
+/*void sub_53A550() //controller init
+{
+	for (int i = 0; i < 4; i++) //4 controllers
+	{
+		XINPUT_STATE state;
+		if (!XInputGetState(i, &state))
+			sub_53A150(&state, i);
+	}
+}
+
+void sub_53A150(XINPUT_STATE* xs, int index) //process controller state
+{
+	sub_53A0B0(index, App::KEY_GAMEPAD_L1, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_R1, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_DOWN) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_DPAD_UP, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_LEFT) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_DPAD_DOWN, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_RIGHT) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_DPAD_LEFT, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_START) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_DPAD_RIGHT, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_BACK) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_START, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_THUMB) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_BACK, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_THUMB) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_THUMBL, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_LEFT_SHOULDER) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_THUMBR, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_RIGHT_SHOULDER) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_A, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_A) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_B, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_B) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_X, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_X) != 0);
+	sub_53A0B0(index, App::KEY_GAMEPAD_Y, (xs->Gamepad.wButtons & XINPUT_GAMEPAD_Y) != 0);
+
+	//xs->Gamepad.sThumbLX;
+}
+
+void sub_53A0B0(int index, App::KeyType controllerKey, bool pressed)
+{
+	//sub_5379B0(?, index);
+}
+
+void sub_5379B0()
+{
+	.clear();
+}*/
+
+std::string OSWin32::getDefaultDataPath() //536080
 {
 	return m_defaultDataPath;
 }
 
 void OSWin32::setCursor(const std::string& cursor) //536A40 | unofficial name
 {
+	//LoadImageW(0, )
 	//HANDLE cursorImg = LoadImageW(cursor);
+
+	HCURSOR newCur = (HCURSOR)LoadImageW(0, string::toUTF16string(cursor).c_str(), IMAGE_CURSOR, 0, 0, 80);
 	
-	throwError(Exception(Format("Setting cursor \"{0}\" failed! Code: {1}", cursor, GetLastError())));
+	if (!newCur)
+		throwError(Exception(Format("Setting cursor \"{0}\" failed! Code: {1}", cursor, GetLastError())));
+
+	s_5B1944 = newCur;
+	SetCursor(newCur);
 }
 
-void OSWin32::loadShaders( const std::string& path, bool recursesubdirs )
+void OSWin32::loadShaders( const std::string& path, bool recursesubdirs ) //Blank.
 {
 }
 
@@ -656,8 +1243,10 @@ void OSWin32::setResolution(int width, int height) //534EC0
 {
 	RECT cr;
 	GetClientRect(s_hwnd, &cr);
+
 	RECT wr;
 	GetWindowRect(s_hwnd, &wr);
+
 	MoveWindow(s_hwnd, wr.left, wr.top, width + (wr.right - cr.right - wr.left), height + (wr.bottom - cr.bottom - wr.top), TRUE);
 }
 
@@ -675,7 +1264,7 @@ void OSWin32::setOrientation(Context::OrientationType orientation) //5350F0
 	}
 }
 
-void OSWin32::allowSleep(bool allow)
+void OSWin32::allowSleep(bool allow) //Blank
 {
 	
 }
@@ -709,6 +1298,54 @@ void OSWin32::stopUpdate() //534F70
 	}
 }
 
+void toggleFullscreen(HWND hwnd, bool fullscreen) //534D40 | Unofficial name.
+{
+	LONG w = GetWindowLongW(hwnd, GWL_STYLE);
+	LONG wExStyle = GetWindowLongW(hwnd, GWL_EXSTYLE);
+
+	if (s_fullscreen)
+	{
+		if (!fullscreen)
+		{
+			SetWindowLongW(hwnd, GWL_STYLE, w | WS_OVERLAPPEDWINDOW);
+			SetWindowPlacement(hwnd, &s_5B195C);
+			SetWindowLongW(hwnd, GWL_EXSTYLE, wExStyle | WS_OVERLAPPEDWINDOW);
+			SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOOWNERZORDER | SWP_FRAMECHANGED | SWP_NOZORDER | SWP_NOMOVE | SWP_NOSIZE);
+			s_fullscreen = false;
+			ClipCursor(0);
+		}
+	}
+
+	else if (fullscreen)
+	{
+		if ((w & WS_OVERLAPPEDWINDOW) != 0)
+		{
+			MONITORINFO mi;
+			mi.cbSize = sizeof(MONITORINFO);
+
+			if (GetWindowPlacement(hwnd, &s_5B195C))
+			{
+				HMONITOR hm = MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY);
+				int monX = mi.rcMonitor.left;
+				int monY = mi.rcMonitor.top;
+				int monCX = mi.rcMonitor.right - monX;
+				int monCY = mi.rcMonitor.bottom - monY;
+
+				if (GetMonitorInfoW(hm, &mi))
+				{
+					SetWindowLongW(hwnd, GWL_STYLE, w & 0xFF30FFFF);
+					SetWindowLongW(hwnd, GWL_EXSTYLE, wExStyle & 0xFF30FFFF);
+					SetWindowPos(hwnd, HWND_TOP, monX, monY, monCX, monCY, SWP_NOCOPYBITS | SWP_NOOWNERZORDER| SWP_NOACTIVATE | SWP_NOZORDER);
+
+					s_5B1948 = mi.rcMonitor;
+					s_fullscreen = true;
+					ClipCursor(&s_5B1948);
+				}
+			}
+		}
+	}
+}
+
 bool OSWin32::captureMouse(bool capture) //534FE0
 {
 	s_captureMouse = capture;
@@ -722,7 +1359,7 @@ bool OSWin32::isMouseCaptured() const ///535000
 
 void OSWin32::setFullscreen(bool fullscreen) //534FB0
 {
-	//return (s_hwnd, fullscreen)
+	toggleFullscreen(s_hwnd, fullscreen);
 }
 
 bool OSWin32::isFullscreen() const //534FD0
@@ -730,7 +1367,7 @@ bool OSWin32::isFullscreen() const //534FD0
 	return s_config.fullscreen;
 }
 
-bool OSWin32::setMousePosition(int x, int y) //According to GameLua
+bool OSWin32::setMousePosition(int x, int y) //435EF0 | According to GameLua
 {
 	return false;
 }

@@ -389,7 +389,7 @@ public:
 	
 	enum UpdateFlags //353
 	{
-		UPDATE_DRAW,
+		UPDATE_DRAW = 1,
 		UPDATE_SIMULATION,
 		UPDATE_ALL,
 	};
@@ -426,9 +426,9 @@ public:
 	 * Main loop for your application.
 	 * @param dt Time (seconds) since last update.
 	 * @param context Rendering device context.
-	 * @param ?
+	 * @param updateFlags
 	 */
-	virtual void				update( float dt, gr::Context* context, int ) = 0; //450
+	virtual void				update( float dt, gr::Context* context, int updateFlags) = 0; //450
 
 	/**
 	 * Called when user pressed key down.

@@ -641,7 +641,7 @@ public:
 	bool						isTextureShadowingEnabled( ) const; //695
 	
 	/**
-	 * Returns platform string id (max 3 characters).
+	 * Returns platform string id.
 	 */
 	static const char*			getString( PlatformType platform ); //700
 
