@@ -12,7 +12,7 @@ using namespace lang;
 
 namespace audio
 {
-	class AudioOutputImpl : public lang::Object
+	class AudioOutputImpl : public lang::Object //0xD8 bytes
 	{
 	public:
 

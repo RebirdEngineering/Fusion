@@ -8,7 +8,7 @@ using namespace lang;
 namespace io
 { 
 
-class FileInputStream::Impl : //18
+class FileInputStream::Impl : //0x2C bytes. | 18
 	public Object
 {
 public:

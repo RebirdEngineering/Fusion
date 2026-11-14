@@ -341,7 +341,7 @@ void App::deleteApp()
     sm_app = 0; //327
 }
 
-bool App::initialized()
+bool App::initialized() //4466C0
 {
 	return sm_app != 0; //332
 }
@@ -402,12 +402,12 @@ bool App::quitRequested() const
 	return m_quit;
 }
 
-void App::setKeyDown( KeyType key, bool down ) //393
+void App::setKeyDown( KeyType key, bool down ) //393 | 446700
 {
 	m_keyDown[key]= down;
 }
 
-bool App::isKeyDown( KeyType key ) const //398
+bool App::isKeyDown( KeyType key ) const //398 | 446720
 {
 	return m_keyDown[key];
 }

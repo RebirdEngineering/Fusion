@@ -80,7 +80,7 @@ const char* Context::platformString() const
 	return PLATFORM_NAME[platform()];
 }
 
-void Context::transformPointToScreen(int& x, int& y) const //Correct? Not on iOS.
+void Context::transformPointToScreen(int& x, int& y) const //45CFC0 | Correct? Not on iOS.
 {
 	switch (orientation())
 	{

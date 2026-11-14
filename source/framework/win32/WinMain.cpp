@@ -181,12 +181,15 @@ static const int s_keyToVk[] = //575608
 };
 
 static std::string s_dataPath; //595448
+static bool s_59AB9D; //59AB9D
+//keyUp? 59AD0C
 //? 59AD24 //?
 static HWND							s_hwnd; //5B1930
 static TRACKMOUSEEVENT s_5B1934; //5B1934
 static HCURSOR s_5B1944; //5B1944
 static RECT s_5B1948; //5B1948 Rect
-static bool s_59AB9D; //59AB9D
+//5B1CA8
+
 static bool							s_captureMouse; //5B1958
 static WINDOWPLACEMENT s_5B195C; //5B195C
 static HDC s_5B1988; //5B1988 HDC
@@ -198,6 +201,7 @@ static bool							s_5B1B91			= false; //5B1B91
 static bool							s_5B1B92			= false; //5B1B92
 static bool							s_fullscreen			= false; //5B1B93
 static bool							s_5B1B94			= false; //5B1B94
+//5B1CC4
 static std::map<std::string, HCURSOR> s_5B1CD8; //mouse related? Is this is a vector or map? 5B1CD8
 //static bool s_5B1CDC;
 //; Controller related? //5B1CE8
@@ -311,14 +315,18 @@ static void setKeyState( App* a, App::KeyType key, bool keydown ) //538CD0
 	{
 		if ( keydown )
 		{
-			if ( !a->isKeyDown(key) )
-				a->keyDown( key );
+			if (!a->isKeyDown(key)) //446720
+			{
+				a->keyDown(key);
+				//sub_538110?
+			}
 		}
 		else
 		{
 			a->keyUp( key );
+			//sub_538110
 		}
-		a->setKeyDown( key, keydown );
+		a->setKeyDown( key, keydown ); //446700
 	}
 }
 
@@ -448,7 +456,7 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) //538E50
 			POINT p;
 			//p.x = touchInputs.;
 			//ScreenToClient(hwnd, );
-			//s_context->transformPointToScreen();
+			//s_context->transformPointToScreen(); //45CFC0
 		}
 
 		CloseTouchInputHandle(ti);*/
@@ -480,11 +488,9 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) //538E50
 		setKeyState( a, App::KEY_LBUTTON, false );
 		setKeyState( a, App::KEY_MBUTTON, false );
 		setKeyState( a, App::KEY_RBUTTON, false );
-		//if (?)
-		//{
-			//? = true
 
-		//}
+		s_59AB9D = true;
+		return 0;
 		break;
 
 	case WM_KEYDOWN:
@@ -577,7 +583,7 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) //538E50
 			App::KeyType key = translateVKCode(VK_MENU);
 			setKeyState(a, key, false);
 		}
-
+		
 		//538110()?
 
 		break;
@@ -600,6 +606,20 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) //538E50
 			return 0;
 	}
 
+	case WM_SIZE:
+		if (s_context && !s_5B1B91 && !lp && !lp)
+		{
+			//s_context->reset(lp, lp);
+			if (a)
+			{
+				a->resolutionChanged();
+				//sub_4FA830(s_59AD40);
+			}
+			a->update(0.0, s_context, App::UPDATE_DRAW);
+			//sub_535FA0(lp, lp); //?
+		}
+		break;
+
 	case WM_ACTIVATE:
 	case WM_ACTIVATEAPP:{
 		s_active = ( LOWORD(wp) != WA_INACTIVE );
@@ -608,15 +628,41 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) //538E50
 		GetWindowTextW( hwnd, name, sizeof(name) );
 		//Debug::printf( "framework: Window \"%s\" %s\n", name, (s_active?"activated":"deactivated") );
 
-		//ShowWindow(hwnd, SW_RESTORE);
-
-		//ShowWindow(hwnd, SW_MINIMIZE);
-
-		if ( App::initialized() )
+		//if (?)
 		{
-			App::get()->activate( s_active );
-			App::get()->activateAudio( s_active ); //This is always set to true so why even
+			if (s_fullscreen)
+			{
+				if (s_active)
+				{
+					MONITORINFO mi;
+					mi.cbSize = sizeof(MONITORINFO);
+
+					HMONITOR monFromWin = MonitorFromWindow(hwnd, MONITOR_DEFAULTTOPRIMARY);
+					if (GetMonitorInfoW(monFromWin, &mi))
+					{
+						s_5B1948 = mi.rcMonitor;
+						s_5B1B94 = true;
+						ShowWindow(hwnd, SW_RESTORE);
+						ClipCursor(&s_5B1948);
+					}
+					else
+					{
+						ShowWindow(hwnd, SW_MINIMIZE);
+						ClipCursor(0);
+					}
+				}
+			}
+
+			if (a)
+			{
+				a->activate(s_active);
+				//?(s_active)
+				a->activateAudio(s_active); //This is always set to true so why even
+				//?(s_active)
+				return 0;
+			}
 		}
+
 		break;}
 	}
 
@@ -624,7 +670,7 @@ static LRESULT wndproc( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp ) //538E50
 }
 
 static HWND createMainWindow(int iconresid, const wchar_t* classname, const wchar_t* name,
-	int w, int h, bool fullscreen, HINSTANCE instance ) //Params were altered
+	int w, int h, bool fullscreen, HINSTANCE instance ) //539E70 | Params were altered
 {	
 	HICON icon = 0;
 	if ( iconresid > 0 )
@@ -638,7 +684,7 @@ static HWND createMainWindow(int iconresid, const wchar_t* classname, const wcha
 	wndclassexw.cbWndExtra		= 0;
 	wndclassexw.hInstance		= (HINSTANCE)instance;
 	wndclassexw.hIcon			= icon;
-	wndclassexw.hCursor			= s_5B1CD8["DEFAULT"];
+	wndclassexw.hCursor			= s_5B1CD8["DEFAULT"]; //428B20
 	wndclassexw.hbrBackground	= 0;
 	wndclassexw.lpszMenuName		= 0;
 	wndclassexw.lpszClassName	= classname;
@@ -665,13 +711,12 @@ static HWND createMainWindow(int iconresid, const wchar_t* classname, const wcha
 	rect.left = 0;
 	rect.top = 0;
 
-	WINDOWPLACEMENT wp;
-	wp.length = sizeof(WINDOWPLACEMENT);
-	wp.flags = WPF_SETMINPOSITION;
-	wp.ptMinPosition = { 0, 0 };
-	wp.ptMaxPosition = { 0, 0 };
-	wp.rcNormalPosition = { 0, 0 };
-	wp.rcNormalPosition = { newRight, newBottom };
+	s_5B195C.length = sizeof(WINDOWPLACEMENT);
+	s_5B195C.flags = WPF_SETMINPOSITION;
+	s_5B195C.ptMinPosition = { 0, 0 };
+	s_5B195C.ptMaxPosition = { 0, 0 };
+	s_5B195C.rcNormalPosition = { 0, 0 };
+	s_5B195C.rcNormalPosition = { newRight, newBottom };
 
 	int newY = 0;
 
@@ -697,7 +742,7 @@ static HWND createMainWindow(int iconresid, const wchar_t* classname, const wcha
 		return 0;
 	}
 	
-	DragAcceptFiles(hwnd, true);
+	DragAcceptFiles(hwnd, TRUE);
 	return hwnd;
 }
 
@@ -721,100 +766,194 @@ static bool flushMessages() //Is this still a standalone function?
 
 static int run( HINSTANCE instance ) //53A740
 {
-	/*TIMECAPS tc;
+	TIMECAPS tc;
 	timeGetDevCaps(&tc, 8);
 	timeBeginPeriod(tc.wPeriodMax);
 
-	OSWin32 os;
-
-	if (__argc > 1)
+	try
 	{
-		std::string path = __argv[1];
-		if (path.find_last_of("\\") != -1)
-			chdir(path.c_str());
-	}
+		OSWin32 os;
 
-	wchar_t cwd[1024];
-	GetCurrentDirectoryW(sizeof(cwd), cwd);
-	//Debug::printf( "Current working directory is %s\n", cwd );
-	
-	std::vector<std::string> args;
-
-	for (int i = 0; i < __argc; i++)
-		args.push_back(__argv[i]);
-
-	s_config.width = 800;
-	s_config.height = 600;
-	s_config.bits = 256;
-
-	configure(s_config, os); //AB 412460->446F10 aka parseConfigFromLuaTable
-
-	if (s_config.singleton)
-	{
-		if (args[0] == "\\")
-			args[0] = "/";
-
-		CreateMutexW(0, TRUE, string::toUTF16string(args[0]).c_str());
-
-		if (GetLastError() == ERROR_ALREADY_EXISTS)
+		if (__argc > 1) //Change dir to lua file
 		{
-			HWND window = FindWindowW(string::toUTF16string(args[0]).c_str(), 0);
-			if (window)
-				SetForegroundWindow(window);
+			std::string path = __argv[1];
+			size_t slashOff = path.find_last_of('\\');
+			if (slashOff != -1)
+				chdir(path.substr(0, slashOff).c_str());
+		}
 
-			args.clear();
+		wchar_t cwd[1024];
+		GetCurrentDirectoryW(sizeof(cwd), cwd);
+		LANG_LOG_DEBUG("Framework", LANG_LOG_PRIORITY_DEBUG, "Current working directory is %s\n", cwd); //Debug::printf( "Current working directory is %s\n", cwd ); //Restoration
 
-			return 0;
+		std::vector<std::string> args;
+
+		for (int i = 0; i < __argc; i++)
+			args.push_back(__argv[i]);
+
+		s_config.width = 800;
+		s_config.height = 600;
+		s_config.framerate = 2056;
+		s_config.fullscreen = false;
+		s_config.showCursor = true;
+		//s_config.bits = 256;
+
+		configure(s_config, os); //AB 412460->446F10 aka parseConfigFromLuaTable
+
+		if (s_config.singleton)
+		{
+			if (args[0] == "\\")
+				args[0] = "/";
+
+			CreateMutexW(0, TRUE, string::toUTF16string(args[0]).c_str());
+
+			//?
+
+			if (GetLastError() == ERROR_ALREADY_EXISTS)
+			{
+				HWND window = FindWindowW(string::toUTF16string(args[0]).c_str(), 0);
+				if (window)
+					SetForegroundWindow(window);
+
+				args.clear();
+
+				return 0;
+			}
+		}
+
+		//TODO FROM HERE
+
+		if (!s_config.publisher.empty() && s_config.product.empty())
+		{
+			WCHAR psz_Path[MAX_PATH];
+			if (SHGetFolderPathAndSubDirW(0, CSIDL_APPDATA | CSIDL_FLAG_CREATE, 0, 0, string::toUTF16string(s_config.publisher + "\\" + s_config.product).c_str(), psz_Path)) //%AppData%/Roaming/Rovio/Angry Birds Seasons
+			{
+				//sub_41C680(psz_Path, sizeof)
+			}
+		}
+
+		//s_cursors.push_back("EMPTY");
+		//s_cursors.push_back("DEFAULT");
+
+		//LoadCursorW(0, IDC_ARROW);
+		//
+		//if (s_config.showCursor)
+		//{
+		//	//s_cursors.push_back = "DEFAULT";
+		//	5B1944 = s_cursors["DEFAULT"];
+		//}
+		//
+		////string::toUTF16string(cwd);
+		//
+		////if (? && ? )
+		//{
+		//	wchar_t pathBuf[MAX_PATH];
+		//	//if (SHGetFolderPathAndSubDirW(0, CSIDL_FLAG_CREATE | CSIDL_APPDATA, 0, 0, string::toUTF16string(), pathBuf))
+		//	{
+		//		//? = ?
+		//	}
+		//}
+
+		//PathName(?)
+
+		//string::toUTF16string()
+
+		s_captureMouse = s_config.captureMouse;
+		s_fullscreen = s_config.fullscreen;
+
+		int winw = s_config.width;
+		int winh = s_config.height;
+
+		// create main window
+		s_hwnd = createMainWindow(s_config.iconResourceID, string::toUTF16string(s_config.name).c_str(), L"Loading...", winw, winh, s_config.fullscreen, instance);
+
+		if (!s_hwnd)
+		{
+			MessageBoxW(0, L"Failed to create main window", L"Error", MB_OK);
+			return 1;
+		}
+
+		s_5B1988 = GetDC(s_hwnd);
+
+		//s_context = sub_536700(s_config.dllPath);
+
+		if (!s_5B1988)
+			s_context->resetCachedState();
+
+		App* app = init(&os, s_context); //call to 40B430
+		app->init();
+
+		RECT rc;
+		GetClientRect(s_hwnd, &rc);
+		sub_535FA0(rc.right, rc.bottom);
+
+		if (s_captureMouse)
+		{
+			POINT pt;
+			GetCursorPos(&pt);
+			ScreenToClient(s_hwnd, &pt);
+
+			int pt_y = pt.y;
+			int pt_x = pt.x;
+
+			if (s_context->platform() < Context::PLATFORM_GL2 && s_context->platform() > Context::PLATFORM_GLES1)
+				s_context->transformPointToScreen(pt_x, pt_y);
+
+			app->mouseMove(pt_x, pt_y);
+			//?
+		}
+
+		s_5B1934.cbSize = sizeof(TRACKMOUSEEVENT);
+		s_5B1934.hwndTrack = s_hwnd;
+		s_5B1934.dwFlags = TME_LEAVE;
+		TrackMouseEvent(&s_5B1934);
+
+		HMODULE userHNDL = GetModuleHandleW(L"user32.dll");
+		s_registerTouchWindow = (PFN_RegisterTouchWindow)GetProcAddress(userHNDL, "RegisterTouchWindow");
+		s_getTouchInputInfo = (PFN_GetTouchInputInfo)GetProcAddress(userHNDL, "GetTouchInputInfo");
+		s_closeTouchInputHandle = (PFN_CloseTouchInputHandle)GetProcAddress(userHNDL, "CloseTouchInputHandle");
+
+		if (s_registerTouchWindow && s_getTouchInputInfo && s_closeTouchInputHandle)
+			s_registerTouchWindow(s_hwnd, TWF_FINETOUCH | TWF_WANTPALM);
+
+		app->activate(s_active);
+		//?
+		app->activateAudio(s_active);
+		//?
+
+		int oldtime = System::currentTimeMicros();
+
+		while (flushMessages())
+		{
+			int time = System::currentTimeMicros();
+			if (time - oldtime < 1000 / 30)
+				continue;
+			float dt = float(time - oldtime) * 1e-3f;
+			oldtime = time;
 		}
 	}
-	
-	//s_cursors.push_back("EMPTY");
-	//s_cursors.push_back("DEFAULT");
 
-	LoadCursorW(0, IDC_ARROW);
-
-	if (s_config.showCursor)
+	catch (Throwable& e)
 	{
-		//s_cursors.push_back = "DEFAULT";
-	}
-
-	//string::toUTF16string(cwd);
-
-	//if (? && ? )
-	{
-		wchar_t pathBuf[MAX_PATH];
-		//if (SHGetFolderPathAndSubDirW(0, CSIDL_FLAG_CREATE | CSIDL_APPDATA, 0, 0, string::toUTF16string(), pathBuf))
+		if (s_fullscreen)
 		{
-			//? = ?
+			s_5B1B91 = true;
 		}
+
+		deinit();
+
+		// minimize window so that it doesn't overlap message box
+		if (s_hwnd != 0)
+		{
+			ShowCursor(TRUE);
+			MoveWindow(s_hwnd, 0, 0, 4, 4, TRUE);
+			ClipCursor(0);
+		}
+
+		MessageBox(s_hwnd, L"Unknown exception happened", L"Error!", MB_OK);
 	}
-
-	//PathName(?)
-
-	//string::toUTF16string()
-
-	s_captureMouse = s_config.captureMouse;
-
-	int winw = s_config.width;
-	int winh = s_config.height;
-
-	// create main window
-	s_hwnd = createMainWindow( s_config.iconResourceID, string::toUTF16string(s_config.name).c_str(), L"Loading...", winw, winh, s_config.fullscreen, instance);
-
-	if ( !s_hwnd )
-	{
-		MessageBoxW( 0, L"Failed to create main window", L"Error", MB_OK );
-		return 1;
-	}
-
-	s_5B1988 = GetDC(s_hwnd);
-	//s_context = sub_536700(s_config.dllPath);
-
-	if (!s_5B1988)
-		s_context->resetCachedState();
-
-	App* app = init(&os, s_context); //call to 40B430
-	app->init();
+	
+	/*
 
 	RECT rc;
 
@@ -982,11 +1121,11 @@ static int run( HINSTANCE instance ) //53A740
 //		DestroyWindow( s_hwnd ); 
 //		s_hwnd = 0;
 //	}
-//
+//*/
 
 	deinit();
 
-	timeEndPeriod(tc.wPeriodMin);*/
+	timeEndPeriod(tc.wPeriodMin);
 
     return 0;
 }
@@ -1040,11 +1179,9 @@ static void deinit() //537780
 
 void sub_535FA0(int w, int h) //Adjusts the window display
 {
-	static wchar_t buf[256];
+	sub_535030(s_5B1990, L"%s (%dx%d)", string::toUTF16string(s_config.name), w, h);
 
-	sub_535030(buf, L"%s (%dx%d)", string::toUTF16string(s_config.name), w, h);
-
-	SetWindowTextW(s_hwnd, buf);
+	SetWindowTextW(s_hwnd, s_5B1990);
 }
 
 /*Context* sub_536700(const std::string& dllPath) //TODO gets DLLs
@@ -1052,7 +1189,10 @@ void sub_535FA0(int w, int h) //Adjusts the window display
 	if (dllPath != s_config.dllPath)
 		throwError(GraphicsException(Format("No renderer defined!")));
 
-	throwError(GraphicsException(Format("{0} renderer not supported!", dllPath)));
+	catch(Throwable)
+	{
+		throwError(GraphicsException(Format("{0} renderer not supported!", dllPath)));
+	}
 
 	return sub_5363E0(dllPath);
 }
@@ -1103,6 +1243,10 @@ std::string sub_536310() //Returns the gr*.dll name.
 	return Format("gr", s_context->platformString(), ".dll").format();
 }
 
+//void sub_538110(App* a, )
+//{
+//}
+
 void sub_538D30(LPARAM lp, HWND hwnd, App* app) //Correct?
 {
 	if (!app)
@@ -1133,14 +1277,15 @@ void sub_538D30(LPARAM lp, HWND hwnd, App* app) //Correct?
 		s_context->transformPointToScreen(cx, cy);
 
 	app->mouseMove(p.x - cx, p.y - cy);
+	//538260(
 }
 
 void sub_53A5B0(float dt)
 {
-	if (!App::initialized())
+	if (!App::initialized()) //4466C0
 		return;
 	
-	App* app = App::get();
+	App* app = App::get(); //446690
 	//sub_53A550(); //Init xinput controllers
 	if (s_captureMouse)
 	{
@@ -1167,6 +1312,7 @@ void sub_53A5B0(float dt)
 
 		s_context->setTime(s_context->time() + dt);
 		app->update(dt, s_context, App::UPDATE_ALL);
+		//?
 
 		if (app->quitRequested())
 		{
@@ -1221,7 +1367,7 @@ std::string OSWin32::getDefaultDataPath() //536080
 	return m_defaultDataPath;
 }
 
-void OSWin32::setCursor(const std::string& cursor) //536A40 | unofficial name
+void OSWin32::setCursor(const std::string& cursor) //536A40
 {
 	//LoadImageW(0, )
 	//HANDLE cursorImg = LoadImageW(cursor);
@@ -1364,7 +1510,7 @@ void OSWin32::setFullscreen(bool fullscreen) //534FB0
 
 bool OSWin32::isFullscreen() const //534FD0
 {
-	return s_config.fullscreen;
+	return s_fullscreen; //By contrary this does NOT use s_config.fullscreen!
 }
 
 bool OSWin32::setMousePosition(int x, int y) //435EF0 | According to GameLua

@@ -59,7 +59,7 @@ void findRecursiveSubdirs(enumerate_t* enumImpl, const std::string& basedir, con
 	}
 }
 
-void enumerate(enumerate_t* enumImpl, const std::string& basedir, const std::string& filepath, int types, bool recursive, std::vector<DirEntry>& ret) //98 | Correct?
+void enumerate(enumerate_t* enumImpl, const std::string& basedir, const std::string& filepath, int types, bool recursive, std::vector<DirEntry>& ret) //98 | Correct? | 46E070
 {
 	if (basedir.find('*') != -1) //100
 		throwError(IOException(Format("base directory must not contain asterisks"))); //101
