@@ -43,7 +43,7 @@ static std::string stringify(const char* fmt, va_list args) //43
 	return s_data->buffer.data(); //?
 }
 
-static void log(const std::string& tag, const char* file, const char* function, int line, int priority, const char* message, ...) //59 | Correct?
+static void log(const std::string& tag, const char* file, const char* function, int line, int priority, const char* message, ...) //59 | Correct? | 4F2C50
 {
 	if (!s_data)
 		return;

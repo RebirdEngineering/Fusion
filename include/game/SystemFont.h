@@ -50,7 +50,17 @@ public:
 
 	gr::Rect getBounds(const std::string& str, Anchor anchor, int offset, int length) const; //136 | Mangled symbol suggests this, output suggests we start at str, offset and length
 
-	const char* toString(Style); //141
+	const char* toString(Style style) //141
+	{
+		switch (style)
+		{
+		case Normal: return "Normal";
+		case Bold: return "Bold";
+		case Italic: return "Italic";
+		default: return "Unknown";
+		}
+	}
+
 private:
 	class Impl;
 	P(Impl) m_impl; //159 | Impl sizes: [Win32 [GDI]: 88 bytes, iOS: 56 bytes, WP8: 12 bytes {Dummy?}, Android: 100 bytes, OSX: 56 bytes]

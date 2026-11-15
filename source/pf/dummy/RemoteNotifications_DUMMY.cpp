@@ -4,7 +4,7 @@ using namespace lang;
 
 namespace pf
 {
-	class RemoteNotifications::Impl : public Object
+	class RemoteNotifications::Impl : public Object //Win32
 	{
 	public:
 		Impl()

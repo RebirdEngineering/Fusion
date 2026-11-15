@@ -8,7 +8,7 @@
 namespace io
 {
 
-#ifdef PLATFORM_ANDROID //This class only exists on Android as it reads the APK using Java classes.
+#ifdef PLATFORM_ANDROID //This class only exists on Android as it reads the APK using Java classes. | TODO MOVE, maybe
 #include <java/jni.h>
 
 using namespace java;
@@ -45,7 +45,7 @@ bool BundleFileSystem::exists(const std::string& path)
 
 #else
 
-bool BundleFileSystem::exists(const std::string& path) //iOS and Android, it's really just here for AB's LuaManager::findScriptPath. | 14
+bool BundleFileSystem::exists(const std::string& path) //467A50 | iOS and Android, it's really just here for AB's LuaManager::findScriptPath. | 14
 {
 	return BasicFileSystem::exists(PathName(detail::bundlePath(), path).toString()); //16
 }

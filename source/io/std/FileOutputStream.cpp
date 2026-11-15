@@ -17,10 +17,10 @@ class FileOutputStream::Impl : //17
 	public Object
 {
 public:
-	Impl(const std::string& filename) : //21
+	Impl(const std::string& filename) : //21 | TODO FIX FOR UNICODE WIN32
 		m_filename(filename)
 	{
-		m_fh = fopen(filename.c_str(), "wb"); //34
+		m_fh = fopen(filename.c_str(), "wb"); //34 | UNICODE AND CALLS sub_4F5410 ON WIN
 		if (!m_fh)
 			throwError(IOException(Format("Failed to open {0} for writing with errno {1} ({2})", filename, errno, strerror(errno)))); //38
 	}

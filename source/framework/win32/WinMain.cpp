@@ -21,6 +21,15 @@ using namespace lua;
 using namespace pf;
 using namespace framework;
 
+//Given there's use of BOTH WinMethodA and WinMethodW, we're gonna use those appropriately.
+
+//4F5410(pointer)->lang::string::toUTF16string
+//4655B0->MoveFile
+//41CEF0?
+//41C680?
+//4661D0?
+//446D20 framework::App::path
+
 
 class OSWin32 : //Not in framework namespace?
 	public OSInterface

@@ -9,7 +9,7 @@
 #include <shlobj.h>
 #endif
 
-static int fsyncHelper(FILE* file) //88
+static int fsyncHelper(FILE* file) //88 | 465450
 {
 #ifdef PLATFORM_WIN32
 	HANDLE handle = (HANDLE)_get_osfhandle(_fileno(file)); //?
@@ -53,7 +53,7 @@ class AppDataOutputStream::Impl :
 	public Object
 {
 public:
-	Impl(const std::string& filename) : //127-136
+	Impl(const std::string& filename) : //127-136 | TODO FIX FOR UNICODE WIN32
 		m_filename(constructPath(filename)), //128
 		m_failure(false)
 	{

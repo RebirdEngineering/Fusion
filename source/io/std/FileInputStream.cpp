@@ -12,7 +12,7 @@ class FileInputStream::Impl : //0x2C bytes. | 18
 	public Object
 {
 public:
-	Impl(const std::string& filename) : //22-45
+	Impl(const std::string& filename) : //22-45 | TODO FIX FOR UNICODE WIN32
 		m_filename(filename)
 	{
 		if (filename.empty() && filename[filename.size() - 1] == '/' || filename[filename.size() - 1] == '\\') //26

@@ -73,11 +73,6 @@ namespace game
 		{
 			return Rect();
 		}
-
-		const char* toString(Style)
-		{
-			return "";
-		}
 	};
 
 #include <game/common/SystemFont.h>
