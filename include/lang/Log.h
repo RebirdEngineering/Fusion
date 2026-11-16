@@ -9,6 +9,7 @@ BEGIN_NAMESPACE(analytics)
 void log(const std::string& eventname, const std::map<std::string, std::string>& params);
 void addListener(Listener* listener);
 void removeListener(Listener* listener);
+void logCommon(const std::map<std::string, std::string>& params); //Not on iOS.
 
 }
 

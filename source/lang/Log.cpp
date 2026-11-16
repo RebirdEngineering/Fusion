@@ -118,6 +118,21 @@ namespace analytics
 		}
 	}
 
+	static void logCommon(const std::string& eventname, const std::map<std::string, std::string>& params) //TODO | Not on iOS.
+	{
+		//if (!s_listeners)
+		//	return;
+		//Event entry;
+		//entry.timestamp = getTimestamp();
+		//std::set<Listener*>::const_iterator it = s_listeners->begin();
+		//while (it != s_listeners->end())
+		//{
+		//	if (s_listeners != 0)
+		//		s_listeners->insert(*it);
+		//	it++;
+		//}
+	}
+
 	static void addListener(Listener* listener) //179
 	{
 		if (!s_listeners)

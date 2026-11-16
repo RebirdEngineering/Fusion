@@ -1,21 +1,13 @@
 #ifndef _LANG_STRING_H
 #define _LANG_STRING_H
 
-
 #include <lang/pp.h>
-
 
 namespace lang
 {
-typedef std::wstring u16string; //If we want this to work on Win32 we have to use std::wstring. Symbols mismatch but it's prob a platform thing std::u16string or stick to the demangled symbol (std::basic_string<unsigned short>)?
 
-//Both: std::basic_string<wchar_t,std::char_traits<wchar_t>,std::allocator<wchar_t> > aka std::wstring
-//iOS Symbol: std::basic_string<unsigned short,std::char_traits<unsigned short>,std::allocator<unsigned short> 
-
-typedef std::u32string u32string; //Same for std::u32string (std::basic_string<unsigned int>)?
-
-//u32string: std::basic_string<char32_t,std::char_traits<char32_t>,std::allocator<char32_t> > aka std::u32string
-//iOS Symbol: std::basic_string<unsigned int,std::char_traits<unsigned int>,std::allocator<unsigned int> >
+typedef std::basic_string<unsigned short> u16string;
+typedef std::basic_string<unsigned int> u32string;
 
 /** 
  * Immutable Unicode character string. Used encoding is UTF-8.
@@ -25,105 +17,87 @@ typedef std::u32string u32string; //Same for std::u32string (std::basic_string<u
  * 
  * @ingroup lang
  */
-class string
+namespace string
 {
-public:
-	/**
-	 * 
-	 * 
-	 * @exception 
-	 */
-	static std::string		to_string(int val);
+	std::string		to_string(int val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(long val);
+	std::string		to_string(long val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(long long val);
+	std::string		to_string(long long val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(unsigned int val);
+	std::string		to_string(unsigned int val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(unsigned long val);
+	std::string		to_string(unsigned long val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(unsigned long long val);
+	std::string		to_string(unsigned long long val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(float val);
+	std::string		to_string(float val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(double val);
+	std::string		to_string(double val);
 
-	/**
-	 *
-	 *
-	 * @exception
-	 */
-	static std::string		to_string(long double val);
+	std::string		to_string(long double val);
 
 	/**
 	 * Returns a new string that has all characters of this string converted to lowercase.
 	 * Doesn't handle locale dependent special casing.
 	 * @exception OutOfMemoryException
 	 */
-	static std::string		tolower(const std::string& str); //[NOTE] changed to lowercase
+	std::string		tolower(const std::string& str); //[NOTE] changed to lowercase
 
 	/**
 	 * Returns a new string that has all characters of this string converted to uppercase.
 	 * Doesn't handle locale dependent special casing.
 	 * @exception OutOfMemoryException
 	 */
-	static std::string		toupper(const std::string& str); //[NOTE] changed to lowercase
+	std::string		toupper(const std::string& str); //[NOTE] changed to lowercase
 
 	/**
 	 * Returns a new string that is otherwise identical to this string 
 	 * but has whitespace removed from both ends of the string.
 	 * @exception OutOfMemoryException
 	 */
-	std::string		trim(const std::string& str) const;
+	std::string		trim(const std::string& str);
 
-	static std::vector<std::string>		split(const std::string& str, const std::string& delimiter);
+	std::vector<std::string>		split(const std::string& str, const std::string& delimiter);
 
-	static std::string 				toUTF8string(const u16string& str);
+	std::string				toUTF8string(const std::wstring& str);
 
-	static std::string 				toUTF8string(const u32string& str);
+	std::string 				toUTF8string(const u16string& str);
 
-	static u16string 				toUTF16string(const std::string& str);
+	std::string 				toUTF8string(const u32string& str);
 
-	static u32string 			toUTF32string(const std::string& str);
+	u16string 				toUTF16string(const std::string& str);
+
+	u16string 				toUTF16string(const u32string& str);
+
+	u16string 				toUTF16string(const std::wstring& str);
+
+	u32string 			toUTF32string(const std::string& str);
+
+	u32string 			toUTF32string(const u16string& str);
+
+	u32string 			toUTF32string(const std::wstring& str);
+
+	std::wstring			towstring(const std::string& str);
+
+	std::wstring			towstring(const u16string& str);
+
+	std::wstring			towstring(const u32string& str);
+
+	double scanDouble(const char* nptr, const char** endptr, int* err);
+
+	std::string scanString(const char* sz, char* buf, int bufLen, const char** szend);
 };
 
-int						vsnprintf(char* buf, int n, const char* format, va_list arg); //Unofficial?
+int						strprintf(const char* ...);
+
+int						vsnprintf(char* buf, int n, const char* format, va_list arg);
+
+int						snprintf(char* buf, int n, const char* format);
+
+int						vstrprintf(std::string&, const char*, char*);
+
+int						strprintf(const std::string&, const char* ...);
 
 
 } // lang

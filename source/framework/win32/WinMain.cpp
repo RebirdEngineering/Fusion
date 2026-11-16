@@ -814,13 +814,13 @@ static int run( HINSTANCE instance ) //53A740
 			if (args[0] == "\\")
 				args[0] = "/";
 
-			CreateMutexW(0, TRUE, string::toUTF16string(args[0]).c_str());
+			CreateMutexW(0, TRUE, string::towstring(args[0]).c_str());
 
 			//?
 
 			if (GetLastError() == ERROR_ALREADY_EXISTS)
 			{
-				HWND window = FindWindowW(string::toUTF16string(args[0]).c_str(), 0);
+				HWND window = FindWindowW(string::towstring(args[0]).c_str(), 0);
 				if (window)
 					SetForegroundWindow(window);
 
@@ -835,7 +835,7 @@ static int run( HINSTANCE instance ) //53A740
 		if (!s_config.publisher.empty() && s_config.product.empty())
 		{
 			WCHAR psz_Path[MAX_PATH];
-			if (SHGetFolderPathAndSubDirW(0, CSIDL_APPDATA | CSIDL_FLAG_CREATE, 0, 0, string::toUTF16string(s_config.publisher + "\\" + s_config.product).c_str(), psz_Path)) //%AppData%/Roaming/Rovio/Angry Birds Seasons
+			if (SHGetFolderPathAndSubDirW(0, CSIDL_APPDATA | CSIDL_FLAG_CREATE, 0, 0, string::towstring(s_config.publisher + "\\" + s_config.product).c_str(), psz_Path)) //%AppData%/Roaming/Rovio/Angry Birds Seasons
 			{
 				//sub_41C680(psz_Path, sizeof)
 			}
@@ -874,7 +874,7 @@ static int run( HINSTANCE instance ) //53A740
 		int winh = s_config.height;
 
 		// create main window
-		s_hwnd = createMainWindow(s_config.iconResourceID, string::toUTF16string(s_config.name).c_str(), L"Loading...", winw, winh, s_config.fullscreen, instance);
+		s_hwnd = createMainWindow(s_config.iconResourceID, string::towstring(s_config.name).c_str(), L"Loading...", winw, winh, s_config.fullscreen, instance);
 
 		if (!s_hwnd)
 		{
@@ -1183,12 +1183,11 @@ static void deinit() //537780
 
 	s_hwnd = 0;
 	s_5B1988 = 0;
-
 }
 
 void sub_535FA0(int w, int h) //Adjusts the window display
 {
-	sub_535030(s_5B1990, L"%s (%dx%d)", string::toUTF16string(s_config.name), w, h);
+	sub_535030(s_5B1990, L"%s (%dx%d)", string::towstring(s_config.name), w, h);
 
 	SetWindowTextW(s_hwnd, s_5B1990);
 }
@@ -1381,7 +1380,7 @@ void OSWin32::setCursor(const std::string& cursor) //536A40
 	//LoadImageW(0, )
 	//HANDLE cursorImg = LoadImageW(cursor);
 
-	HCURSOR newCur = (HCURSOR)LoadImageW(0, string::toUTF16string(cursor).c_str(), IMAGE_CURSOR, 0, 0, 80);
+	HCURSOR newCur = (HCURSOR)LoadImageW(0, string::towstring(cursor).c_str(), IMAGE_CURSOR, 0, 0, 80);
 	
 	if (!newCur)
 		throwError(Exception(Format("Setting cursor \"{0}\" failed! Code: {1}", cursor, GetLastError())));

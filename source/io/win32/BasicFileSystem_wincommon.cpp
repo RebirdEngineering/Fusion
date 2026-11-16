@@ -16,10 +16,9 @@
 
 using namespace lang;
 
-int getAttributes(LPCWSTR lpFileName) //Recover name from assert in ABC 4.0.0
+int getAttributes(std::string path, WIN32_FILE_ATTRIBUTE_DATA data) //466250 | Recover name from assert in ABC 4.0.0
 {
-	WIN32_FILE_ATTRIBUTE_DATA data;
-	if (!GetFileAttributesExW(lpFileName, GetFileExInfoStandard, &data))
+	if (!GetFileAttributesExW(string::towstring(path).c_str(), GetFileExInfoStandard, &data))
 		return data.dwFileAttributes;
 
 	int error = GetLastError();

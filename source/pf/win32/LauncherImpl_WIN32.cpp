@@ -35,7 +35,7 @@ namespace pf
 			SHELLEXECUTEINFOW execInfo;
 			execInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
 			execInfo.lpVerb = L"open";
-			execInfo.lpFile = string::toUTF16string(target).c_str();
+			execInfo.lpFile = string::towstring(target).c_str();
 			execInfo.nShow = SW_SHOWNORMAL;
 			ShellExecuteExW(&execInfo);
 
@@ -50,7 +50,7 @@ namespace pf
 			SHELLEXECUTEINFOW execInfo;
 			execInfo.cbSize = sizeof(SHELLEXECUTEINFOW);
 			execInfo.lpVerb = L"open";
-			execInfo.lpFile = string::toUTF16string(target).c_str();
+			execInfo.lpFile = string::towstring(target).c_str();
 			execInfo.nShow = SW_SHOWNORMAL;
 			ShellExecuteExW(&execInfo);
 
@@ -62,7 +62,7 @@ namespace pf
 
 		bool canOpenProgram(const std::string& target, const std::string& minVersion) //4C9780
 		{
-			return (GetFileAttributesW(string::toUTF16string(target).c_str()) & FILE_ATTRIBUTE_DIRECTORY) == 0;
+			return (GetFileAttributesW(string::towstring(target).c_str()) & FILE_ATTRIBUTE_DIRECTORY) == 0;
 		}
 
 		bool openSMS(const std::string&, const std::string&, const std::string&, const std::string&) //Unused?
