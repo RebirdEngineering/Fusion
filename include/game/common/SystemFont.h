@@ -1,15 +1,17 @@
 #ifndef _GAME_COMMON_SYSTEMFONT_H
 #define _GAME_COMMON_SYSTEMFONT_H
 
-const std::vector<std::string>& SystemFont::getAvailableFontNames()
-{
-	return m_impl->getAvailableFontNames();
-}
+//OFF FOR NOW
 
-std::string SystemFont::findBestFontMatch(const std::string& param1, const std::string& param2)
-{
-	return m_impl->findBestFontMatch(param1, param2);
-}
+//const std::vector<std::string>& SystemFont::getAvailableFontNames()
+//{
+//	return m_impl->getAvailableFontNames();
+//}
+//
+//std::string SystemFont::findBestFontMatch(const std::string& param1, const std::string& param2)
+//{
+//	return m_impl->findBestFontMatch(param1, param2);
+//}
 
 SystemFont::SystemFont(Context* context, const std::string& fontName, int fontSize, const gr::Color& fontColor, int style) //15 | 45B9D0
 {

@@ -18,7 +18,7 @@ public:
 		Italic,
 	};
 
-	const std::vector<std::string>& getAvailableFontNames(); //27 | Likely not static.
+	static const std::vector<std::string>& getAvailableFontNames(); //27 | For now this isn't in the common h, will fix later...
 
 	std::string findBestFontMatch(const std::string& param1, const std::string& param2); //36 | Unknown params.
 

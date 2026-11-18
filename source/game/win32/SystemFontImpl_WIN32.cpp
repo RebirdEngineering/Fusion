@@ -1,4 +1,5 @@
 #include <game/SystemFont.h>
+#include <game/common/LabelPool.h>
 #include <lang/Exception.h>
 
 #include <windows.h>
@@ -15,9 +16,35 @@ namespace game
 		public lang::Object
 	{
 	public:
-		/*const std::vector<std::string>& getAvailableFontNames() //45C800
+		const std::vector<std::string>& getAvailableFontNames() //45C800 | TODO
 		{
-		}*/
+			std::vector<std::string> ret;
+			//ULONG_PTR tkn;
+			//Gdiplus::GdiplusStartupInput start;
+			//if (s_59ADB4)
+			//{
+			//	Gdiplus::GdiplusStartup(&tkn, &start, NULL);
+			//	s_59ADB4 = true;
+			//}
+			//
+			//if (s_labelPool)
+			//{
+			//	Gdiplus::InstalledFontCollection ifc;
+			//	int families = ifc.GetFamilyCount();
+			//
+			//	//Gdiplus::FontFamily fontFamily(;
+			//}
+
+			//Gdiplus::GdiplusBase();
+
+			//return s_labelPool.
+			return ret;
+		}
+
+		std::string findBestFontMatch(const std::string& param1, const std::string& param2) //TODO | Is this a function?
+		{
+			return "";
+		}
 
 		Impl(Context* context, const std::string& fontName, int fontSize, const Color& fontColor, int style) : //45B2E0 | TODO
 			m_name(fontName),
@@ -25,44 +52,44 @@ namespace game
 			m_color(fontColor),
 			m_style(style)
 		{
-			//if (?) //Init var
-			//{
-			//	Gdiplus::GdiplusStartupInput startup;
-			//	ULONG_PTR token;
-			//	Gdiplus::GdiplusStartup(&token, &startup, NULL);
-			//	? = true;
-			//}
+			if (s_59ADB4) //Init var
+			{
+				Gdiplus::GdiplusStartupInput startup;
+				ULONG_PTR token;
+				Gdiplus::GdiplusStartup(&token, &startup, NULL);
+				s_59ADB4 = true;
+			}
 
-			//u16string s = sub_4F5410()
+			Gdiplus::FontFamily fontFamily(string::towstring(fontName).c_str());
+			if (!fontFamily.IsAvailable())
+				throwError(Exception(Format("Font {0} is not available.", fontName)));
 
-			//Gdiplus::FontCollection collection;
-			//Gdiplus::FontFamily fontFamily(?, 0, &collection);
+			if (fontFamily.IsStyleAvailable(m_style))
+			{
+				const char* style = toString((Style)m_style);
 
-			//std::string name = .c_str();
+				if (!style)
+					throwError(Exception(Format("Style {0} is not available for font {1}.", style, fontName)));
+			}
 
-			//if (collection.)
-				//throwError(Exception(Format("Font {0} is not available.", name)));
-			//SolidBrush
-			//GdipDeleteFontFamily();
+			dword50_solidbrush = new Gdiplus::SolidBrush(fontColor.getColorAsInt());
+			m_font = new Gdiplus::Font(&fontFamily, fontSize, style);
+			dword4C_gfx = new Gdiplus::Graphics(sub_534D30());
 
-			//throwError(Exception(Format("Style {0} is not available for font {1}.", )));
+			m_ascending = ceil(fontFamily.GetCellAscent(m_font->GetStyle()));
+			m_descending = ceil(fontFamily.GetCellDescent(m_font->GetStyle()));
+			m_leading = ceil(fontFamily.GetLineSpacing(m_font->GetStyle()));
 
-
-			//int baseLineSpacing;
-
-			//Gdiplus::GdiplusBase();
-			//Gdiplus::Graphics(sub_534D30(), )
-
-			//Gdiplus::GpGraphics* 
-
-			//m_ascending = ceil(baseLineSpacing * ?);
-			//m_leading = ceil(baseLineSpacing * ?);
+			s_labelPool.addUser();
 		}
 
 		~Impl() //45BEF0 | TODO?
 		{
-			//GdipDeleteFont();
-			//GdipDeleteGraphics();
+			s_labelPool.removeUser();
+
+			delete dword50_solidbrush;
+			delete m_font;
+			delete dword4C_gfx;
 		}
 
 		void drawString(Context* context, const std::string& str, float y, float x, Anchor anchor) const //45C230 | TODO
@@ -80,7 +107,7 @@ namespace game
 			drawString(context, str, 0.0f, 0.0f, anchor);
 		}
 
-		std::string filter(const std::string& str) const //45AD70
+		std::string filter(const std::string& str) const //45AD70 | Same as iOS impl!
 		{
 			return str;
 		}
@@ -92,13 +119,31 @@ namespace game
 
 		int getStringWidth(const std::string& str, int offset, int length) const //45B890 | TODO
 		{
+			if (str.empty())
+				return 0;
+
 			int result; //= 45B890();
 			return ceil(result);
 		}
 
-		int getStringHeight(const std::string& str, int offset, int length) const //45B890 | TODO
+		int getStringHeight(const std::string& str, int offset, int length) const //45B890 | TODO same function!
 		{
-			int result; //= 45B890();
+			//if (str.empty())
+			//	return 0;
+			//
+			//std::wstring unicode = string::towstring(str.substr(offset, length));
+			//int size = unicode.size();
+			//
+			//Gdiplus::PointF l_r;
+			//Gdiplus::RectF b;
+			//
+			//Gdiplus::Status status = dword40_gfx->MeasureString(unicode.data(), size, dword54_createFont, l_r, 0, 0);
+
+			//if (status)
+				//dword40_gfx =
+
+			//Gdiplus::Graphics::MeasureString()
+			int result; //=
 			return ceil(result);
 		}
 
@@ -127,17 +172,27 @@ namespace game
 			return 0;
 		}
 
-		gr::Rect getBounds(const std::string& str, Anchor anchor, int offset, int length) const //45BC70 | TODO
+		Rect getBounds(const std::string& str, Anchor anchor, int offset, int length) const //45BC70 | Correct?
 		{
-			int x0 = 0;
-			int y0 = 0;
-			//if (length ==1)
+			float x = 0.0f; //x0
+			float y = 0.0f; //y0
+			float width = ceil(getStringWidth(str, offset, length)); //x1
+			float height = ceil(getStringHeight(str, offset, length)); //y1
 
+			switch (anchor.h)
+			{
+			case Anchor::HCENTER: x = -0.5 * width; break;
+			case Anchor::RIGHT: x = -width; break;
+			}
 
-			int x1 = 0; //ceil(;
-			int y1 = 0; //ceil(;
+			switch (anchor.v)
+			{
+			case Anchor::VCENTER: y = getHeight() / -2; break;
+			case Anchor::BOTTOM: y = -getHeight(); break;
+			case Anchor::BASELINE: y = -getMaxAscending(); break;
+			}
 
-			return gr::Rect(x0, y0, x0 + x1, y0 + y1);
+			return Rect(x, y, x + width, y + height);
 		}
 
 	private:
@@ -149,27 +204,56 @@ namespace game
 		int m_ascending; //0x40
 		int m_descending; //0x44
 		int m_leading; //0x48
-		Gdiplus::GpStatus dword40_hwnd; //0x4C
-		Gdiplus::GpStatus dword44_solidbrush; //0x50
-		Gdiplus::GpStatus dword54_createFont; //0x54
+		Gdiplus::Graphics* dword4C_gfx; //0x4C | HWND?
+		Gdiplus::SolidBrush* dword50_solidbrush; //0x50
+		Gdiplus::Font* m_font; //0x54
 
-		/*
-		int *pint0;
-		_BYTE gap4[36];
-		_DWORD dword28;
-		_BYTE gap2C[16];
-		_DWORD dword3C;
-		int int40;
-		_DWORD dword44;
-		_BYTE gap48[8];
-		_DWORD dword50;
-		_DWORD dword54;
-		*/
+		static bool s_59ADB4; //init
+		static LabelPool s_labelPool; //59ADCC
+		static HWND s_hwnd;
 
-		/*HWND sub_534D30() //Grabs the HWND
+		HWND sub_534D30() //Grabs the HWND
 		{
 			return s_hwnd;
-		}*/
+		}
+
+		//sub_45A8D0()
+		//{
+		//}
+
+		//REMOVED DUE TO GR::COLOR::getColorAsInt
+
+		//void sub_45D3B0(float r[4], const Color& clr) //Clamp color? | Correct?
+		//{
+		//	float values[4] =
+		//	{
+		//		clr.red(),
+		//		clr.green(),
+		//		clr.blue(),
+		//		clr.alpha()
+		//	};
+		//
+		//	for (int i = 0; i < 4; i++)
+		//	{
+		//		if (values[i])
+		//			r[i] = min(values[i], 1.0f);
+		//		else
+		//			r[i] = 0.0f;
+		//	}
+		//}
+		//
+		//int sub_45D480(const Color& clr) //45D480 | Convert to GDI ARGB, CORRECT?
+		//{
+		//	float cl[4];
+		//	sub_45D3B0(cl, clr);
+		//
+		//	const auto r = static_cast<std::uint32_t>(cl[0] * 255.0f);
+		//	const auto g = static_cast<std::uint32_t>(cl[1] * 255.0f);
+		//	const auto b = static_cast<std::uint32_t>(cl[2] * 255.0f);
+		//	const auto a = static_cast<std::uint32_t>(cl[3] * 255.0f);
+		//
+		//	return (a << 24) | (r << 16) | (g << 8) | b;
+		//}
 	};
 
 #include <game/common/SystemFont.h>
