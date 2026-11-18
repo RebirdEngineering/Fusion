@@ -9,9 +9,9 @@ namespace pf //6
 class RemoteNotificationsListener //12
 {
 public:
-	virtual void onRemoteNotificationReceived(const std::string&); //19
+	virtual void onRemoteNotificationReceived(const std::string& payloadAsJSON); //19 | Assuming via pf::detail::notifyRemoteNotificationListeners
 
-	virtual void onRemoteNotificationTokenReceived(const std::string&); //26
+	virtual void onRemoteNotificationTokenReceived(const std::string& token); //26 | Assuming via pf::detail::remoteNotificationTokenReceived
 };
 
 class RemoteNotifications : public lang::Object //34 | Ok so this kind of file is named RemoteNotifications_* and not RemoteNotificationsImpl_*? We've only seen it in Trilogii? | RemoteNotificationsImpl_* (iOS), RemoteNotifications_DUMMY (Trilogii, Win), RemoteNotifications_* (iOS)

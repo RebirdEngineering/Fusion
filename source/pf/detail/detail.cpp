@@ -27,7 +27,22 @@ static void addRemoteNotificationListener(RemoteNotificationsListener* listener)
 		listener->onRemoteNotificationReceived(sm_lastRemoteNotification);
 }
 
-static void notifyRemoteNotificationListeners(const std::string& payloadAsJSON) //55
+static void removeRemoteNotificationListener(RemoteNotificationsListener* listener) //Android only. | Correct?
+{
+	Mutex::Lock lock(sm_mutex);
+
+	std::vector <RemoteNotificationsListener*>::iterator it = sm_remoteNotificationListeners.begin();
+
+	while (it != sm_remoteNotificationListeners.end())
+	{
+		if (*it == listener)
+			sm_remoteNotificationListeners.erase(it);
+
+		it++;
+	}
+}
+
+static void notifyRemoteNotificationListeners(const std::string& payloadAsJSON) //55 | TODO
 {
 	Mutex::Lock lock(sm_mutex); //57
 
@@ -44,7 +59,7 @@ static void notifyRemoteNotificationListeners(const std::string& payloadAsJSON) 
 	sm_lastRemoteNotification = payloadAsJSON;
 }
 
-static void remoteNotificationTokenReceived(const std::string& token) //70
+static void remoteNotificationTokenReceived(const std::string& token) //70 | TODO
 {
 	Mutex::Lock lock(sm_mutex); //72
 

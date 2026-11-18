@@ -18,9 +18,9 @@ public:
 		Italic,
 	};
 
-	static const std::vector<std::string>& getAvailableFontNames(); //27
+	const std::vector<std::string>& getAvailableFontNames(); //27 | Likely not static.
 
-	static std::string findBestFontMatch(const std::string&, const std::string&); //36
+	std::string findBestFontMatch(const std::string& param1, const std::string& param2); //36 | Unknown params.
 
 	SystemFont(gr::Context* context, const std::string& fontName, int fontSize, const gr::Color& fontColor, int style); //47
 
@@ -50,7 +50,7 @@ public:
 
 	gr::Rect getBounds(const std::string& str, Anchor anchor, int offset, int length) const; //136 | Mangled symbol suggests this, output suggests we start at str, offset and length
 
-	const char* toString(Style style) //141
+	static const char* toString(Style style) //141 | Static is needed. Does not exist on Android.
 	{
 		switch (style)
 		{
@@ -63,7 +63,7 @@ public:
 
 private:
 	class Impl;
-	P(Impl) m_impl; //159 | Impl sizes: [Win32 [GDI]: 88 bytes, iOS: 56 bytes, WP8: 12 bytes {Dummy?}, Android: 100 bytes, OSX: 56 bytes]
+	P(Impl) m_impl; //159 | Impl sizes: [Win32 {GDI}: 88 bytes, iOS: 56 bytes, WP8: 12 bytes {Dummy?}, Android: 100 bytes, OSX: 56 bytes]
 };
 
 }

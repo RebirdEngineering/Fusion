@@ -1,7 +1,7 @@
-WebView::WebView(int x, int y, int height, int width, bool backgroundIsTransparent) //1 (yeah line 1, by that logic there's no ifdef define endif) | Includes and namespaces are redundant since we're including this file in the namespace
+WebView::WebView(int x, int y, int height, int width, bool backgroundIsTransparent) : //1 (yeah line 1, by that logic there's no ifdef define endif) | Includes and namespaces are redundant since we're including this file in the namespace
+	m_func_ref(-1),
+	m_callback(-1)
 {
-	m_func_ref = -1;
-	m_callback = -1;
 	m_impl = new WebViewImpl(x, y, height, width, backgroundIsTransparent); //5
 }
 

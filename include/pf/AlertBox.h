@@ -46,7 +46,7 @@ public:
 
 	void setCustomButtons(const std::vector<std::string>& customButtons); //67
 
-	void show(const std::string& title, const std::string& message, int type, AlertBoxListener* listener); //73
+	void show(const std::string& title, const std::string& message, int type, AlertBoxListener* listener); //73 | Type is button type
 
 private:
 	class AlertBoxImpl;

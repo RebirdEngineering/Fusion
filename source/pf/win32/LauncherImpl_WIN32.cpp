@@ -40,7 +40,7 @@ namespace pf
 			ShellExecuteExW(&execInfo);
 
 			if (_delegate)
-				_delegate->LauncherCompleted(LauncherDelegate::UNKNOWN);
+				_delegate->LauncherCompleted();
 
 			return true;
 		}
@@ -55,7 +55,7 @@ namespace pf
 			ShellExecuteExW(&execInfo);
 
 			if (_delegate)
-				_delegate->LauncherCompleted(LauncherDelegate::UNKNOWN);
+				_delegate->LauncherCompleted();
 
 			return true;
 		}

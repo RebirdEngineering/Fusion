@@ -45,15 +45,15 @@ public:
 		{
 		}*/
 
-		void draw(gr::Context* context, int x, int y) const; //51
-		//{
-			//m_image->draw(context, x, y, 0, 0, m_width, m_height, x, y); //53 | ?
-		//}
+		void draw(gr::Context* context, int x, int y) const //51
+		{
+			m_image->draw(context, x, y, 0, 0, m_width, m_height, x, y); //53 | ?
+		}
 
-		int getMemoryUsage() const; //56
-		/*{
+		int getMemoryUsage() const //56
+		{
 			return m_image->format().getMemoryUsage(m_width, m_height);
-		}*/
+		}
 
 		void blt(void* data) //58
 		{
@@ -75,7 +75,7 @@ public:
 		int m_pivotY; //75
 	};
 public:
-	LabelPool(); //78
+	LabelPool() {} //78
 
 	Label* getLabel(const std::string& fontname, int size, int color, const std::string& str, int style) const; //80-91
 	//{
@@ -102,14 +102,23 @@ public:
 		//m_order.begin(); //116
 	}*/
 
-	void addUser(); //121
+	void addUser() { m_users++; } //121
 
-	void removeUser(); //123
+	void removeUser() //123
+	{
+		if (m_users)
+		{
+			reset(); //127
+		}
+	}
+
 private:
 	void reset() //132
 	{
-		m_labels.clear(); //134
-		m_order.clear(); //135
+		m_size = 0;
+		m_labels.clear(); //135
+		m_order.clear(); //136
+		m_users = 0;
 	}
 
 	int m_size; //140

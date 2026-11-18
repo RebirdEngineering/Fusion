@@ -8,6 +8,7 @@ namespace pf
 	namespace detail
 	{
 		void addRemoteNotificationListener(RemoteNotificationsListener* listener);
+		void removeRemoteNotificationListener(RemoteNotificationsListener* listener); //Only seen on Android.
 		void notifyRemoteNotificationListeners(const std::string& payloadAsJSON);
 		void remoteNotificationTokenReceived(const std::string& token);
 	}

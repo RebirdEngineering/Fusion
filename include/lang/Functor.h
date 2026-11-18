@@ -1,7 +1,7 @@
 #ifndef _LANG_FUNCTOR_H
 #define _LANG_FUNCTOR_H
 
-#include <lang/Object.h>
+#include <lang/pp.h>
 
 BEGIN_NAMESPACE(lang)
 

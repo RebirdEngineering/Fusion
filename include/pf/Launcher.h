@@ -10,7 +10,7 @@ class LauncherDelegate //12
 {
 public:
 	enum ResultValue { FAILED, SUCCEEDED, CANCELLED, UNKNOWN }; //15
-	virtual void LauncherCompleted(ResultValue) = 0; //16
+	virtual void LauncherCompleted(ResultValue = UNKNOWN) = 0; //16
 };
 
 class Launcher : //24
