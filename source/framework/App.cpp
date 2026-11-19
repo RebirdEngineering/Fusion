@@ -476,7 +476,7 @@ bool App::setControlsPresent(bool)
 	return true;
 }
 
-#ifndef PLATFORM_IOS //Inexistent on iOS but exists on Android OSX and PC.
+#ifndef PLATFORM_IOS //Inexistent on iOS but exists on Android, OSX and PC.
 void parseConfigFromLuaTable(App::Configuration& config, LuaTable& table) //446F10 | Correct?
 {
 	if (table.isString("name")) config.name = table.getString("name");
@@ -487,7 +487,7 @@ void parseConfigFromLuaTable(App::Configuration& config, LuaTable& table) //446F
 	if (table.isBoolean("showCursor")) config.showCursor = table.getBoolean("showCursor");
 	if (table.isBoolean("depthbuffer")) config.depthbuffer = table.getBoolean("depthbuffer");
 	if (table.isBoolean("captureMouse")) config.captureMouse = table.getBoolean("captureMouse");
-	if (table.isString("dllPath")) config.dllPath = table.getString("dllPath");
+	if (table.isString("dllPath")) config.dllPath = table.getBoolean("dllPath"); //A boolean? A string still works but you could simply pass one instead of a string!
 	if (table.isString("iconResourceID")) config.iconResourceID = table.getNumber("iconResourceID");
 	if (table.isBoolean("debugMemoryAllocs")) config.debugMemoryAllocs = table.getBoolean("debugMemoryAllocs");
 
