@@ -11,8 +11,7 @@ namespace gr
 
 namespace game
 {
-class LabelPool :
-	public lang:: Object
+class LabelPool
 {
 	
 public:

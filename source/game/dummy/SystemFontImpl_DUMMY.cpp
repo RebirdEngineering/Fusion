@@ -8,6 +8,13 @@ namespace game
 		public lang::Object
 	{
 	public:
+		static std::vector<std::string> s_fontNames;
+
+		const std::vector<std::string>& getAvailableFontNames()
+		{
+			return s_fontNames;
+		}
+
 		Impl(Context* context, const std::string& fontName, int fontSize, const Color& fontColor, int style)
 		{
 		}
