@@ -12,11 +12,15 @@ Please do not confuse this for private KA3D. Fusion is exclusively for modern da
 ### Differencies / accuracy notes
 - To reduce legal risk, we do not aim to reverse engineer anything handling DRM or IAPs, the resulting code is DRM-free, at worst dummy implementations of them will be allowed, just so applications would be able to reference them.
 - Certain variable/parameter names, asserts and missing methods have been reconstructed by referencing the originally semi-open-source release of the KA3D engine, as well as reverse engineering KA3D-era and Silverlight ports of games. For more information, check the Hidden Birds Fusion documentation spreadsheet.
-- Any functions vastly similar to public KA3D in the grand scale will use the original namespace macros.
+- Any classes vastly similar to public KA3D in the grand scale will use the original namespace macros.
 
 ### Compiling
 
-Clone the repo using your Git client, please do not download the master release as an archive as it won't include external submodules, which are needed. After you did that, simply open the repo in CMake and you will be able to build the most of the libraries for targeting to a project. At the moment, the repo is not quite completed and other build types than Windows or dummy implementations are unimplemented.
+Recursively clone the repo using your Git client, please do not download the master release as an archive through GitHub as it won't include external submodules, which are needed. This below Git command would do all of it for you.
+
+ `git clone https://github.com/RebirdEngineering/Fusion.git --recursive`
+
+ After you did that, simply open the repo in CMake and you should be able to build the most of the libraries for targeting to a project. At the moment, the repo is not quite completed and other build types than Windows or dummy implementations are often unimplemented.
 
 ### The executables used for comparison/reference (BLAKE3)
 
@@ -26,11 +30,11 @@ Clone the repo using your Git client, please do not download the master release 
 	Angry Birds Seasons v4.1.0 from Google Play (32-bit).
 - ` 950beefdcdcb45101543cf707de8919740af3d98fe7d5f9edc68c7d68e7e6d24 angrybirdsfreemagic`
 	Angry Birds Free with Magic v1.1.3 for Meego + leftover debug information.
-- ` 16da89de8ce40a7e2a84b7a2d894cbd60a80267ed920e44a3dfc43fb4e6127d9 angrybirdsfreemagic`
+- `16da89de8ce40a7e2a84b7a2d894cbd60a80267ed920e44a3dfc43fb4e6127d9 angrybirdsfreemagic`
 	Angry Birds Free with Magic v1.1.5 for Meego + leftover debug information.
-- ` 2069b508b734627d0a361c1160a8b0da4bcd5f938d45de44096086d843a29010 AngryBirdsSeasons.exe`
+- `2069b508b734627d0a361c1160a8b0da4bcd5f938d45de44096086d843a29010 AngryBirdsSeasons.exe`
 	Angry Birds Seasons v4.1.0 for Windows, and its renderering DLLs.
-- ` 3a10c882be1c862f06f97a4836a939a5d3995f27ab88b0049014496ec00ed81e plugin_rcssdk.dylib + 500f1b38bd7923d99accc9e9f1d5306124ab5751e2284e3f3d5b21c858d7e8c2 plugin_rcssdk.dll`
+- `3a10c882be1c862f06f97a4836a939a5d3995f27ab88b0049014496ec00ed81e plugin_rcssdk.dylib + 500f1b38bd7923d99accc9e9f1d5306124ab5751e2284e3f3d5b21c858d7e8c2 plugin_rcssdk.dll`
 	Debug build of Rovio Cloud Services (RCS) plugin from the Corona SDK, for Windows and Mac OS X, which uses a newer revision of the engine that shares some libraries.
 
 ### Miscellaneous notes
@@ -43,6 +47,6 @@ Legal notes:
 - The decompilation project does not include any assets - you need to get them from your own copy of a game using it.
 - For development on Apple platforms, a local copy of their SDKs must be manually included.
 
-Project initially started by LolHacksRule. No AI is used for the decompiled code. Any PRs entirely using AI will be denied.
+Project initially started by LolHacksRule. No AI is directly used for the decompiled code. Any PRs entirely using AI will be denied.
 
 The original semi-open-source KA3D engine can be found at https://sourceforge.net/projects/ka3d/. Original engine belongs to Rovio.
