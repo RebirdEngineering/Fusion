@@ -21,7 +21,7 @@ AndroidLogger::~AndroidLogger()
 
 void AndroidLogger::onLogEvent(const log::Event& e)
 {
-	__android_log_print(e.priority - 1 <= ANDROID_LOG_INFO ? androidLogPrio[e.priority - 1] : ANDROID_LOG_INFO, e.tag, "%s", e.message);
+	__android_log_print(e.priority - 1 <= ANDROID_LOG_INFO ? androidLogPrio[e.priority - 1] : ANDROID_LOG_INFO, e.tag.c_str(), "%s", e.message.c_str());
 }
 
 }
