@@ -1,4 +1,5 @@
 #include <framework/FileLogger.h>
+#include <io/OutputStream.h>
 #include <lang/Format.h>
 
 #include <time.h>

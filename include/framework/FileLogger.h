@@ -2,11 +2,12 @@
 #define _FRAMEWORK_FILELOGGER_H
 
 #include <lang/Log.h>
-#include <io/OutputStream.h>
 
 //Android only.
 
 //BEGIN_NAMESPACE(lang) BEGIN_NAMESPACE(log) struct Event; class Listener; } }
+	class OutputStream;
+}
 	
 namespace framework
 {
@@ -18,10 +19,10 @@ public:
 	FileLogger();
 	~FileLogger();
 
-	void onLogEvent(const NS(lang::log, Event)& Event);
+	void onLogEvent(const lang::log::Event& e);
 
 private:
-	P(io::OutputStream) m_output;
+	lang::Ptr<io::OutputStream> m_output;
 };
 
 } // framework
