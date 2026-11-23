@@ -6,7 +6,7 @@
 namespace gr
 {
 
-Context* DX11_createContext(int w, int h, Context::OrientationType orientation, void (*presentFunc)());
+Context* createContext(int w, int h, Context::OrientationType orientation, void (*presentFunc)());
 
 }
 

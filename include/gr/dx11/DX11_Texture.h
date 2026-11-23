@@ -100,11 +100,32 @@ private:
 	  _DWORD dword44;
 	  _DWORD dword48;
 	*/
+
+	/*
+	  _DWORD dword10;
+	  _DWORD dword14;
+	  img__surfaceformat18;
+	  _BYTE byte1C;
+	  _BYTE gap1D[15];
+	  _DWORD dword2C;
+	  _DWORD dword30;
+	  _BYTE gap34[4];
+	  _BYTE byte38;
+	  ID3D11Texture2D *pid3d11texture2d3C;
+	  ID3D11ShaderResourceView *pid3d11shaderresourceview40;
+	  ID3D11RenderTargetView *pid3d11rendertargetview44;
+	  _DWORD dword48;
+	*/
 	
 	int m_width; //0x10
 	int m_height; //0x14
 	img::SurfaceFormat m_format; //0x18
 	std::string m_name; //0x1C
+	byte unk[4]; //0x38
+	ID3D11Texture2D* id3d11texture2d3c; //0x3C
+	ID3D11ShaderResourceView* pid3d11shaderresourceview40; //0x40
+	ID3D11RenderTargetView* pid3d11rendertargetview44; //0x44
+	DX11_Context* m_context; //0x48
 
 	/*int m_mipcount;
 	int dword18;

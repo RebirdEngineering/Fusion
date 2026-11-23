@@ -1228,7 +1228,7 @@ Context* sub_5363E0(const std::string& renderer) //TODO returns renderer context
 	if (!dllModule)
 		throwError(GraphicsException(Format("Renderer for platform {0} ({1}) not found!", s_context->platformString(), renderer)));
 
-	typedef Context*(WINAPI* CreateContextFunction)(int w, int h, Context::OrientationType orientation, HWND hwnd, HDC hdc);
+	typedef Context*(WINAPI* CreateContextFunction)(int w, int h, Context::OrientationType orientation, HWND hwnd);
 	CreateContextFunction createContextFunc = (CreateContextFunction)GetProcAddress(dllModule, "createContext");
 
 	if (!createContextFunc)

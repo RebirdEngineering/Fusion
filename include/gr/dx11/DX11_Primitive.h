@@ -71,18 +71,14 @@ public:
 	 */
 	PrimType		type() const;
 
-	/**
-	 * Returns object string description.
-	 */
-	std::string	toString() const;
-
 private:
-	
 	DX11_Context* m_context; //0x7C
-	DX11_Shader* m_fx;
+	DX11_Shader* m_fx; //0x80
 	PrimType m_prim; //0x84
-	LockType m_locked;
+	LockType m_locked; //0x88
 	int m_usage; //0x8C
+
+	ID3D11InputLayout* pid3d11inputlayout124; //0x123
 
 	/*
 		_DWORD dword7C;

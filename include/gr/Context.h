@@ -654,10 +654,7 @@ public:
 	 *
 	 */
 	static RenderBatcher&				getBatcher(); //710
-    
-    /**
-	 *
-	 */
+
 	virtual void*				getBackbuffer(); //712
 	
 protected:

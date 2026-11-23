@@ -5,6 +5,7 @@
 #include "DX11_common.h"
 #include "DX11_Shader.h"
 #include "DX11_Primitive.h"
+#include "DX11_Texture.h"
 #include <gr/Context.h>
 #include <io/PathName.h>
 #include <img/SurfaceFormat.h>
@@ -24,17 +25,12 @@ class DX11_Context : //0x350 bytes.
 public:
     /**
      * Initializes the device object that renders to current active window.
-     * @param w Width of the frame buffer.
-     * @param h Height of the frame buffer.
+     * @param hwnd
      * @param orientation
-     * @param presentFunc
      */
-    DX11_Context(HWND hwnd, int unk); //( int w, int h, OrientationType orientation, void* presentFunc );
+    DX11_Context(HWND hwnd, OrientationType orientation); //( int w, int h, OrientationType orientation, void* presentFunc ); | 10007950
 
     ~DX11_Context();
-
-    //void createBackBuffer();
-    //void releaseBackBuffer();
 
     /**
      * Creates context dependent shader by name.
@@ -75,8 +71,6 @@ public:
 
     Image* createImage(int width, int height, int mipcount, const img::SurfaceFormat& fmt, UsageFlags usage);
 
-    Image* createFlippedImage(int width, int height, int mipcount, const img::SurfaceFormat& fmt, UsageFlags usage);
-
     /**
      * Creates context dependent geometry primitive.
      */
@@ -96,13 +90,13 @@ public:
 
     void    drawCircle2D(unsigned int color, int x, int y, int radius, int lineWidth); //Recovered param names from ABFM
 
-    void    fillTrianDX11e2D(unsigned int color, int x0, int y0, int x1, int y1, int x2, int y2); //Recovered param names from ABFM
+    void    fillTriangle2D(unsigned int color, int x0, int y0, int x1, int y1, int x2, int y2); //Recovered param names from ABFM
 
     void    fillRect2D(unsigned int color, int x, int y, int w, int h, Blend blend);
 
     void    fillCircle2D(unsigned int color, int x, int y, int radius);
 
-    void    texturizeTrianDX11e2D(Image* image, const math::float4& scaleBias, int x0, int y0, int x1, int y1, int x2, int y2); //Recovered param names from ABFM
+    void    texturizeTriangle2D(Image* image, const math::float4& scaleBias, int x0, int y0, int x1, int y1, int x2, int y2); //Recovered param names from ABFM
 
     void    texturizeRect2D(Image* image, const math::float4& scalebias, int x, int y, int width, int height); //Recovered param names from ABFM
 
@@ -262,14 +256,14 @@ public:
 
     void        flush();
 
-    Shader*     getPlainShader()
+    Shader*     getPlainShader() //10003650
     {
         if (!m_plainShader)
             m_plainShader = createShader(NS(io, PathName)(shaderPath(), "2d-vertexcolor").toString(), 0);
         return m_plainShader;
     };
 
-    Shader*     getPlainAlphaShader()
+    Shader*     getPlainAlphaShader() //10003760
     {
         if (!m_plainAlphaShader)
             m_plainAlphaShader = createShader(NS(io, PathName)(shaderPath(), "2d-vertexcolor-alpha").toString(), 0);
@@ -290,20 +284,24 @@ public:
         return m_spriteAlphaShader;
     }
 
-    //void        removeTexture(Texture* tex);
-
     void        saveCachedState(const std::string& name);
 
     void        restoreCachedState(const std::string& name);
 
     void        resetCachedState();
 
+    void getColorF(int color, float* colorf); //Assuming via GLES2
+
+    void*       getBackbuffer();
+
 protected:
 
 private:
 
-    int m_currentPass; //0x14
-
+    std::vector<math::float4x4> boneworldtm; //0x40
+    math::float4 camerapos; //0x50
+    math::float4x4 worldtm; //0x60
+    SortBuffer sortbuffer; //0xA0
     framework::VisualStudioLogger* visualstudiologgerB8; //0xB8
 
     RenderState2D m_renderState2D; //0xDC
@@ -311,20 +309,45 @@ private:
     math::float4x4 m_viewtm; //0x1B8
     math::float4x4 m_modelviewtm; //0x1F8
     math::float3x4 m_customModelTM; //0x238
+    math::float3x4 unk; //0x238
     Rect m_viewport; //0x2A8
+    int m_width; //0x2B8
+    int m_height; //0x2BC
+
+    bool m_customModelTMEnabled; //0x2C4
+
+    OrientationType m_orientation; //0x2CC
+    Texture* m_renderTarget; //0x2D0
+    float m_time; //0x2D4
+    math::float2 m_fovScaleBias; //0x2D8
     
-    RenderState2D m_renderState2D; //0x2DDC
     std::string m_shaderPath; //0x2E0
     P(Shader) m_plainShader; //0x2FC
     P(Shader) m_plainAlphaShader; //0x300
     P(Shader) m_spriteShader; //0x304
     P(Shader) m_spriteAlphaShader; //0x308
+
+    std::vector<P(DX11_Primitive)> m_dynamicPrimitives;
+
+    std::vector<DX11_Texture*> m_textures;
+
+    ID3D11Device* pid3d11device31C; //0x31C
+    ID3D11DeviceContext* pid3d11devicecontext320; //0x320
+    IDXGISwapChain* pidxgiswapchain324; //0x324
+    ID3D11RenderTargetView* pid3d11rendertargetview328; //0x324
+
     DXGI_FORMAT dxgi_format32C; //0x32C
 
-    ID3D11RenderTargetView* pid3d11rendertargetview338;
-    ID3D11DepthStencilView* pid3d11depthstencilview33C;
-
+    ID3D11RenderTargetView* pid3d11rendertargetview338; //0x338
+    ID3D11DepthStencilView* pid3d11depthstencilview33C; //0x33C
     std::map<std::string, P(DX11_Shader)> m_uniqueShaders; //0x340
+
+    ID3D11Device* sub_10002020(); //10002020 | device
+    ID3D11DeviceContext* sub_10002030(); //10002030 | deviceContext
+
+
+
+    void createSwapChain(HWND hwnd);
 
 	/*
   _DWORD dword40;

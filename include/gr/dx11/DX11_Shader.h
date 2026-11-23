@@ -212,6 +212,8 @@ private:
 
 	SortType			m_sort; //0x38
 
+	DX11_Context* m_context; //0x44
+
 	DX11_Shader( const DX11_Shader& );
 	DX11_Shader& operator=( const DX11_Shader& );
 };
