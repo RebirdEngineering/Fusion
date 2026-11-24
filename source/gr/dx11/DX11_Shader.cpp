@@ -1,8 +1,7 @@
+#include <gr/dx11/DX11_common.h>
 #include <gr/dx11/DX11_Shader.h>
 #include <gr/dx11/DX11_Context.h>
 #include <lang/Log.h>
-
-//#include <d3dx11effect.h>
 
 using namespace lang;
 using namespace math;
@@ -128,7 +127,7 @@ namespace gr
 		//if (!m_enabled)
 		//	return 0;
 		//
-		//m_context->m_batcher->flush();
+		//m_context->getBatcher().flush();
 		//
 		//return m_currentTechnique;
 	}

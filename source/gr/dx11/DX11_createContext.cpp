@@ -1,3 +1,4 @@
+#include <gr/dx11/DX11_common.h>
 #include <gr/dx11/DX11_createContext.h>
 #include <gr/dx11/DX11_Context.h>
 

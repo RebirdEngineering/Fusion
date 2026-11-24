@@ -1,3 +1,4 @@
+#include <gr/dx11/DX11_common.h>
 #include <gr/dx11/DX11_Context.h>
 #include <gr/dx11/DX11_Image.h>
 #include <gr/dx11/DX11_Texture.h>
@@ -16,14 +17,45 @@ using namespace img;
 
 namespace gr
 {
-	DX11_Context::DX11_Context(HWND hwnd, OrientationType orientation) //WIP
+	DX11_Context::DX11_Context(HWND hwnd, OrientationType orientation) : //WIP
+		boneworldtm(),
+		m_projtm(1.f),
+		m_viewtm(1.f),
+		m_modelviewtm(1.f),
+		//dwordBC?
+		//dwordC0?
+		//dwordC4?
+		m_customModelTM(1.f),
+		m_time(0.f),
+		m_width(0),
+		m_height(0),
+		m_customModelTMEnabled(false),
+		//?
+		m_orientation(orientation),
+		m_renderTarget(0),
+		m_fovScaleBias(1.0f, 0.0f),
+		m_plainShader(0),
+		m_plainAlphaShader(0),
+		m_spriteShader(0),
+		m_spriteAlphaShader(0),
+		m_device(0),
+		pid3d11devicecontext320(0),
+		pidxgiswapchain324(0),
+		pid3d11rendertargetview328(0),
+		dxgi_format32C(DXGI_FORMAT_UNKNOWN),
+		//dword330(0),
+		//dword334(0)
+		pid3d11rendertargetview338(0),
+		pid3d11depthstencilview33C(0)
 	{
-		D3D_FEATURE_LEVEL* featureLevel;
-		HRESULT hr = D3D11CreateDevice(0, D3D_DRIVER_TYPE_HARDWARE, 0, 0, 0, 0, D3D11_SDK_VERSION, &pid3d11device31C, featureLevel, &pid3d11devicecontext320);
+		D3D_FEATURE_LEVEL featureLevel;
 
-		hr = D3D11CreateDevice(0, D3D_DRIVER_TYPE_SOFTWARE, LoadLibraryW(L"D3D10WARP.dll"), 0, 0, 0, D3D11_SDK_VERSION, &pid3d11device31C, featureLevel, &pid3d11devicecontext320);
-		if (FAILED(hr))
-			throw Exception(Format("D3D11CreateDevice() failed"));
+		if (FAILED(D3D11CreateDevice(0, D3D_DRIVER_TYPE_HARDWARE, 0, 0, 0, 0, D3D11_SDK_VERSION, &m_device, &featureLevel, &pid3d11devicecontext320)))
+		{
+			HMODULE dll = LoadLibraryW(L"D3D10WARP.dll");
+			if (!dll || FAILED(D3D11CreateDevice(0, D3D_DRIVER_TYPE_SOFTWARE, dll, 0, 0, 0, D3D11_SDK_VERSION, &m_device, &featureLevel, &pid3d11devicecontext320)) || FAILED(D3D11CreateDevice(0, D3D_DRIVER_TYPE_REFERENCE, 0, 0, 0, 0, D3D11_SDK_VERSION, &m_device, &featureLevel, &pid3d11devicecontext320)))
+				throw Exception(Format("D3D11CreateDevice() failed"));
+		}
 
 		createSwapChain(hwnd);
 
@@ -31,13 +63,13 @@ namespace gr
 		setProjection(proj);
 	}
 
-	void DX11_Context::createSwapChain(HWND hwnd) //sub_10003A90 | TODO
+	void DX11_Context::createSwapChain(HWND hwnd) //sub_10003A90 | TODO | Unofficial name.
 	{
 		//IDXGIDevice1* device1;
 		//IDXGIAdapter* adapter;
 		//IDXGIFactory* factory;
 		//
-		//HRESULT hr = pid3d11device31C->QueryInterface(IID_IDXGIDevice1, (void**)device1);
+		//HRESULT hr = m_device->QueryInterface(IID_IDXGIDevice1, (void**)device1);
 		//if (FAILED(hr))
 		//	throw Exception(Format("Creating SwapChain failed"));
 		//
@@ -70,7 +102,7 @@ namespace gr
 		//factory->MakeWindowAssociation(hwnd, DXGI_MWA_NO_ALT_ENTER);
 	}
 
-	DX11_Context::~DX11_Context()
+	DX11_Context::~DX11_Context() //100072F0
 	{
 		m_batcher->reset();
 
@@ -146,11 +178,6 @@ namespace gr
 		statistics.allocatedTextureMemory += fmt.getMemoryUsage(width, height);
 		m_textures.push_back(tex);
 		return tex;
-	}
-
-	ID3D11DeviceContext* DX11_Context::sub_10002030() //10002030
-	{
-		return pid3d11devicecontext320;
 	}
 
 	[[noreturn]] CubeTexture* DX11_Context::createCubeTexture(const std::string& filename) //10003E00
@@ -453,10 +480,10 @@ namespace gr
 		if (FAILED(hr))
 			throw Exception(Format("Getting backbuffer failed"));
 
-		hr = pid3d11device31C->CreateRenderTargetView(surface, 0, &pid3d11rendertargetview328);
+		hr = m_device->CreateRenderTargetView(surface, 0, &pid3d11rendertargetview328);
 
 		if (FAILED(hr))
-			throw Exception(Format("Getting backbuffer failed"));
+			throw Exception(Format("Creating RenderTargetView failed"));
 
 		hr = pidxgiswapchain324->GetDesc(&desc);
 
@@ -472,6 +499,12 @@ namespace gr
 		setViewport(Rect(0, 0, width(), height()));
 
 		//Autogen?
+		if (pid3d11rendertargetview338)
+		{
+			D3D11_RENDER_TARGET_VIEW_DESC desc;
+			pid3d11rendertargetview338->GetDesc(&desc);
+			dxgi_format32C = desc.Format;
+		}
 	}
 
 	void DX11_Context::beginScene()
@@ -492,9 +525,8 @@ namespace gr
 	void DX11_Context::present() //10005620
 	{
 		m_batcher->flush();
-		HRESULT hr = pidxgiswapchain324->Present(0, 0);
 
-		if (FAILED(hr))
+		if (FAILED(pidxgiswapchain324->Present(0, 0)))
 			throw Exception(Format("Cannot present context"));
 	}
 
@@ -555,17 +587,18 @@ namespace gr
 
 		else
 		{
-			//dword324->
-			//pid3d11devicecontext320->CopyResource(tex->sub_1000CDF0(), 0);
+			//void* buf;
+			//pidxgiswapchain324->GetBuffer(0, IID_ID3D11Texture2D, &buf);
+			//pid3d11devicecontext320->CopyResource(tex->sub_1000CDF0(), buf);
 		}
 
-		//if (FAILED(pid3d11devicecontext320->Map(? , 0, D3D11_MAP_READ, 0, tex))
+		//if (FAILED(pid3d11devicecontext320->Map(tex->texture2D(), 0, D3D11_MAP_READ, 0, tex))
 		{
 			throw GraphicsException(Format("Texture Map failed"));
 		}
 
 		ImageWriter::write(out, ff, &data, width, height, SurfaceFormat::SURFACE_A8B8G8R8, SurfaceFormat());
-		//pid3d11devicecontext320->Unmap(tex->sub_10002030(), ) //Autogen?
+		//pid3d11devicecontext320->Unmap(tex->sub_10002030(), 0) //Autogen?
 	}
 
 	P(Image) DX11_Context::capture(P(Image) image) //TODO
@@ -580,11 +613,11 @@ namespace gr
 		m_batcher->flush();
 	}
 
-	void DX11_Context::hibernateContext()
+	void DX11_Context::hibernateContext() //Blank!
 	{
 	}
 
-	void DX11_Context::resumeContext()
+	void DX11_Context::resumeContext() //Blank!
 	{
 	}
 
@@ -593,18 +626,15 @@ namespace gr
 		m_batcher->flush();
 	}
 
-	void DX11_Context::saveCachedState(const std::string& name)
+	void DX11_Context::saveCachedState(const std::string& name) //Blank!
 	{
-		//m_stateStorage[name] = GL_State::sm_current; //
 	}
 
-	void DX11_Context::restoreCachedState(const std::string& name)
+	void DX11_Context::restoreCachedState(const std::string& name) //Blank!
 	{
-		//if (&m_stateStorage.find(name))
-			//m_stateStorage[name] = GL_State::sm_current;
 	}
 
-	void DX11_Context::resetCachedState()
+	void DX11_Context::resetCachedState() //Blank!
 	{
 	}
 
@@ -613,11 +643,11 @@ namespace gr
 		ID3D11Texture2D* backBuffer = 0;
 		HRESULT hr = pidxgiswapchain324->GetBuffer(0, IID_ID3D11Texture2D, (void**)backBuffer);
 
-		if (SUCCEEDED(hr))
-			return backBuffer;
+		if (FAILED(hr))
+			return 0;
 
 		//backBuffer->Release(); //Autogen?
 
-		return 0;
+		return backBuffer;
 	}
 }

@@ -2,6 +2,7 @@
 #define _GR_GL_CREATECONTEXT_H
 
 #include <gr/Context.h>
+//#include <windows.h>
 
 BEGIN_NAMESPACE(gr)
 
@@ -11,6 +12,7 @@ BEGIN_NAMESPACE(gles2)
 BEGIN_NAMESPACE(gl1)
 #endif
 
+//Context* GL_createContext(HWND hwnd, Context::OrientationType orientation);
 Context* GL_createContext(int w, int h, Context::OrientationType orientation, void (*presentFunc)());
 
 }

@@ -1,3 +1,4 @@
+#include <gr/dx11/DX11_common.h>
 #include <gr/dx11/DX11_Texture.h>
 #include <gr/dx11/DX11_Context.h>
 #include <gr/GraphicsException.h>
@@ -91,7 +92,7 @@ namespace gr
 
 	void DX11_Texture::blt(int x, int y, const void* data, int pitch, int miplevel, int w, int h, const img::SurfaceFormat& fmt) //1000CD50
 	{
-		ID3D11DeviceContext* deviceContext; // = m_context->deviceContext();
+		ID3D11DeviceContext* deviceContext = m_context->deviceContext();
 		
 		D3D11_BOX dstBox;
 		dstBox.left = x;

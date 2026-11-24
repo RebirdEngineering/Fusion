@@ -259,28 +259,28 @@ public:
     Shader*     getPlainShader() //10003650
     {
         if (!m_plainShader)
-            m_plainShader = createShader(NS(io, PathName)(shaderPath(), "2d-vertexcolor").toString(), 0);
+            m_plainShader = createShader(io::PathName(shaderPath(), "2d-vertexcolor").toString(), 0);
         return m_plainShader;
     };
 
     Shader*     getPlainAlphaShader() //10003760
     {
         if (!m_plainAlphaShader)
-            m_plainAlphaShader = createShader(NS(io, PathName)(shaderPath(), "2d-vertexcolor-alpha").toString(), 0);
+            m_plainAlphaShader = createShader(io::PathName(shaderPath(), "2d-vertexcolor-alpha").toString(), 0);
         return m_plainAlphaShader;
     }
 
     Shader*     getSpriteShader() //10003870
     {
         if (!m_spriteShader)
-            m_spriteShader = createShader(NS(io, PathName)(shaderPath(), "2d-sprite").toString(), 0);
+            m_spriteShader = createShader(io::PathName(shaderPath(), "2d-sprite").toString(), 0);
         return m_spriteShader;
     }
 
     Shader*     getSpriteAlphaShader() //10003980
     {
         if (!m_spriteAlphaShader)
-            m_spriteAlphaShader = createShader(NS(io, PathName)(shaderPath(), "2d-sprite-alpha").toString(), 0);
+            m_spriteAlphaShader = createShader(io::PathName(shaderPath(), "2d-sprite-alpha").toString(), 0);
         return m_spriteAlphaShader;
     }
 
@@ -294,6 +294,10 @@ public:
 
     void*       getBackbuffer();
 
+    ID3D11Device* device() { return m_device; } //Unofficial name, assuming from KA3D DX9. | 10002020 | device
+
+    ID3D11DeviceContext* deviceContext() { return pid3d11devicecontext320; } //sub_10002030 | Unofficial name.
+
 protected:
 
 private:
@@ -303,49 +307,40 @@ private:
     math::float4x4 worldtm; //0x60
     SortBuffer sortbuffer; //0xA0
     framework::VisualStudioLogger* visualstudiologgerB8; //0xB8
-
+    std::vector<math::float4x4> unkBC; //0xBC
+    std::vector<P(DX11_Primitive)> m_dynamicPrimitives; //0xCC
     RenderState2D m_renderState2D; //0xDC
     math::float4x4 m_projtm; //0x178
     math::float4x4 m_viewtm; //0x1B8
     math::float4x4 m_modelviewtm; //0x1F8
+    math::float4x4 unk238; //0x238
     math::float3x4 m_customModelTM; //0x238
-    math::float3x4 unk; //0x238
     Rect m_viewport; //0x2A8
     int m_width; //0x2B8
     int m_height; //0x2BC
-
+    int m_windingOrder; //0x2C0
     bool m_customModelTMEnabled; //0x2C4
-
+    Shader::SortType m_sort; //0x2C8
     OrientationType m_orientation; //0x2CC
     Texture* m_renderTarget; //0x2D0
     float m_time; //0x2D4
     math::float2 m_fovScaleBias; //0x2D8
-    
     std::string m_shaderPath; //0x2E0
     P(Shader) m_plainShader; //0x2FC
     P(Shader) m_plainAlphaShader; //0x300
     P(Shader) m_spriteShader; //0x304
     P(Shader) m_spriteAlphaShader; //0x308
-
-    std::vector<P(DX11_Primitive)> m_dynamicPrimitives;
-
-    std::vector<DX11_Texture*> m_textures;
-
-    ID3D11Device* pid3d11device31C; //0x31C
+    std::vector<DX11_Texture*> m_textures; //0x30C
+    ID3D11Device* m_device; //0x31C
     ID3D11DeviceContext* pid3d11devicecontext320; //0x320
     IDXGISwapChain* pidxgiswapchain324; //0x324
     ID3D11RenderTargetView* pid3d11rendertargetview328; //0x324
-
     DXGI_FORMAT dxgi_format32C; //0x32C
-
+    DX11_Texture* unk330; //0x330
+    DX11_Texture* unk334; //0x334
     ID3D11RenderTargetView* pid3d11rendertargetview338; //0x338
     ID3D11DepthStencilView* pid3d11depthstencilview33C; //0x33C
     std::map<std::string, P(DX11_Shader)> m_uniqueShaders; //0x340
-
-    ID3D11Device* sub_10002020(); //10002020 | device
-    ID3D11DeviceContext* sub_10002030(); //10002030 | deviceContext
-
-
 
     void createSwapChain(HWND hwnd);
 
@@ -395,7 +390,7 @@ private:
   _DWORD dword310;
   _DWORD dword314;
   _BYTE gap318[4];
-  ID3D11Device *pid3d11device31C;
+  ID3D11Device *m_device;
   ID3D11DeviceContext *pid3d11devicecontext320;
   _DWORD dword324;
   _DWORD dword328;

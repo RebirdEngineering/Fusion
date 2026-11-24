@@ -1,3 +1,4 @@
+#include <gr/dx11/DX11_common.h>
 #include <gr/dx11/DX11_Primitive.h>
 #include <gr/dx11/DX11_Context.h>
 
@@ -11,6 +12,7 @@ namespace gr
 		//m_in
 		m_usage(usage)
 	{
+		m_context->deviceContext();
 	}
 
 	DX11_Primitive::~DX11_Primitive()
@@ -20,8 +22,21 @@ namespace gr
 
 	void DX11_Primitive::lock(LockType lock) //
 	{
-		
+		m_locked = lock;
 	}
+
+	/*void sub_1000A2B0(ID3D11InputLayout* inputLayout)?
+	{
+		m_fx->
+		throw GraphicsException(Format("Couldn't get pass description"));
+		throw GraphicsException(Format("Couldn't get shader description"));
+		throw GraphicsException(Format("Couldn't get vertex shader description"));
+
+		ID3D11Device* device = m_context->device();
+		if (FAILED(device->CreateInputLayout(
+		throw GraphicsException(Format("Failed to create a input layout."));
+	}
+	*/
 
 	void DX11_Primitive::setShader(Shader* shader) //10009990
 	{
@@ -129,9 +144,9 @@ namespace gr
 		return m_fx;
 	}
 
-	void DX11_Primitive::allocate(const VertexFormat& vf, int vertices, int indices) //1000A9D0
+	void DX11_Primitive::allocate(const VertexFormat& vf, int vertices, int indices) //1000A9D0 | TODO
 	{
-
+		//m_context->deviceContext();
 	}
 
 	void DX11_Primitive::deallocate() //1000A000

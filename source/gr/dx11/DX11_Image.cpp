@@ -1,5 +1,6 @@
+#include <gr/dx11/DX11_common.h>
 #include <gr/dx11/DX11_Image.h>
-#include <gr/dx11/DX11_Texture.h>
+//#include <gr/dx11/DX11_Texture.h>
 #include <gr/dx11/DX11_Context.h>
 
 using namespace img;

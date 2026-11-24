@@ -73,7 +73,7 @@ public:
 
 private:
 	DX11_Context* m_context; //0x7C
-	DX11_Shader* m_fx; //0x80
+	P(DX11_Shader) m_fx; //0x80
 	PrimType m_prim; //0x84
 	LockType m_locked; //0x88
 	int m_usage; //0x8C
