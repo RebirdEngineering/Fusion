@@ -1,3 +1,6 @@
-[submodule "AES"]
+[submodule "external/AES"]
 	path = external/AES
 	url = http://github.com/RebirdEngineering/AES
+[submodule "external/FX11"]
+	path = external/FX11
+	url = https://github.com/microsoft/FX11.git
