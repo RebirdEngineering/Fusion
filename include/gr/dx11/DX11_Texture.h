@@ -21,10 +21,6 @@ public:
 	///
 	~DX11_Texture();
 
-	void allocate(DX11_Context* context, int width, int height, int mipcount, img::SurfaceFormat format, int usageflags);
-
-	void deallocate();
-
 	/**
 	 * Sets all pixels of this texture image.
 	 * Texture must be unlocked before the method is called.
@@ -59,11 +55,6 @@ public:
 	 * Returns texture top level surface height in pixels.
 	 */
 	int     height() const;
-
-	/**
-	 * 
-	 */
-	int     pitch() const;
 
 	/**
 	* Returns surface pixel storage format of this texture.

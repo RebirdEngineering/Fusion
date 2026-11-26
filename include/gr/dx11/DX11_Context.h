@@ -298,13 +298,15 @@ public:
 
     ID3D11DeviceContext* deviceContext() { return pid3d11devicecontext320; } //sub_10002030 | Unofficial name.
 
-protected:
-
-private:
-
     std::vector<math::float4x4> boneworldtm; //0x40
     math::float4 camerapos; //0x50
     math::float4x4 worldtm; //0x60
+
+protected:
+
+private:
+    
+    
     SortBuffer sortbuffer; //0xA0
     framework::VisualStudioLogger* visualstudiologgerB8; //0xB8
     std::vector<math::float4x4> unkBC; //0xBC

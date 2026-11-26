@@ -197,11 +197,6 @@ public:
 	 */
 	const std::string& name() const;
 
-	/**
-	 * Returns object string description.
-	 */
-	std::string		toString() const;
-
 private:
 	int m_currentTechnique; //0x10
 	int m_currentPass; //0x14
@@ -209,8 +204,8 @@ private:
 	int8_t				m_priority; //0x19
 	std::string			m_name; //0x1C
 	SortType			m_sort; //0x38
-	int unk3C;
-	int unk40;
+	ID3DX11Effect* unk3C; //0x3C | D3DX11Effect?
+	ID3DX11EffectTechnique* unk40; //0x40
 	DX11_Context* m_context; //0x44
 
 	DX11_Shader( const DX11_Shader& );
@@ -220,5 +215,37 @@ private:
 
 } // gr
 
+class ShaderInclude : public ID3DInclude
+{
+public:
+	std::string name04; //0x04
+
+	/*
+	  _BYTE gap0[4];
+	  const char *pchar4;
+	  _BYTE gap8[24];
+	  void *pvoid20;
+	  _DWORD dword24;
+	  _DWORD dword28;
+
+	  ?
+
+	   _BYTE gap0[32];
+	  void *pvoid20;
+	  _DWORD dword24;
+	  _DWORD dword28;
+	*/
+
+	//ShaderInclude()
+	//{
+	//
+	//}
+
+	STDMETHOD(Open)(THIS_ D3D_INCLUDE_TYPE IncludeType, LPCSTR pFileName, LPCVOID pParentData, LPCVOID* ppData, UINT* pBytes);
+	//{
+	//	//BundleInputStream bis(PathName(pFileName).parent().toString()); //?
+	//};
+	STDMETHOD(Close)(THIS_ LPCVOID pData);
+};
 
 #endif // _GR_DX11_Shader_H

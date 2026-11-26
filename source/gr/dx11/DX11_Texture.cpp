@@ -17,12 +17,11 @@ namespace gr
 		pid3d11shaderresourceview40(0),
 		pid3d11rendertargetview44(0)
 	{
-		ID3D11Device* device; // = m_context->deviceContext();
+		ID3D11Device* device = m_context->device();
 
 		//bool unk = format.type() == SurfaceFormat::SURFACE_A8R3G3B2; //?
 
 		D3D11_TEXTURE2D_DESC desc;
-
 		desc.Width = width;
 		desc.Width = height;
 		desc.MipLevels = mipcount + 1;
@@ -37,7 +36,7 @@ namespace gr
 		case SurfaceFormat::SURFACE_DXT5: dxFormat = DXGI_FORMAT_BC3_UNORM; break;
 		case SurfaceFormat::SURFACE_A8R8G8B8: dxFormat = DXGI_FORMAT_B8G8R8A8_UNORM; break;
 		case SurfaceFormat::SURFACE_A8B8G8R8: dxFormat = DXGI_FORMAT_R8G8B8A8_UNORM; break;
-		//default: m_format = m_fontext->
+		//default: m_format = m_context->
 		}
 
 		desc.Format = dxFormat;
@@ -60,7 +59,7 @@ namespace gr
 			renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 
 			if (FAILED(device->CreateRenderTargetView(id3d11texture2d3c, &renderTargetViewDesc, &pid3d11rendertargetview44)))
-				throw GraphicsException(Format("Creating texture failed"));
+				throw GraphicsException(Format("Creating RenderTargetView for Texture failed"));
 		}
 
 		if ((desc.BindFlags & D3D11_BIND_SHADER_RESOURCE) != 0)
@@ -71,7 +70,7 @@ namespace gr
 			shaderResourceViewDesc.Buffer.FirstElement = -1;
 
 			if (FAILED(device->CreateShaderResourceView(id3d11texture2d3c, &shaderResourceViewDesc, &pid3d11shaderresourceview40)))
-				throw GraphicsException(Format("Creating texture failed"));
+				throw GraphicsException(Format("Creating ShaderResourceView for Texture failed"));
 		}
 	}
 
@@ -112,6 +111,14 @@ namespace gr
 	{
 	}
 
+	void DX11_Texture::lock(LockType lock) //Blank!
+	{
+	}
+
+	void DX11_Texture::unlock() //Blank!
+	{
+	}
+
 	Rect DX11_Texture::rect() const //1000CCF0
 	{
 		return Rect(width(), height());
@@ -120,5 +127,15 @@ namespace gr
 	[[noreturn]] void DX11_Texture::getData(void** bits, int* pitch) const //1000D1C0
 	{
 		throw Exception(Format("getData() is not supported on DX11"));
+	}
+
+	const std::string& DX11_Texture::getName() const //1000CD40
+	{
+		return m_name;
+	}
+
+	void DX11_Texture::setName(const std::string& name) //1000C8C0
+	{
+		m_name = name;
 	}
 }
