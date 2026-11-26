@@ -268,7 +268,7 @@ void GL_Context::begin2D()
 
 bool cullScreen(const float3* vertpos, int size = 0) //697
 {
-    float minx = 3.4028e38; //702
+    float minx = 3.4028e38; //699
     float miny = 3.4028e38; //700
     float maxx = -3.4028e38; //701
     float maxy = -3.4028e38; //702
@@ -763,7 +763,7 @@ P(Image) GL_Context::capture(P(Image) image) //1368 | TODO
     int height = m_renderTarget ? m_renderTarget->height() : m_height; //1373
 
     if (!image) //1376
-        image = createFlippedImage(width, height, 0, img::SurfaceFormat(), Context::USAGE_DEFAULT); //1377
+        image = createFlippedImage(width, height, 0, img::SurfaceFormat(SurfaceFormat::SURFACE_B8G8R8), Context::USAGE_DEFAULT); //1377
 
     if (image->width() != width || image->height() != height) //1379
         throwError(Exception(Format("Wrong size capture target image"))); //1380

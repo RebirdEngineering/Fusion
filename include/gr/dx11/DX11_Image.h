@@ -16,7 +16,7 @@ namespace gr
 
 class DX11_Context;
 
-class DX11_Image : //0x24 bytes.
+class DX11_Image : //0x24 bytes. Heavily based off GLES2 impl but similar enough :shrug:
 	public Image
 {
 public:
@@ -49,7 +49,7 @@ public:
 
 private:
 	DX11_Context* m_context; //0x10
-	P(Texture) m_texture; //0x14 | Do we base off DX9? If so, tex, otherwise, we'll use GL's texture.
+	P(Texture) m_texture; //0x14
 	int m_width; //0x18
 	int m_height; //0x1C
 	bool m_flipped; //0x20

@@ -75,7 +75,7 @@ private:
 	DX11_Context* m_context; //0x7C
 	P(DX11_Shader) m_fx; //0x80
 	PrimType m_prim; //0x84
-	LockType m_locked; //0x88
+	LockType m_lock; //0x88 | Assuming GL's official var
 	int m_usage; //0x8C
 
 	ID3D11InputLayout* pid3d11inputlayout124; //0x123
@@ -92,7 +92,7 @@ private:
 		_DWORD dwordDC;
 		_DWORD dwordE0;
 		__declspec(align(8)) _DWORD dwordE8;
-		_DWORD dwordEC;
+		_DWORD dwordEC; //vector accoding to lumina?
 		_DWORD dwordF0;
 		_DWORD dwordF4;
 		_BYTE gapF8[4];
@@ -110,17 +110,12 @@ private:
 		_DWORD dword12C;
 	*/
 
-	void		deviceLost();
-	void		deviceReset();
 	void		allocate( const VertexFormat& vf, int vertices, int indices );
 	void		deallocate();
 	void		lock( LockType lock );
 	void		unlock();
-	bool		createVertexBuffer();
-	bool		createIndexBuffer();
 	int			setupDeviceVertexDataOffset( int offset, VertexFormat::DataType dt );
 	void		setupDeviceVertexFormat();
-	LockType	locked() const;
 	VertexFormat validateDeviceVertexFormat( const VertexFormat& origvf ) const;
 
 	DX11_Primitive( const DX11_Primitive& );

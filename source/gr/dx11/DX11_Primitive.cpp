@@ -13,16 +13,31 @@ namespace gr
 		m_usage(usage)
 	{
 		m_context->deviceContext();
+
+		//getvertexdataformat
 	}
 
-	DX11_Primitive::~DX11_Primitive()
+	DX11_Primitive::~DX11_Primitive() //1000B860
 	{
 		deallocate();
 	}
 
-	void DX11_Primitive::lock(LockType lock) //
+	void DX11_Primitive::lock(LockType lock) //10008F60
 	{
-		m_locked = lock;
+		m_lock = lock;
+	}
+
+	void DX11_Primitive::unlock() //10009990
+	{
+		//ID3D11DeviceContext* deviceContext = m_context->deviceContext();
+		//pid3d11ulongbufferEC.
+
+		//if (indices() && byteFC)
+		{
+			//deviceContext->Unmap(pid3d11buffer100, 0)
+			//? = 0;
+			//? = 0;
+		}
 	}
 
 	/*void sub_1000A2B0(ID3D11InputLayout* inputLayout)?
@@ -38,7 +53,7 @@ namespace gr
 	}
 	*/
 
-	void DX11_Primitive::setShader(Shader* shader) //10009990
+	void DX11_Primitive::setShader(Shader* shader) //10009220
 	{
 		m_fx = (DX11_Shader*)shader;
 	}
@@ -122,7 +137,7 @@ namespace gr
 	{
 		if (indices() > 0)
 		{
-			ID3D11DeviceContext* deviceContext;
+			ID3D11DeviceContext* deviceContext = m_context->deviceContext();
 			D3D11_MAPPED_SUBRESOURCE subRes;
 
 			//deviceContext->Map(pid3d11buffer100, 0, D3D11_MAP_WRITE_DISCARD, 0, &subRes);

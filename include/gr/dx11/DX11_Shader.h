@@ -203,15 +203,14 @@ public:
 	std::string		toString() const;
 
 private:
-	int passes10;
-	int currentPass14;
+	int m_currentTechnique; //0x10
+	int m_currentPass; //0x14
 	bool				m_enabled; //0x18
 	int8_t				m_priority; //0x19
-
 	std::string			m_name; //0x1C
-
 	SortType			m_sort; //0x38
-
+	int unk3C;
+	int unk40;
 	DX11_Context* m_context; //0x44
 
 	DX11_Shader( const DX11_Shader& );

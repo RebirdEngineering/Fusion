@@ -334,7 +334,7 @@ private:
     ID3D11Device* m_device; //0x31C
     ID3D11DeviceContext* pid3d11devicecontext320; //0x320
     IDXGISwapChain* pidxgiswapchain324; //0x324
-    ID3D11RenderTargetView* pid3d11rendertargetview328; //0x324
+    ID3D11RenderTargetView* pid3d11rendertargetview328; //0x328
     DXGI_FORMAT dxgi_format32C; //0x32C
     DX11_Texture* unk330; //0x330
     DX11_Texture* unk334; //0x334

@@ -19,8 +19,8 @@ GL_Image::GL_Image(GL_Context* context, int width, int height, int mipcount, Con
 
 GL_Image::~GL_Image()
 {
-	m_context->getBatcher().flush(); //58
-	delete m_texture;
+	if (m_context->getBatcher().getImage() == this) //58
+		m_context->getBatcher().flush(); //59
 }
 
 void GL_Image::draw(Context* context, float dstX, float dstY, int srcX, int srcY, int w, int h, float targetW, float targetH) //62
@@ -74,10 +74,15 @@ void GL_Image::draw(Context* context, float dstX, float dstY, float targetW, flo
 
 	float3 vertpos[4]; //195
 
-	if (state.m_worldtmSet)
+	if (state.m_worldtmSet) //197
 	{
-		//Shader* shader = m_texture->; //212
+		vertpos[0] = float3(dstX, dstY, 0.f);
+		vertpos[1] = float3(dstX + targetW, dstY, 0.f);
+		vertpos[2] = float3(dstX, dstY + targetH, 0.0);
+		vertpos[3] = float3(vertpos[1].x, vertpos[2].y, 0.f);
 	}
+
+	//Shader* shader = m_texture->; //212
 
 	float2 offset = state.getTranslation(); //219
 	float2 scale = state.getScale(); //220
@@ -89,8 +94,8 @@ void GL_Image::draw(Context* context, float dstX, float dstY, float targetW, flo
 	float ey; //226
 	float tx; //227
 	float ty; //228
-	float proj00 = .width(); //229
-	float proj11 = .height(); //230
+	float proj00 = m_context->viewport().width(); //229
+	float proj11 = m_context->viewport().height(); //230
 	float minx; //248
 	float miny; //249
 	float maxx; /250
@@ -102,8 +107,8 @@ void GL_Image::draw(Context* context, float dstX, float dstY, float targetW, flo
 
 	float tx; //268
 	float ty; //269
-	float proj00 = .width(); //270
-	float proj11 = .height(); //271
+	float proj00 = m_context->viewport().width(); //270
+	float proj11 = m_context->viewport().height(); //271
 	
 	Shader* shader = m_texture->format().hasAlpha() || state.m_alpha > 1.0f ? m_context->getSpriteAlphaShader() : m_context->getSpriteShader(); //315
 	m_context->getBatcher().render(RenderBatcher::TYPE_TEX, shader, vertpos, uv, 0, this); //316*/
@@ -120,13 +125,11 @@ void GL_Image::draw(Context* context, const float3* corners, const float2* uv, c
 	/*float proj00 = 2.0f / m_context->viewport().width(); //329
 	float proj11 = -2.0f / m_context->viewport().height(); //330
 
-	float3 vertpos[4] = //332
-	{
-		corners[0],
-		corners[1],
-		corners[2],
-		corners[3]
-	};*/
+	float3 vertpos[4] = { //332
+			float3(corners->x, corners->y, corners->z),
+			float3(corners[1].x, corners[1].y, corners[1].z),
+			float3(corners[2].x, corners[2].y, corners[2].z),
+			float3(corners[3].x, corners[1].y, corners[3].z) };*/
 
 	//vertpos[0].x *= proj00 + -1.0;
 	//vertpos[0].y *= proj11 + 1.0;
@@ -140,10 +143,6 @@ void GL_Image::draw(Context* context, const float3* corners, const float2* uv, c
 	//vertpos[3].x *= proj00 + -1.0;
 	//vertpos[3].y *= proj11 + 1.0;
 
-	//vertpos[0] = corners[0]; //float3(corners->x, corners->y, corners->z); //?
-	//vertpos[1] = corners[1]; //float3(corners->x, corners->y, corners->z); //?
-	//vertpos[2] = corners[2]; //float3(corners->x, corners->y, corners->z); //?
-	//vertpos[3] = corners[3]; //float3(corners->x, corners->y, corners->z); //?
 	/*float minx = vertpos[0].x; //345
 	float miny = vertpos[0].x; //346
 	float maxx = vertpos[0].x; //347

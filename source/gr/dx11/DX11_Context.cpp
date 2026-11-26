@@ -17,14 +17,12 @@ using namespace img;
 
 namespace gr
 {
-	DX11_Context::DX11_Context(HWND hwnd, OrientationType orientation) : //WIP
+	DX11_Context::DX11_Context(HWND hwnd, OrientationType orientation) : //10007950 | WIP
 		boneworldtm(),
 		m_projtm(1.f),
 		m_viewtm(1.f),
 		m_modelviewtm(1.f),
-		//dwordBC?
-		//dwordC0?
-		//dwordC4?
+		//vectorBC?
 		m_customModelTM(1.f),
 		m_time(0.f),
 		m_width(0),
@@ -104,7 +102,10 @@ namespace gr
 
 	DX11_Context::~DX11_Context() //100072F0
 	{
-		m_batcher->reset();
+		unkBC.clear();
+		m_dynamicPrimitives.clear();
+
+		m_textures.clear();
 
 		m_plainShader = 0;
 		m_plainAlphaShader = 0;
@@ -112,6 +113,8 @@ namespace gr
 		m_spriteAlphaShader = 0;
 		m_dynamicPrimitives.clear();
 		m_uniqueShaders.clear();
+
+		boneworldtm.clear();
 	}
 
 	static SurfaceFormat convertToCompatibleSurfaceFormat(const SurfaceFormat& fmt) //Assumed via GLES2
@@ -244,7 +247,7 @@ namespace gr
 		}
 
 		m_dynamicPrimitives.push_back(new DX11_Primitive(this, prim, vf, (vertices + 31) & ~31, (indices + 31) & ~31, Context::USAGE_DYNAMIC));
-		return m_dynamicPrimitives.back(); //691
+		return m_dynamicPrimitives.back();
 	}
 
 	void DX11_Context::begin2D() //Blank!
@@ -257,6 +260,52 @@ namespace gr
 
 	void DX11_Context::drawLine2D(unsigned int color, int x0, int y0, int x1, int y1, int lineWidth) //10003E90 | TODO
 	{
+		//float2 delta;
+		//
+		//float2 offset = m_renderState2D.getTranslation();
+		//float2 scale = m_renderState2D.getScale();
+		//float2 pivot = m_renderState2D.getRotationPivot();
+		//float2 col0;
+		//float2 col1;
+		//
+		//float ex;
+		//float ey;
+		//float tx;
+		//float ty;
+		//float proj00 = viewport().width();
+		//float proj11 = viewport().height();
+
+		//float2 linepos[];
+
+		// = normalize(
+		// *= //754
+
+		//float2 d;
+		//float2 v = normalize();
+
+		//int width = m_renderTarget->width();
+		//int height = m_renderTarget->height();
+
+		//float2 ext; 
+
+		//float3 vertpos[4];
+
+		//getColorF(color, ?)
+
+		//m_batcher->render(TYPE_LINE, )
+		//m_renderState2D.getAlpha()
+
+		/*const int CIRCLE_SEGMENTS = 32;
+		const int DELTA2 = 0.125;
+		const int NUM_VERTS = 64;
+		float3 vertices[NUM_VERTS];
+		float4 colors[];
+		float colorf[];
+		float proj11;
+		float radiusX;
+		float radiusY;*/
+
+		//m_batcher->render(RenderBatcher::TYPE_PLAIN, shader, vertpos, 0, colors, 0);
 	}
 
 	void DX11_Context::drawLine2D(unsigned int color, int* vertices, int count, int lineWidth) //Blank!
@@ -267,28 +316,28 @@ namespace gr
 	{
 	}
 
-	void DX11_Context::fillTriangle2D(unsigned int color, int x0, int y0, int x1, int y1, int x2, int y2)
+	void DX11_Context::fillTriangle2D(unsigned int color, int x0, int y0, int x1, int y1, int x2, int y2) //100044F0
 	{
 	}
 
-	void DX11_Context::fillRect2D(unsigned int color, int x, int y, int w, int h, Blend blend)
+	void DX11_Context::fillRect2D(unsigned int color, int x, int y, int w, int h, Blend blend) //100048C0
 	{
 
 	}
 
-	void DX11_Context::fillCircle2D(unsigned int color, int x, int y, int radius)
+	void DX11_Context::fillCircle2D(unsigned int color, int x, int y, int radius) //Blank!
 	{
 	}
 
-	void DX11_Context::texturizeTriangle2D(Image* image, const float4& scaleBias, int x0, int y0, int x1, int y1, int x2, int y2)
+	void DX11_Context::texturizeTriangle2D(Image* image, const float4& scaleBias, int x0, int y0, int x1, int y1, int x2, int y2) //Blank
 	{
 	}
 
-	void DX11_Context::texturizeRect2D(Image* image, const float4& scalebias, int x, int y, int width, int height)
+	void DX11_Context::texturizeRect2D(Image* image, const float4& scalebias, int x, int y, int width, int height) //10004EE0
 	{
 	}
 
-	void DX11_Context::texturizeCircle2D(Image* image, const float4& scalebias, int x, int y, int radius)
+	void DX11_Context::texturizeCircle2D(Image* image, const float4& scalebias, int x, int y, int radius) //Blank!
 	{
 	}
 
@@ -307,104 +356,191 @@ namespace gr
 		return "Unknown";
 	}
 
-	RenderState2D& DX11_Context::getRenderState2D()
+	RenderState2D& DX11_Context::getRenderState2D() //100015B0
 	{
 		return m_renderState2D;
 	}
 
-	const Rect& DX11_Context::viewport() const
+	const Rect& DX11_Context::viewport() const //100015C0
 	{
 		return m_viewport;
 	}
 
-	SurfaceFormat DX11_Context::SurfaceFormat() const
+	SurfaceFormat DX11_Context::SurfaceFormat() const //100015D0
 	{
 		return SurfaceFormat::SURFACE_A8B8G8R8;
 	}
 
 	int DX11_Context::width() const //10001630
 	{
-		return 0;
+		if (m_orientation == ORIENTATION_90 || m_orientation == ORIENTATION_270)
+			return m_height;
+		
+		return m_width;
 	}
 
 	int DX11_Context::height() const //10001650
 	{
-		return 0;
+		if (m_orientation == ORIENTATION_90 || m_orientation == ORIENTATION_270)
+			return m_width;
+
+		return m_height;
 	}
 
 	float DX11_Context::time() const //10001670
 	{
-		return 0.0;
+		return m_time;
 	}
 
-	const float3x4& DX11_Context::customModelTransform() const
+	const float3x4& DX11_Context::customModelTransform() const //10001680
 	{
 		return m_customModelTM;
 	}
 
-	bool DX11_Context::customModelTransformEnabled() const
+	bool DX11_Context::customModelTransformEnabled() const //10001690
 	{
 		return m_customModelTMEnabled;
 	}
 
-	const float4x4& DX11_Context::projectionTransform() const
+	const float4x4& DX11_Context::projectionTransform() const //100016A0
 	{
 		return m_projtm;
 	}
 
-	const float4x4& DX11_Context::viewTransform() const
+	const float4x4& DX11_Context::viewTransform() const //100016B0
 	{
 		return m_viewtm;
 	}
 
-	const float2& DX11_Context::getFovScaleBias() const
+	const float2& DX11_Context::getFovScaleBias() const //100016C0
 	{
 		return m_fovScaleBias;
 	}
 
-	Context::PlatformType DX11_Context::platform() const
+	Context::PlatformType DX11_Context::platform() const //100016D0
 	{
 		return PLATFORM_DX11;
 	}
 
-	Context::OrientationType DX11_Context::orientation() const
+	Context::OrientationType DX11_Context::orientation() const //100016E0
 	{
 		return m_orientation;
 	}
 
-	bool DX11_Context::ready() const
+	bool DX11_Context::ready() const //100016F0
 	{
 		return true;
 	}
 
-	const std::string& DX11_Context::shaderPath() const
+	const std::string& DX11_Context::shaderPath() const //10001700
 	{
 		return m_shaderPath;
 	}
 
-	void DX11_Context::setRenderState2D(const RenderState2D& state)
+	void DX11_Context::setRenderState2D(const RenderState2D& state) //10001710
 	{
 		m_renderState2D = state;
 	}
 
-	void DX11_Context::setViewport(const Rect& rect)
+	void DX11_Context::setViewport(const Rect& rect) //10001B40
 	{
-		
+		m_batcher->flush();
+
+		if (!m_renderTarget)
+		{
+			//TODO
+			D3D11_VIEWPORT vp;
+			vp.Width = rect.width();
+			vp.Height = rect.height();
+			vp.MinDepth = 1.f;
+			vp.MaxDepth = 0.f;
+			vp.TopLeftX = rect.left();
+			vp.TopLeftY = rect.top();
+			pid3d11devicecontext320->RSSetViewports(1, &vp);
+		}
+
+		else
+		{
+			D3D11_VIEWPORT vp;
+			vp.Width = rect.width();
+			vp.Height = rect.height();
+			vp.MinDepth = 1.f;
+			vp.MaxDepth = 0.f;
+			vp.TopLeftX = rect.left();
+			vp.TopLeftY = rect.top();
+			pid3d11devicecontext320->RSSetViewports(1, &vp);
+		}
 	}
 
-	void DX11_Context::setClipRect(const Rect& rect)
+	void DX11_Context::setClipRect(const Rect& rect) //10001D30 | TODO
+	{
+		//m_batcher->flush();
+		//
+		//if (m_renderTarget)
+		//{
+		//	//TODO
+		//	D3D11_RECT newRect;
+		//	newRect.left = rect.left();
+		//	newRect.right = rect.right();
+		//	newRect.bottom = rect.bottom();
+		//	newRect.top = rect.top();
+		//	pid3d11devicecontext320->RSSetScissorRects(1, &newRect);
+		//}
+		//
+		//else
+		//{
+		//	Rect temp;
+		//	int w = width();
+		//	int h = height();
+		//
+		//	switch (m_orientation)
+		//	{
+		//	
+		//	}
+		//
+		//	D3D11_RECT newRect;
+		//	newRect.left = rect.left();
+		//	newRect.right = rect.right();
+		//	newRect.bottom = rect.bottom();
+		//	newRect.top = rect.top();
+		//	pid3d11devicecontext320->RSSetScissorRects(1, &newRect);
+		//}
+	}
+
+	void DX11_Context::setRenderTarget(Texture* dst) //100024E0 | TODO
+	{
+		//m_batcher->flush();
+		//
+		//if (dst != 0)
+		//{
+		//	DX11_Texture* dsttex((DX11_Texture*)dst);
+		//}
+		//
+		//else
+		//{
+		//	m_renderTarget = 0;
+		//}
+		//
+		//pid3d11devicecontext320->OMSetRenderTargets(1, &pid3d11rendertargetview338, 0);
+		//
+		//unsigned int newWidth = dst ? dst->width() : width();
+		//unsigned int newHeight = dst ? dst->height() : height();
+		//
+		//setViewport(Rect(0, 0, newWidth, newHeight));
+	}
+
+	void DX11_Context::setWireframeEnabled(bool enabled) //Blank!
 	{
 
 	}
 
-	void DX11_Context::setWireframeEnabled(bool enabled)
+	void DX11_Context::setOrientation(OrientationType orientation) //10001730
 	{
-
-	}
-
-	void DX11_Context::setOrientation(OrientationType orientation)
-	{
-		m_orientation = orientation;
+		if (orientation != m_orientation)
+		{
+			m_orientation = orientation;
+			setViewport(Rect(0, 0, width(), height()));
+		}
 	}
 
 	void DX11_Context::setFovScaleBias(const float2& scalebias) //10001780
@@ -425,7 +561,8 @@ namespace gr
 	void DX11_Context::setPerspectiveProjection(float aspect, float fov, float front, float back) //100017D0
 	{
 		float4x4 tm(m_projtm);
-		tm.setPerspectiveProjection(aspect, fov, front, back);
+		m_projtm.setPerspectiveProjection(aspect, fov, front, back);
+		setProjection(tm);
 	}
 
 	void DX11_Context::setOrthographicProjection() //10001830
@@ -433,7 +570,7 @@ namespace gr
 		setProjection(float4x4(1.f));
 	}
 
-	void DX11_Context::setProjection(const float4x4& projtm)
+	void DX11_Context::setProjection(const float4x4& projtm) //10001870?
 	{
 		m_projtm = projtm;
 		if (m_renderTarget)
@@ -507,17 +644,17 @@ namespace gr
 		}
 	}
 
-	void DX11_Context::beginScene()
+	void DX11_Context::beginScene() //Blank!
 	{
 
 	}
 
-	void DX11_Context::endScene()
+	void DX11_Context::endScene() //Blank!
 	{
 
 	}
 
-	void DX11_Context::reloadShaders()
+	void DX11_Context::reloadShaders() //Blank!
 	{
 
 	}
@@ -543,7 +680,7 @@ namespace gr
 
 		unsigned int clearFlags;
 
-		float colorf[4]; 
+		float colorf[4];
 		getColorF(color, colorf);
 
 		if (clearColor)
@@ -575,9 +712,6 @@ namespace gr
 		int width = m_renderTarget ? m_renderTarget->width() : m_width;
 		int height = m_renderTarget ? m_renderTarget->height() : m_height;
 
-		std::vector<unsigned int> data;
-		std::vector<unsigned int> reserved;
-
 		Texture* tex = createTexture(width, height, 0, SurfaceFormat(), USAGE_DYNAMIC);
 
 		if (m_renderTarget)
@@ -587,23 +721,98 @@ namespace gr
 
 		else
 		{
-			//void* buf;
-			//pidxgiswapchain324->GetBuffer(0, IID_ID3D11Texture2D, &buf);
+			ID3D11Texture2D* buf;
+			pidxgiswapchain324->GetBuffer(0, IID_ID3D11Texture2D, (void**)buf);
 			//pid3d11devicecontext320->CopyResource(tex->sub_1000CDF0(), buf);
 		}
 
-		//if (FAILED(pid3d11devicecontext320->Map(tex->texture2D(), 0, D3D11_MAP_READ, 0, tex))
+		D3D11_MAPPED_SUBRESOURCE rsrc;
+		//if (FAILED(pid3d11devicecontext320->Map(tex->sub_1000CDF0(), 0, D3D11_MAP_READ, 0, &rsrc))
 		{
 			throw GraphicsException(Format("Texture Map failed"));
 		}
 
-		ImageWriter::write(out, ff, &data, width, height, SurfaceFormat::SURFACE_A8B8G8R8, SurfaceFormat());
-		//pid3d11devicecontext320->Unmap(tex->sub_10002030(), 0) //Autogen?
+		ImageWriter::write(out, ff, rsrc.pData, width, height, SurfaceFormat::SURFACE_A8B8G8R8, SurfaceFormat());
+		//pid3d11devicecontext320->Unmap(tex->sub_1000CDF0(), 0) //Autogen?
 	}
 
-	P(Image) DX11_Context::capture(P(Image) image) //TODO
+	P(Image) DX11_Context::capture(P(Image) image) //10005990 | TODO
 	{
-		m_batcher->flush();
+		//m_batcher->flush();
+		//
+		//int width = m_renderTarget ? m_renderTarget->width() : m_width;
+		//int height = m_renderTarget ? m_renderTarget->height() : m_height;
+		//
+		//Image* img = 0;
+		//img::SurfaceFormat fmt;
+		//
+		//if (m_renderTarget && image)
+		//{
+		//	img = createImage(width, height, 0, fmt, USAGE_DYNAMIC);
+		//
+		//	DX11_Texture* tex = (DX11_Texture*)img->getTexture();
+		//
+		//	//pid3d11devicecontext320->CopyResource(tex->);
+		//}
+		//
+		//ID3D11Texture2D* t2d = 0;
+		//D3D11_TEXTURE2D_DESC desc;
+		//pidxgiswapchain324->GetBuffer(0, IID_ID3D11Texture2D, (void**)t2d);
+		//t2d->GetDesc(&desc);
+		//
+		//int textureWidth = desc.Width;
+		//int textureHeight = desc.Height;
+		//
+		//if (img)
+		//{
+		//	if (m_orientation == ORIENTATION_90 || m_orientation == ORIENTATION_270)
+		//	{
+		//		if (dxgi_format32C == DXGI_FORMAT_B8G8R8A8_UNORM)
+		//			fmt = img::SurfaceFormat(SurfaceFormat::SURFACE_A8R8G8B8);
+		//		else
+		//			fmt = img::SurfaceFormat(SurfaceFormat::SURFACE_A8B8G8R8);
+		//
+		//		img = createImage(textureHeight, textureWidth, 0, fmt, USAGE_STATIC);
+		//	}
+		//
+		//	else
+		//	{
+		//		//fmt = sub_100015F0(
+		//		img = createImage(textureWidth, textureWidth, 0, fmt, USAGE_STATIC);
+		//	}
+		//}
+		//
+		//DX11_Texture* tex = (DX11_Texture*)img->getTexture();
+		//
+		//if (m_orientation == ORIENTATION_90 || m_orientation == ORIENTATION_270)
+		//{
+		//	if (unk330)
+		//	{
+		//		if (dxgi_format32C == DXGI_FORMAT_B8G8R8A8_UNORM)
+		//			fmt = img::SurfaceFormat(SurfaceFormat::SURFACE_A8R8G8B8);
+		//		else
+		//			fmt = img::SurfaceFormat(SurfaceFormat::SURFACE_A8B8G8R8);
+		//
+		//		unk330 = (DX11_Texture*)createTexture(textureWidth, textureHeight, 0, fmt, USAGE_DYNAMIC);
+		//	}
+		//
+		//	if (unk334)
+		//	{
+		//		if (dxgi_format32C == DXGI_FORMAT_B8G8R8A8_UNORM)
+		//			fmt = img::SurfaceFormat(SurfaceFormat::SURFACE_A8R8G8B8);
+		//		else
+		//			fmt = img::SurfaceFormat(SurfaceFormat::SURFACE_A8B8G8R8);
+		//
+		//		unk334 = (DX11_Texture*)createTexture(textureHeight, textureWidth, 0, fmt, USAGE_DYNAMIC);
+		//	}
+		//
+		//	//pid3d11devicecontext320->CopyResource(unk330->)
+		//
+		//	//if (pid3d11devicecontext320->Map())
+		//		//throw GraphicsException(Format("Texture Map failed"));
+		//
+		//	//pid3d11devicecontext320->CopyResource(unk330->)
+		//}
 
 		return image;
 	}

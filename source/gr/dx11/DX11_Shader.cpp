@@ -21,6 +21,11 @@ namespace gr
 		//D3DX11CreateEffectFromMemory()
 	}
 
+	DX11_Shader::~DX11_Shader()
+	{
+		
+	}
+
 	Shader* DX11_Shader::clone() const //1000C770
 	{
 		return new DX11_Shader(*this);

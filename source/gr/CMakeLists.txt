@@ -3,7 +3,7 @@ project(gr)
 file(GLOB GR_SRC "*.cpp")
 
 if(WIN32)
-	#add_subdirectory(dx11) #NOT YET DECOMPILED
+	add_subdirectory(dx11)
 	add_subdirectory(gl)
 endif()
 
